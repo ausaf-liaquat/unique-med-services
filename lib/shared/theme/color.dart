@@ -45,4 +45,6 @@ class AppColorScheme {
   Color black0 = HexColor('#FFFFFF');
 
   get color => null;
+
+  get grey80 => null;
 }

@@ -5,5 +5,5 @@ import 'names.dart';
 
 var appRoutes = <String, WidgetBuilder>{
   AppRoutes.splashScreen: (context) => const SplashScreen(),
-  AppRoutes.login: (context) => const LoginScreen(),
+  AppRoutes.login: (context) => LoginScreen(),
 };
