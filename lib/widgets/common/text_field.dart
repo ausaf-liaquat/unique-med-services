@@ -3,7 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:ums_staff/widgets/common/typography.dart';
 import '../../shared/theme/color.dart';
 
-class AppTextField extends StatefulWidget {
+class AppTextField extends StatelessWidget {
   const AppTextField({
     super.key,
     required this.name,
@@ -21,11 +21,6 @@ class AppTextField extends StatefulWidget {
   final double? bottom;
   final String? error;
 
-  @override
-  State<AppTextField> createState() => _AppTextFieldState();
-}
-
-class _AppTextFieldState extends State<AppTextField> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -49,8 +44,8 @@ class _AppTextFieldState extends State<AppTextField> {
             ],
           ),
           child: FormBuilderTextField(
-            name: widget.name,
-            validator: widget.validator,
+            name: name,
+            validator: validator,
             style: TextStyle(
               color: AppColorScheme().black80,
               fontSize: 18,
@@ -59,7 +54,7 @@ class _AppTextFieldState extends State<AppTextField> {
             decoration: InputDecoration(
               errorStyle: const TextStyle(height: 1, fontSize: 0),
               label: AppTypography(
-                text: widget.label,
+                text: label,
                 size: 15,
                 color: AppColorScheme().black50,
                 spacing: 0.4,
@@ -67,23 +62,22 @@ class _AppTextFieldState extends State<AppTextField> {
             ),
           ),
         ),
-        (widget.helpText + (widget.error ?? '')) != ''
+        (helpText + (error ?? '')) != ''
             ? Container(
                 margin: EdgeInsets.only(
-                    left: 20.0,
-                    right: 20.0,
-                    bottom: widget.bottom ?? 0,
-                    top: 4),
+                    left: 20.0, right: 20.0, bottom: bottom ?? 0, top: 4),
                 child: AppTypography(
-                  text: widget.error ?? widget.helpText,
+                  text: error ?? helpText,
                   size: 12,
                   align: TextAlign.start,
-                  color: widget.error != null
+                  color: error != null
                       ? Theme.of(context).colorScheme.error
                       : AppColorScheme().black60,
                   spacing: 0.4,
                 ))
-            : const SizedBox(),
+            : SizedBox(
+                height: bottom ?? 0,
+              ),
       ],
     );
   }

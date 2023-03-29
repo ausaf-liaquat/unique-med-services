@@ -8,9 +8,21 @@ class AppThemeData {
   ThemeData lightTheme = ThemeData(
     fontFamily: fonts,
     colorScheme: AppColorScheme().colorScheme,
-    buttonTheme: const ButtonThemeData(shape: StadiumBorder()),
+    buttonTheme: ButtonThemeData(
+        shape: const StadiumBorder(),
+        buttonColor: HexColor('#A018F8'),
+        textTheme: ButtonTextTheme.accent),
     elevatedButtonTheme: ElevatedButtonThemeData(
-        style: TextButton.styleFrom(shape: const StadiumBorder())),
+        style: TextButton.styleFrom(
+            iconColor: AppColorScheme().black0,
+            padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+            shape: const StadiumBorder(),
+            minimumSize: const Size.fromHeight(50),
+            textStyle: TextStyle(
+                color: AppColorScheme().black0,
+                fontSize: 14,
+                letterSpacing: 0.5,
+                fontWeight: FontWeight.w600))),
     inputDecorationTheme: InputDecorationTheme(
         contentPadding:
             const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),

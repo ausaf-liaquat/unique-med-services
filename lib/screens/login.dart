@@ -73,10 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               // sucess funtion
                             }
                           },
-                          child: const Text(
-                            'Submit',
-                            style: TextStyle(color: Colors.white),
-                          ),
+                          child: const Text('LOGIN'),
                         ),
                         const SizedBox(height: 24),
                         Row(
