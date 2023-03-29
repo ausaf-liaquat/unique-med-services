@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:ums_staff/shared/theme/color.dart';
-import 'package:ums_staff/widgets/common/typography.dart';
+import 'package:ums_staff/widgets/common/text_field.dart';
 
-class LoginScreen extends StatelessWidget {
+import '../widgets/common/typography.dart';
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,53 +30,72 @@ class LoginScreen extends StatelessWidget {
                 margin: const EdgeInsets.only(left: 20.0, right: 20.0),
                 child: FormBuilder(
                     key: _formKey,
+                    onChanged: () {
+                      _formKey.currentState!.save();
+                      debugPrint(_formKey.currentState!.value.toString());
+                    },
+                    autovalidateMode: AutovalidateMode.disabled,
+                    initialValue: const {
+                      'email': '',
+                      'password': '',
+                    },
+                    skipDisabled: true,
                     child: Column(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.30),
-                                blurRadius: 2,
-                                offset: const Offset(0, 1),
-                              ),
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.15),
-                                blurRadius: 6,
-                                spreadRadius: 2,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: FormBuilderTextField(
-                            name: 'email',
-                            style: TextStyle(
-                              color: AppColorScheme().black80,
-                              fontSize: 18,
-                              letterSpacing: 0.5,
-                            ),
-                            decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.only(
-                                    left: 16, right: 16, top: 12, bottom: 12),
-                                label: AppTypography(
-                                  text: 'Username or Email:',
-                                  size: 15,
-                                  color: AppColorScheme().black50,
-                                  spacing: 0.4,
-                                ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                      color: AppColorScheme().black0),
-                                ),
-                                border: UnderlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                filled: true,
-                                fillColor: AppColorScheme().black0),
+                        AppTextField(
+                          error:
+                              _formKey.currentState?.fields['email']!.errorText,
+                          bottom: 16,
+                          name: 'email',
+                          label: 'Username or Email',
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(
+                                errorText: 'Email is mendatory'),
+                          ]),
+                        ),
+                        AppTextField(
+                          error: _formKey
+                              .currentState?.fields['password']!.errorText,
+                          bottom: 40,
+                          name: 'password',
+                          label: 'Password',
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(
+                                errorText: 'Password is mendatory'),
+                          ]),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState?.saveAndValidate() ??
+                                false) {
+                              // error funtion
+                            } else {
+                              // sucess funtion
+                            }
+                          },
+                          child: const Text(
+                            'Submit',
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
+                        const SizedBox(height: 24),
+                        Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              AppTypography(
+                                text: 'Forget Password?',
+                                size: 14,
+                                spacing: 0.1,
+                                color: AppColorScheme().black90,
+                              ),
+                              AppTypography(
+                                text: 'Apply',
+                                size: 14,
+                                spacing: 0.1,
+                                color: Theme.of(context).colorScheme.error,
+                              )
+                            ])
                       ],
                     ))),
           ),
