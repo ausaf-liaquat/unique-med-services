@@ -1,4 +1,4 @@
 class AppRoutes {
-  static String splashScreen = '/';
+  static String landing = '/';
   static String login = '/login';
 }

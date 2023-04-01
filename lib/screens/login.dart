@@ -32,7 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     key: _formKey,
                     onChanged: () {
                       _formKey.currentState!.save();
-                      debugPrint(_formKey.currentState!.value.toString());
                     },
                     autovalidateMode: AutovalidateMode.disabled,
                     initialValue: const {

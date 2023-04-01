@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../screens/landing.dart';
 import '../../screens/login.dart';
-import '../../screens/splash_screen.dart';
 import 'names.dart';
 
 var appRoutes = <String, WidgetBuilder>{
-  AppRoutes.splashScreen: (context) => const SplashScreen(),
+  AppRoutes.landing: (context) => const LandingScreen(),
   AppRoutes.login: (context) => const LoginScreen(),
 };

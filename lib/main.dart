@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ums_staff/shared/router/main.dart';
+import 'package:ums_staff/shared/router/router.dart';
 import 'package:ums_staff/shared/router/names.dart';
-import 'package:ums_staff/shared/theme/main.dart';
+import 'package:ums_staff/shared/theme/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'Unique Med Service',
       theme: AppThemeData().lightTheme,
       darkTheme: AppThemeData().darkTheme,
-      initialRoute: AppRoutes.splashScreen,
+      initialRoute: AppRoutes.landing,
       routes: appRoutes,
     );
   }
