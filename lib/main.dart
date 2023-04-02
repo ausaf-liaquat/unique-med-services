@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Unique Med Service',
+      debugShowCheckedModeBanner: false,
       theme: AppThemeData().lightTheme,
       darkTheme: AppThemeData().darkTheme,
       initialRoute: AppRoutes.landing,

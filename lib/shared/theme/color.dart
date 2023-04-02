@@ -47,4 +47,6 @@ class AppColorScheme {
   get color => null;
 
   get grey80 => null;
+
+  get grey8 => null;
 }
