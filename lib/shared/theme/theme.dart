@@ -33,7 +33,10 @@ class AppThemeData {
           filled: true,
           fillColor: AppColorScheme().black0),
       appBarTheme: AppBarTheme(
+        titleTextStyle: const TextStyle(
+            fontSize: 22, fontWeight: FontWeight.w500, color: Colors.white),
         elevation: 0,
+        titleSpacing: 8,
         iconTheme:
             IconThemeData(size: 26, color: AppColorScheme().black2, opacity: 1),
         color: HexColor('#6505A3'),
