@@ -9,7 +9,7 @@ import 'package:ums_staff/shared/theme/color.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
-
+  static const route = '/';
   @override
   State<LandingScreen> createState() => _LandingScreenState();
 }

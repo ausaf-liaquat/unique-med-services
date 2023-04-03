@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:ums_staff/screens/landing.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/common/text_field.dart';
 
@@ -8,13 +9,19 @@ import '../widgets/common/typography.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
-
+  static const route = 'login';
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
+  String passwordError = '';
+  String emailError = '';
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +75,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                if (_formKey.currentState?.saveAndValidate() ??
+                                Navigator.pushNamed(
+                                    context, LandingScreen.route);
+                                if (_formKey.currentState?.validate() ??
                                     false) {
                                   // error funtion
                                 } else {
+                                  setState(() {});
                                   // sucess funtion
                                 }
                               },
