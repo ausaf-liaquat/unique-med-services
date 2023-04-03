@@ -4,6 +4,6 @@ import '../../screens/login.dart';
 import 'names.dart';
 
 var appRoutes = <String, WidgetBuilder>{
-  AppRoutes.landing: (context) => const LandingScreen(),
-  AppRoutes.login: (context) => const LoginScreen(),
+  LandingScreen.route: (context) => const LandingScreen(),
+  LoginScreen.route: (context) => const LoginScreen(),
 };

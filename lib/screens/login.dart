@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:ums_staff/screens/landing.dart';
+import 'package:ums_staff/shared/router/router.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/common/text_field.dart';
 
@@ -8,14 +10,19 @@ import '../widgets/common/typography.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
-
+  static const route = 'login';
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-
+  String passwordError = '';
+  String emailError = '';
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Image.asset('assets/images/logo.png', width: 150),
           ),
           Expanded(
-            child: Container(
+            child:  Container(
                 margin: const EdgeInsets.only(left: 20.0, right: 20.0),
                 child: FormBuilder(
                     key: _formKey,
@@ -65,10 +72,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            if (_formKey.currentState?.saveAndValidate() ??
-                                false) {
+                            Navigator.pushNamed(context, LandingScreen.route);
+                            if (_formKey.currentState?.validate() ?? false) {
                               // error funtion
                             } else {
+                              setState(() {
+
+                              });
                               // sucess funtion
                             }
                           },
