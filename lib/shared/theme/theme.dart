@@ -35,7 +35,7 @@ class AppThemeData {
       appBarTheme: AppBarTheme(
         titleTextStyle: const TextStyle(
             fontSize: 22, fontWeight: FontWeight.w500, color: Colors.white),
-        elevation: 0,
+        elevation: 3,
         titleSpacing: 8,
         iconTheme:
             IconThemeData(size: 26, color: AppColorScheme().black2, opacity: 1),

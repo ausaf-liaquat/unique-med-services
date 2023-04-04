@@ -17,8 +17,8 @@ class MyApp extends StatelessWidget {
       title: 'Unique Med Service',
       debugShowCheckedModeBanner: false,
       theme: AppThemeData().lightTheme,
-      darkTheme: AppThemeData().darkTheme,
-      initialRoute: LoginScreen.route,
+      darkTheme: AppThemeData().lightTheme,
+      initialRoute: '/',
       routes: appRoutes,
     );
   }
