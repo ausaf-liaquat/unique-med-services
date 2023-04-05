@@ -39,14 +39,16 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         indent: 24,
                         endIndent: 24,
                       ),
-                      // ListView.separated(
-                      //   itemCount: 6,
-                      //   itemBuilder: (BuildContext context, int index) {
-                      //     return const JobShift();
-                      //   },
-                      //   separatorBuilder: (BuildContext context, int index) =>
-                      //       const Divider(),
-                      // )
+                      ListView.separated(
+                        itemCount: 6,
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return const JobShift();
+                        },
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const Divider(),
+                      )
                     ],
                   ),
                 )
