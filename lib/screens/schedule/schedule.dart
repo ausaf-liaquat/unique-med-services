@@ -41,6 +41,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       ),
                       ListView.separated(
                         itemCount: 6,
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
                         itemBuilder: (BuildContext context, int index) {
                           return const JobShift();
                         },
@@ -51,6 +53,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   ),
                 )
               ],
-            )));
+            )
+        )
+    );
   }
 }
