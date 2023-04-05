@@ -9,7 +9,9 @@ class AppThemeData {
       fontFamily: fonts,
       colorScheme: AppColorScheme().colorScheme,
       dividerTheme: DividerThemeData(
-          color: AppColorScheme().black10, space: 1, indent: 16, endIndent: 16),
+        color: AppColorScheme().black10,
+        space: 1,
+      ),
       buttonTheme: ButtonThemeData(
           shape: const StadiumBorder(),
           buttonColor: HexColor('#A018F8'),

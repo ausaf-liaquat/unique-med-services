@@ -34,20 +34,23 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         weight: FontWeight.w600,
                         spacing: 0.4,
                       ),
-                      Divider(
-                        color: Theme.of(context).colorScheme.secondary,
-                        indent: 24,
-                        endIndent: 24,
-                      ),
+                      Container(
+                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          child: Divider(
+                              color: Theme.of(context).colorScheme.secondary)),
                       ListView.separated(
-                        itemCount: 6,
+                        itemCount: data.length,
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         itemBuilder: (BuildContext context, int index) {
                           return const JobShift();
+                          // for dinamic usage: data[index].value
                         },
                         separatorBuilder: (BuildContext context, int index) =>
-                            const Divider(),
+                            Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                child: const Divider()),
                       )
                     ],
                   ),
