@@ -3,7 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:ums_staff/widgets/common/typography.dart';
 import '../../shared/theme/color.dart';
 
-class AppTextField extends StatelessWidget {
+class AppTextField extends StatefulWidget {
   const AppTextField({
     super.key,
     required this.name,
@@ -11,7 +11,9 @@ class AppTextField extends StatelessWidget {
     this.validator,
     this.bottom,
     this.error,
+    this.end = const SizedBox(),
     this.helpText = '',
+    this.type = TextInputType.text,
   });
 
   final String name;
@@ -20,6 +22,15 @@ class AppTextField extends StatelessWidget {
   final String helpText;
   final double? bottom;
   final String? error;
+  final Widget end;
+  final TextInputType type;
+
+  @override
+  State<AppTextField> createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  bool _passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -44,17 +55,37 @@ class AppTextField extends StatelessWidget {
             ],
           ),
           child: FormBuilderTextField(
-            name: name,
-            validator: validator,
+            keyboardType: widget.type,
+            name: widget.name,
+            obscureText: !_passwordVisible,
+            validator: widget.validator,
             style: TextStyle(
               color: AppColorScheme().black80,
               fontSize: 18,
               letterSpacing: 0.5,
             ),
             decoration: InputDecoration(
+              suffixIcon: widget.name == 'password'
+                  ? Container(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: IconButton(
+                        splashRadius: 20,
+                        icon: Icon(
+                          _passwordVisible
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _passwordVisible = !_passwordVisible;
+                          });
+                        },
+                      ),
+                    )
+                  : widget.end,
               errorStyle: const TextStyle(height: 1, fontSize: 0),
               label: AppTypography(
-                text: label,
+                text: widget.label,
                 size: 15,
                 color: AppColorScheme().black50,
                 spacing: 0.4,
@@ -62,21 +93,24 @@ class AppTextField extends StatelessWidget {
             ),
           ),
         ),
-        (helpText + (error ?? '')) != ''
+        (widget.helpText + (widget.error ?? '')) != ''
             ? Container(
                 margin: EdgeInsets.only(
-                    left: 20.0, right: 20.0, bottom: bottom ?? 0, top: 4),
+                    left: 20.0,
+                    right: 20.0,
+                    bottom: widget.bottom ?? 0,
+                    top: 4),
                 child: AppTypography(
-                  text: error ?? helpText,
+                  text: widget.error ?? widget.helpText,
                   size: 12,
                   align: TextAlign.start,
-                  color: error != null
+                  color: widget.error != null
                       ? Theme.of(context).colorScheme.error
                       : AppColorScheme().black60,
                   spacing: 0.4,
                 ))
             : SizedBox(
-                height: bottom ?? 0,
+                height: widget.bottom ?? 0,
               ),
       ],
     );
