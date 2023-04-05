@@ -35,6 +35,8 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool smallDevice = MediaQuery.of(context).size.width >= 375;
+
     return Scaffold(
         appBar: AppBar(
           leadingWidth: 150,
@@ -68,9 +70,10 @@ class _LandingScreenState extends State<LandingScreen> {
             ),
             child: GNav(
                 tabBackgroundColor: HexColor('#A018F8'),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                iconSize: 24,
+                padding: EdgeInsets.symmetric(
+                    vertical: smallDevice ? 12 : 9,
+                    horizontal: smallDevice ? 20 : 17),
+                iconSize: smallDevice ? 24 : 21,
                 selectedIndex: _selectedIndex,
                 hoverColor: HexColor('#A018F8'),
                 curve: Curves.fastOutSlowIn,

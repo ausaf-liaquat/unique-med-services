@@ -44,6 +44,7 @@ class RowItem extends StatelessWidget {
         : Container(
             padding: EdgeInsets.only(bottom: bottom),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
                   icon,
@@ -51,13 +52,15 @@ class RowItem extends StatelessWidget {
                   size: 20,
                 ),
                 const SizedBox(width: 10),
-                AppTypography(
-                  text: text,
-                  spacing: 0.4,
-                  size: 15,
-                  weight: FontWeight.w500,
-                  color: textColor ?? AppColorScheme().black80,
-                ),
+                Expanded(
+                  child: AppTypography(
+                    text: text,
+                    spacing: 0.4,
+                    size: 15,
+                    weight: FontWeight.w500,
+                    color: textColor ?? AppColorScheme().black80,
+                  ),
+                )
               ],
             ),
           );
