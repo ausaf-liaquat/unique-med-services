@@ -3,12 +3,20 @@ import 'package:ums_staff/widgets/common/typography.dart';
 
 import '../../widgets/card/calendar.dart';
 import '../../widgets/card/card.dart';
+import '../../widgets/card/shift.dart';
 
-class ScheduleScreen extends StatelessWidget {
+class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
 
   @override
+  State<ScheduleScreen> createState() => _ScheduleScreenState();
+}
+
+class _ScheduleScreenState extends State<ScheduleScreen> {
+  @override
   Widget build(BuildContext context) {
+    const data = ['a', 'b', 'c', 'd'];
+
     return SingleChildScrollView(
         child: Container(
             padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
@@ -26,11 +34,19 @@ class ScheduleScreen extends StatelessWidget {
                         weight: FontWeight.w600,
                         spacing: 0.4,
                       ),
-                      const SizedBox(height: 18),
                       Divider(
                         color: Theme.of(context).colorScheme.secondary,
+                        indent: 24,
+                        endIndent: 24,
                       ),
-                      const SizedBox(height: 24),
+                      ListView.separated(
+                        itemCount: 6,
+                        itemBuilder: (BuildContext context, int index) {
+                          return const JobShift();
+                        },
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const Divider(),
+                      )
                     ],
                   ),
                 )

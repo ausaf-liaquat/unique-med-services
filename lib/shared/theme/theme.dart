@@ -8,6 +8,8 @@ class AppThemeData {
   ThemeData lightTheme = ThemeData(
       fontFamily: fonts,
       colorScheme: AppColorScheme().colorScheme,
+      dividerTheme: DividerThemeData(
+          color: AppColorScheme().black10, space: 1, indent: 16, endIndent: 16),
       buttonTheme: ButtonThemeData(
           shape: const StadiumBorder(),
           buttonColor: HexColor('#A018F8'),
