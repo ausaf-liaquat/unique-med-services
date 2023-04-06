@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ums_staff/shared/theme/color.dart';
-import 'package:ums_staff/widgets/common/typography.dart';
-
-import '../common/row_item.dart';
+import 'package:ums_staff/widgets/dataDisplay/row_item.dart';
+import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 
 class JobShift extends StatelessWidget {
   const JobShift({super.key, this.accept = false});
@@ -46,7 +45,7 @@ class JobShift extends StatelessWidget {
         accept ? const SizedBox(height: 24) : const SizedBox(),
         accept
             ? SizedBox(
-                width: 150,
+                width: 145,
                 child: ElevatedButton.icon(
                     onPressed: () {},
                     style: ButtonStyle(

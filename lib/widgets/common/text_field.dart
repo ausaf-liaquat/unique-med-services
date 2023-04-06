@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:ums_staff/widgets/common/typography.dart';
+import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 import '../../shared/theme/color.dart';
 
 class AppTextField extends StatefulWidget {

@@ -36,6 +36,7 @@ class _CalendarCardState extends State<CalendarCard> {
           lastDay: DateTime.utc(2030, 3, 14),
           focusedDay: DateTime.now(),
           daysOfWeekHeight: 43,
+          availableGestures: AvailableGestures.none,
           daysOfWeekStyle: DaysOfWeekStyle(
               weekdayStyle: TextStyle(
                   fontSize: 12,

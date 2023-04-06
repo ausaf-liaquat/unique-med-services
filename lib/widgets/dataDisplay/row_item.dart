@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ums_staff/widgets/common/typography.dart';
+import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 import '../../shared/theme/color.dart';
 
 class RowItem extends StatelessWidget {

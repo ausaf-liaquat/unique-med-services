@@ -5,7 +5,7 @@ import 'package:ums_staff/screens/landing.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/common/text_field.dart';
 
-import '../widgets/common/typography.dart';
+import '../widgets/dataDisplay/typography.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -55,6 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               error: _formKey
                                   .currentState?.fields['email']!.errorText,
                               bottom: 16,
+                              type: TextInputType.emailAddress,
                               name: 'email',
                               label: 'Username or Email',
                               validator: FormBuilderValidators.compose([
@@ -66,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               error: _formKey
                                   .currentState?.fields['password']!.errorText,
                               bottom: 40,
+                              type: TextInputType.visiblePassword,
                               name: 'password',
                               label: 'Password',
                               validator: FormBuilderValidators.compose([
