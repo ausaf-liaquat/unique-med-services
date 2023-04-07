@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import '../../shared/theme/color.dart';
 
@@ -8,6 +7,7 @@ class AppTypography extends StatelessWidget {
       required this.text,
       required this.size,
       this.weight = FontWeight.normal,
+      this.overflow,
       this.spacing,
       this.height,
       this.color,
@@ -17,6 +17,7 @@ class AppTypography extends StatelessWidget {
   final String text;
   final double size;
   final FontWeight weight;
+  final TextOverflow? overflow;
   final double? spacing;
   final double? height;
   final Color? color;
@@ -28,6 +29,7 @@ class AppTypography extends StatelessWidget {
         color: Colors.transparent, // <-- Add this, if needed
         child: Text(
           text,
+          overflow: overflow,
           style: TextStyle(
             fontSize: size,
             fontWeight: weight,
