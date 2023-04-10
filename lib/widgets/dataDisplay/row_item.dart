@@ -28,14 +28,14 @@ class RowItem extends StatelessWidget {
                 Icon(
                   icon,
                   color: iconColor ?? AppColorScheme().black70,
-                  size: 24,
+                  size: 28,
                 ),
-                const SizedBox(width: 18),
+                const SizedBox(width: 22),
                 AppTypography(
                   text: text,
                   spacing: 0.4,
-                  size: 16,
-                  weight: FontWeight.w500,
+                  size: 18,
+                  weight: FontWeight.w600,
                   color: textColor ?? AppColorScheme().black90,
                 ),
               ],

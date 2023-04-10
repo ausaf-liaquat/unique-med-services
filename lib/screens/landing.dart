@@ -8,6 +8,8 @@ import 'package:ums_staff/screens/wallet/wallet.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 
+import '../widgets/others/bottom_sheet.dart';
+
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
   static const route = '/';
@@ -16,7 +18,7 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
-  int _selectedIndex = 4;
+  int _selectedIndex = 0;
   static const List<Widget> _tabs = <Widget>[
     ScheduleScreen(),
     ShiftScreen(),
@@ -38,7 +40,7 @@ class _LandingScreenState extends State<LandingScreen> {
           icon: const Icon(Icons.schedule)),
       IconButton(
           onPressed: () {}, icon: const Icon(Icons.cloud_upload_outlined)),
-      IconButton(onPressed: () {}, icon: const Icon(Icons.more_horiz))
+      const ProfileBottomSheet()
     ];
 
     bool smallDevice = MediaQuery.of(context).size.width >= 375;
