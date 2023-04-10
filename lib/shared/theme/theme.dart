@@ -27,6 +27,26 @@ class AppThemeData {
                   fontSize: 14,
                   letterSpacing: 0.5,
                   fontWeight: FontWeight.w600))),
+      textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+              padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+              shape: const StadiumBorder(),
+              minimumSize: const Size.fromHeight(50),
+              textStyle: const TextStyle(
+                  fontSize: 14,
+                  letterSpacing: 0.5,
+                  fontWeight: FontWeight.w500))),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+              side: BorderSide(color: HexColor('#A018F8'), width: 2),
+              padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+              shape: const StadiumBorder(),
+              minimumSize: const Size.fromHeight(50),
+              textStyle: const TextStyle(
+                  fontSize: 14,
+                  wordSpacing: 0.4,
+                  letterSpacing: 0.5,
+                  fontWeight: FontWeight.w600))),
       inputDecorationTheme: InputDecorationTheme(
           contentPadding:
               const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),

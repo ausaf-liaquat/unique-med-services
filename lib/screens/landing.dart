@@ -3,6 +3,7 @@ import 'package:ums_staff/screens/document/documents.dart';
 import 'package:ums_staff/screens/profile/profile.dart';
 import 'package:ums_staff/screens/schedule/schedule.dart';
 import 'package:ums_staff/screens/shift/shifts.dart';
+import 'package:ums_staff/screens/wallet/payout_avtivity.dart';
 import 'package:ums_staff/screens/wallet/wallet.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:ums_staff/shared/theme/color.dart';
@@ -15,7 +16,7 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 4;
   static const List<Widget> _tabs = <Widget>[
     ScheduleScreen(),
     ShiftScreen(),
@@ -24,17 +25,22 @@ class _LandingScreenState extends State<LandingScreen> {
     ProfileScreen(),
   ];
 
-  static final List<Widget> _icons = <Widget>[
-    IconButton(
-        onPressed: () {}, icon: const Icon(Icons.notifications_outlined)),
-    IconButton(onPressed: () {}, icon: const Icon(Icons.tune)),
-    IconButton(onPressed: () {}, icon: const Icon(Icons.schedule)),
-    IconButton(onPressed: () {}, icon: const Icon(Icons.cloud_upload_outlined)),
-    IconButton(onPressed: () {}, icon: const Icon(Icons.more_horiz))
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final List<Widget> icons = <Widget>[
+      IconButton(
+          onPressed: () {}, icon: const Icon(Icons.notifications_outlined)),
+      IconButton(onPressed: () {}, icon: const Icon(Icons.tune)),
+      IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, PayoutActivtyScreen.route);
+          },
+          icon: const Icon(Icons.schedule)),
+      IconButton(
+          onPressed: () {}, icon: const Icon(Icons.cloud_upload_outlined)),
+      IconButton(onPressed: () {}, icon: const Icon(Icons.more_horiz))
+    ];
+
     bool smallDevice = MediaQuery.of(context).size.width >= 375;
 
     return Scaffold(
@@ -48,7 +54,7 @@ class _LandingScreenState extends State<LandingScreen> {
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 12),
-              child: _icons[_selectedIndex],
+              child: icons[_selectedIndex],
             ),
           ],
         ),

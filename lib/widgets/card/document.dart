@@ -14,13 +14,18 @@ class DocumentCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-                width: 75,
-                height: 75,
-                child: Image.asset(
-                  'assets/test/licence.png',
-                  fit: BoxFit.cover,
-                )),
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(12),
+                  bottomLeft: Radius.circular(12)),
+              child: SizedBox(
+                  width: 75,
+                  height: 75,
+                  child: Image.asset(
+                    'assets/test/licence.png',
+                    fit: BoxFit.cover,
+                  )),
+            ),
             const SizedBox(width: 24),
             Expanded(
                 child: Column(

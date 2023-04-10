@@ -11,25 +11,24 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
+    return Container(
+      padding: padding,
+      decoration: BoxDecoration(
+        color: AppColorScheme().black0,
         borderRadius: BorderRadius.circular(12),
-        child: Container(
-          padding: padding,
-          decoration: BoxDecoration(
-            color: AppColorScheme().black0,
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: Colors.black.withOpacity(0.02),
-                blurRadius: 6,
-              ),
-              BoxShadow(
-                color: Colors.black.withOpacity(0.08),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 6,
           ),
-          child: child,
-        ));
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: child,
+    );
   }
 }
