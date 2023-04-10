@@ -57,7 +57,7 @@ class _AppTextFieldState extends State<AppTextField> {
           child: FormBuilderTextField(
             keyboardType: widget.type,
             name: widget.name,
-            obscureText: !_passwordVisible,
+            obscureText: widget.name == 'password' ? !_passwordVisible : false,
             validator: widget.validator,
             style: TextStyle(
               color: AppColorScheme().black80,
