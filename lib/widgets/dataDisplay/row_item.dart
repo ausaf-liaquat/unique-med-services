@@ -24,17 +24,18 @@ class RowItem extends StatelessWidget {
         ? Container(
             padding: EdgeInsets.only(bottom: bottom),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(
                   icon,
                   color: iconColor ?? AppColorScheme().black70,
-                  size: 28,
+                  size: 26,
                 ),
-                const SizedBox(width: 22),
+                const SizedBox(width: 18),
                 AppTypography(
                   text: text,
                   spacing: 0.4,
-                  size: 18,
+                  size: 16,
                   weight: FontWeight.w600,
                   color: textColor ?? AppColorScheme().black90,
                 ),

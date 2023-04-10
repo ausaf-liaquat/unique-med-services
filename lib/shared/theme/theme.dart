@@ -17,9 +17,8 @@ class AppThemeData {
           buttonColor: HexColor('#A018F8'),
           textTheme: ButtonTextTheme.accent),
       elevatedButtonTheme: ElevatedButtonThemeData(
-          style: TextButton.styleFrom(
-              iconColor: AppColorScheme().black0,
-              padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+          style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
               shape: const StadiumBorder(),
               minimumSize: const Size.fromHeight(50),
               textStyle: TextStyle(
@@ -29,7 +28,7 @@ class AppThemeData {
                   fontWeight: FontWeight.w600))),
       textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-              padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
               shape: const StadiumBorder(),
               minimumSize: const Size.fromHeight(50),
               textStyle: const TextStyle(
@@ -39,7 +38,7 @@ class AppThemeData {
       outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
               side: BorderSide(color: HexColor('#A018F8'), width: 2),
-              padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
               shape: const StadiumBorder(),
               minimumSize: const Size.fromHeight(50),
               textStyle: const TextStyle(
@@ -49,7 +48,7 @@ class AppThemeData {
                   fontWeight: FontWeight.w600))),
       inputDecorationTheme: InputDecorationTheme(
           contentPadding:
-              const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
+          const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           border: UnderlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: AppColorScheme().black0),

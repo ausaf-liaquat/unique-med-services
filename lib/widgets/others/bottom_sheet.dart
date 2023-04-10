@@ -20,27 +20,28 @@ class ProfileBottomSheet extends StatelessWidget {
             ),
             builder: (BuildContext context) {
               return Container(
-                height: 320,
-                padding: const EdgeInsets.fromLTRB(30, 50, 30, 0),
+                height: 314,
+                padding: const EdgeInsets.fromLTRB(30, 68, 30, 0),
                 child: Column(
                   children: const [
                     RowItem(
                         large: true,
+                        bottom: 32,
                         icon: Icons.notifications_outlined,
                         text: 'Notification'),
-                    SizedBox(height: 26),
                     RowItem(
                         large: true,
+                        bottom: 32,
                         icon: Icons.support_agent_outlined,
                         text: 'Help'),
-                    SizedBox(height: 26),
                     RowItem(
                         large: true,
+                        bottom: 32,
                         icon: Icons.article_outlined,
                         text: 'Privacy Policy'),
-                    SizedBox(height: 26),
                     RowItem(
                         large: true,
+                        bottom: 32,
                         icon: Icons.gavel_outlined,
                         text: 'Terms & Conditions')
                   ],

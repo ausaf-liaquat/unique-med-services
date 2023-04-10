@@ -8,6 +8,7 @@ class SearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      keyboardType: TextInputType.text,
       decoration: InputDecoration(
           hintText: 'Enter Keyword...',
           fillColor: AppColorScheme().black6,
