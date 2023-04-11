@@ -9,6 +9,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 
 import '../widgets/others/bottom_sheet.dart';
+import 'document/create.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -39,7 +40,10 @@ class _LandingScreenState extends State<LandingScreen> {
           },
           icon: const Icon(Icons.schedule)),
       IconButton(
-          onPressed: () {}, icon: const Icon(Icons.cloud_upload_outlined)),
+          onPressed: () {
+            Navigator.pushNamed(context, CreateDocumentScreen.route);
+          },
+          icon: const Icon(Icons.cloud_upload_outlined)),
       const ProfileBottomSheet()
     ];
 

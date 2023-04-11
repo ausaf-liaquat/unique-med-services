@@ -14,6 +14,7 @@ class ProfileBottomSheet extends StatelessWidget {
         onPressed: () {
           showModalBottomSheet<void>(
             context: context,
+            backgroundColor: AppColorScheme().black0,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(28), topRight: Radius.circular(28)),
