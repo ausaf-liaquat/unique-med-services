@@ -93,7 +93,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                           label: 'Expiration Date',
                         ),
                         Image.asset(
-                          '/assets/images/image-select.svg',
+                          'assets/images/select-image.png',
                           fit: BoxFit.fitWidth,
                         )
                       ],
