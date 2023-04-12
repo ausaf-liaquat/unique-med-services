@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:ums_staff/widgets/card/card.dart';
 
 import '../../shared/theme/color.dart';
+import '../../shared/utils/image_picker.dart';
 import '../dataDisplay/row_item.dart';
 import '../dataDisplay/typography.dart';
 
@@ -10,6 +13,8 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    File? profileImage;
+
     return AppCard(
         radius: BorderRadius.circular(35),
         child: Column(
@@ -37,12 +42,18 @@ class ProfileCard extends StatelessWidget {
                           ),
                         ]),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Image.asset(
-                        'assets/test/profile.jpg',
-                        fit: BoxFit.cover,
-                      ),
-                    )),
+                        borderRadius: BorderRadius.circular(100),
+                        child: InkWell(
+                          onTap: () {
+                            ImagePick.pickerImage(context, (File image) {
+                              profileImage = image;
+                            });
+                          },
+                          child: Image.asset(
+                            'assets/test/profile.jpg',
+                            fit: BoxFit.cover,
+                          ),
+                        ))),
                 const SizedBox(width: 19),
                 Expanded(
                     child: Column(

@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:ums_staff/shared/theme/color.dart';
+import '../../shared/utils/image_picker.dart';
 import '../../shared/utils/initial_data.dart';
 import '../../widgets/common/back_layout.dart';
 import '../../widgets/common/date_field.dart';
@@ -16,8 +20,30 @@ class CreateDocumentScreen extends StatefulWidget {
 
 class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
+  File? _image;
+
   void changeSelectValue(String name, String value) {
     _formKey.currentState!.fields[name]!.didChange(value);
+  }
+
+  Future getImageGalery() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image == null) {
+      return;
+    }
+    setState(() {
+      _image = File(image.path);
+    });
+  }
+
+  Future getImageCamera() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.camera);
+    if (image == null) {
+      return;
+    }
+    setState(() {
+      _image = File(image.path);
+    });
   }
 
   @override
@@ -92,20 +118,36 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                           name: 'expire_date',
                           label: 'Expiration Date',
                         ),
-                        Image.asset(
-                          'assets/images/select-image.png',
-                          fit: BoxFit.fitWidth,
-                        )
+                        _image == null
+                            ? Image.asset(
+                                'assets/images/select-image.png',
+                                width: 300,
+                              )
+                            : Image.file(
+                                _image!,
+                                fit: BoxFit.fitWidth,
+                              )
                       ],
                     ),
                   )),
-              const SizedBox(height: 80),
+              SizedBox(height: _image == null ? 40 : 80),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 26),
-                child: ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.wallpaper_outlined),
-                    label: const Text('UPLOAD IMAGE')),
+                child: _image == null
+                    ? ElevatedButton.icon(
+                        onPressed: () {
+                          ImagePick.pickerImage(context, (File image) {
+                            setState(() {
+                              _image = image;
+                            });
+                          });
+                        },
+                        icon: const Icon(Icons.wallpaper_outlined),
+                        label: const Text('SELECT Document'))
+                    : ElevatedButton.icon(
+                        onPressed: () {},
+                        icon: const Icon(Icons.wallpaper_outlined),
+                        label: const Text('UPLOAD Document')),
               ),
             ]),
           ),

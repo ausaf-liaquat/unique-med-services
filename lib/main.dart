@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ums_staff/screens/document/create.dart';
 import 'package:ums_staff/screens/login.dart';
 import 'package:ums_staff/shared/router/router.dart';
 import 'package:ums_staff/shared/theme/theme.dart';
@@ -19,7 +18,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppThemeData().lightTheme,
       darkTheme: AppThemeData().lightTheme,
-      initialRoute: CreateDocumentScreen.route,
+      initialRoute: LoginScreen.route,
       routes: appRoutes,
     );
   }
