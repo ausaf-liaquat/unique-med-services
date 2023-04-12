@@ -3,8 +3,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 import '../../shared/theme/color.dart';
 
-class AppTextField extends StatefulWidget {
-  const AppTextField(
+class AppDateField extends StatefulWidget {
+  const AppDateField(
       {super.key,
       required this.name,
       required this.label,
@@ -19,7 +19,7 @@ class AppTextField extends StatefulWidget {
   final String name;
   final void Function()? onTap;
   final String label;
-  final String? Function(String?)? validator;
+  final String? Function(DateTime?)? validator;
   final String helpText;
   final double? bottom;
   final String? error;
@@ -27,12 +27,10 @@ class AppTextField extends StatefulWidget {
   final TextInputType type;
 
   @override
-  State<AppTextField> createState() => _AppTextFieldState();
+  State<AppDateField> createState() => _AppDateFieldState();
 }
 
-class _AppTextFieldState extends State<AppTextField> {
-  bool _passwordVisible = false;
-
+class _AppDateFieldState extends State<AppDateField> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -55,36 +53,24 @@ class _AppTextFieldState extends State<AppTextField> {
               ),
             ],
           ),
-          child: FormBuilderTextField(
-            keyboardType: widget.type,
+          child: FormBuilderDateTimePicker(
             name: widget.name,
-            onTap: widget.onTap,
-            obscureText: widget.name == 'password' ? !_passwordVisible : false,
             validator: widget.validator,
-            style: TextStyle(
-              color: AppColorScheme().black80,
-              fontSize: 16,
-              letterSpacing: 0.5,
-            ),
+            initialEntryMode: DatePickerEntryMode.calendarOnly,
+            inputType: InputType.date,
+            transitionBuilder: (context, child) {
+              return Theme(
+                data: Theme.of(context).copyWith(
+                  colorScheme: ColorScheme.light(
+                    primary: HexColor('#2AABE4'),
+                    onPrimary: HexColor('#FFFFFF'),
+                    onSurface: AppColorScheme().black90,
+                  ),
+                ),
+                child: child!,
+              );
+            },
             decoration: InputDecoration(
-              suffixIcon: widget.name == 'password'
-                  ? Container(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: IconButton(
-                        splashRadius: 20,
-                        icon: Icon(
-                          _passwordVisible
-                              ? Icons.visibility_off_outlined
-                              : Icons.visibility_outlined,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _passwordVisible = !_passwordVisible;
-                          });
-                        },
-                      ),
-                    )
-                  : widget.end,
               errorStyle: const TextStyle(height: 1, fontSize: 0),
               label: AppTypography(
                 text: widget.label,

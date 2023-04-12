@@ -1,38 +1,36 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 import '../../shared/theme/color.dart';
 
-class AppTextField extends StatefulWidget {
-  const AppTextField(
-      {super.key,
-      required this.name,
-      required this.label,
-      this.validator,
-      this.bottom,
-      this.error,
-      this.end = const SizedBox(),
-      this.helpText = '',
-      this.type = TextInputType.text,
-      this.onTap});
+class AppSelectField extends StatefulWidget {
+  const AppSelectField({
+    super.key,
+    required this.name,
+    required this.label,
+    this.validator,
+    this.bottom,
+    this.error,
+    this.helpText = '',
+    required this.onSelect,
+    required this.option,
+  });
 
   final String name;
-  final void Function()? onTap;
   final String label;
   final String? Function(String?)? validator;
+  final void Function(String, String) onSelect;
   final String helpText;
   final double? bottom;
   final String? error;
-  final Widget end;
-  final TextInputType type;
+  final List<String> option;
 
   @override
-  State<AppTextField> createState() => _AppTextFieldState();
+  State<AppSelectField> createState() => _AppSelectFieldState();
 }
 
-class _AppTextFieldState extends State<AppTextField> {
-  bool _passwordVisible = false;
-
+class _AppSelectFieldState extends State<AppSelectField> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -56,10 +54,8 @@ class _AppTextFieldState extends State<AppTextField> {
             ],
           ),
           child: FormBuilderTextField(
-            keyboardType: widget.type,
+            readOnly: true,
             name: widget.name,
-            onTap: widget.onTap,
-            obscureText: widget.name == 'password' ? !_passwordVisible : false,
             validator: widget.validator,
             style: TextStyle(
               color: AppColorScheme().black80,
@@ -67,24 +63,6 @@ class _AppTextFieldState extends State<AppTextField> {
               letterSpacing: 0.5,
             ),
             decoration: InputDecoration(
-              suffixIcon: widget.name == 'password'
-                  ? Container(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: IconButton(
-                        splashRadius: 20,
-                        icon: Icon(
-                          _passwordVisible
-                              ? Icons.visibility_off_outlined
-                              : Icons.visibility_outlined,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _passwordVisible = !_passwordVisible;
-                          });
-                        },
-                      ),
-                    )
-                  : widget.end,
               errorStyle: const TextStyle(height: 1, fontSize: 0),
               label: AppTypography(
                 text: widget.label,
@@ -93,6 +71,47 @@ class _AppTextFieldState extends State<AppTextField> {
                 spacing: 0.4,
               ),
             ),
+            onTap: () {
+              showCupertinoModalPopup<void>(
+                context: context,
+                builder: (BuildContext context) => CupertinoActionSheet(
+                    message: AppTypography(
+                      text: 'What is your document type?',
+                      align: TextAlign.center,
+                      size: 13,
+                      spacing: -0.08,
+                      color: AppColorScheme().black50,
+                    ),
+                    cancelButton: CupertinoActionSheetAction(
+                      isDefaultAction: true,
+                      onPressed: () {
+                        Navigator.pop(context, 'Cancel');
+                      },
+                      child: AppTypography(
+                        text: 'Cancel',
+                        size: 20,
+                        weight: FontWeight.w600,
+                        spacing: 0.38,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    actions: widget.option.map((String item) {
+                      return CupertinoActionSheetAction(
+                        isDestructiveAction: true,
+                        onPressed: () {
+                          widget.onSelect(widget.name, item);
+                          Navigator.pop(context, item);
+                        },
+                        child: AppTypography(
+                          text: item,
+                          size: 20,
+                          spacing: 0.38,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      );
+                    }).toList()),
+              );
+            },
           ),
         ),
         (widget.helpText + (widget.error ?? '')) != ''

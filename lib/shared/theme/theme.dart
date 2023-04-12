@@ -48,7 +48,7 @@ class AppThemeData {
                   fontWeight: FontWeight.w600))),
       inputDecorationTheme: InputDecorationTheme(
           contentPadding:
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           border: UnderlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(color: AppColorScheme().black0),

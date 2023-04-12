@@ -95,30 +95,40 @@ class ProfileCard extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(12, 24, 12, 0),
               child: Column(
                 children: [
-                  const RowItem(icon: Icons.call_outlined, text: '7274631685'),
-                  const SizedBox(height: 6),
+                  const RowItem(
+                    icon: Icons.call_outlined,
+                    text: '7274631685',
+                    bottom: 16,
+                  ),
                   const RowItem(
                       icon: Icons.location_on_outlined,
+                      bottom: 16,
                       text: 'uvsoffl@gmail.co'),
-                  const SizedBox(height: 6),
                   const RowItem(
                       icon: Icons.call_outlined,
+                      bottom: 16,
                       text: '11929 Bahia Valley Drive'),
-                  const SizedBox(height: 6),
                   Row(
                     children: const [
                       Expanded(
                           child: RowItem(
                               icon: Icons.apartment_outlined,
+                              bottom: 16,
                               text: 'Riverview')),
                       SizedBox(width: 6),
                       Expanded(
-                          child:
-                              RowItem(icon: Icons.villa_outlined, text: 'FL'))
+                          child: RowItem(
+                        icon: Icons.villa_outlined,
+                        text: 'FL',
+                        bottom: 16,
+                      ))
                     ],
                   ),
-                  const SizedBox(height: 6),
-                  const RowItem(icon: Icons.map_outlined, text: '33579'),
+                  const RowItem(
+                    icon: Icons.map_outlined,
+                    text: '33579',
+                    bottom: 16,
+                  ),
                 ],
               ),
             )

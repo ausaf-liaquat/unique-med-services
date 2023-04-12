@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:ums_staff/shared/theme/color.dart';
+import '../../shared/utils/initial_data.dart';
 import '../../widgets/common/back_layout.dart';
-import '../../widgets/common/text_field.dart';
+import '../../widgets/common/date_field.dart';
+import '../../widgets/common/select_field.dart';
 
 class CreateDocumentScreen extends StatefulWidget {
   const CreateDocumentScreen({super.key});
@@ -15,8 +16,10 @@ class CreateDocumentScreen extends StatefulWidget {
 
 class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-  String passwordError = '';
-  String emailError = '';
+  void changeSelectValue(String name, String value) {
+    _formKey.currentState!.fields[name]!.didChange(value);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -65,37 +68,34 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                       _formKey.currentState!.save();
                     },
                     autovalidateMode: AutovalidateMode.disabled,
-                    initialValue: const {
-                      'document_type': '',
-                      'expire_date': '',
+                    initialValue: {
+                      'document_type': AppInitialData().documentTypes[0],
+                      'expire_date': DateTime.now(),
                     },
                     skipDisabled: true,
                     child: Column(
                       children: [
-                        AppTextField(
+                        AppSelectField(
                           error: _formKey
                               .currentState?.fields['document_type']!.errorText,
-                          bottom: 16,
-                          type: TextInputType.emailAddress,
+                          bottom: 20,
+                          onSelect: changeSelectValue,
+                          option: AppInitialData().documentTypes,
                           name: 'document_type',
                           label: 'Document Type',
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(
-                                errorText: 'Document type is mendatory'),
-                          ]),
                         ),
-                        AppTextField(
+                        AppDateField(
                           error: _formKey
                               .currentState?.fields['expire_date']!.errorText,
                           bottom: 40,
                           type: TextInputType.datetime,
                           name: 'expire_date',
                           label: 'Expiration Date',
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(
-                                errorText: 'Expiration date is mendatory'),
-                          ]),
                         ),
+                        Image.asset(
+                          '/assets/images/image-select.svg',
+                          fit: BoxFit.fitWidth,
+                        )
                       ],
                     ),
                   )),
@@ -103,13 +103,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 26),
                 child: ElevatedButton.icon(
-                    onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        // error funtion
-                      } else {
-                        setState(() {});
-                      }
-                    },
+                    onPressed: () {},
                     icon: const Icon(Icons.wallpaper_outlined),
                     label: const Text('UPLOAD IMAGE')),
               ),
