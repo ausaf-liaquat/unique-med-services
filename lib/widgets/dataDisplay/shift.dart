@@ -45,7 +45,7 @@ class JobShift extends StatelessWidget {
         accept ? const SizedBox(height: 24) : const SizedBox(),
         accept
             ? SizedBox(
-                width: 145,
+                width: 135,
                 child: ElevatedButton.icon(
                     onPressed: () {},
                     style: ButtonStyle(

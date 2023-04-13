@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 
+import '../../screens/wallet/direct_deposit.dart';
+
 class AccountBalance extends StatefulWidget {
   const AccountBalance({super.key});
 
@@ -101,7 +103,10 @@ class _AccountBalanceState extends State<AccountBalance> {
               SizedBox(width: smallDevice ? 16 : 8),
               Expanded(
                   child: ElevatedButton(
-                      onPressed: () {}, child: const Text('Deposit')))
+                      onPressed: () {
+                        Navigator.pushNamed(context, DirectDepositScreen.route);
+                      },
+                      child: const Text('Deposit')))
             ],
           )
         ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../shared/theme/color.dart';
 import '../../widgets/card/profile.dart';
 import '../../widgets/dataDisplay/typography.dart';
+import 'edit.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -30,7 +31,10 @@ class ProfileScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                     child: OutlinedButton.icon(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                              context, EditProfileScreen.route);
+                                        },
                                         icon: const Icon(Icons.edit_outlined),
                                         label: const Text('PROFILE'))),
                                 SizedBox(width: midiumDevice ? 32 : 15),
@@ -45,7 +49,10 @@ class ProfileScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                     child: OutlinedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                              context, EditProfileScreen.route);
+                                        },
                                         child: const Text('PROFILE'))),
                                 SizedBox(width: midiumDevice ? 32 : 15),
                                 Expanded(

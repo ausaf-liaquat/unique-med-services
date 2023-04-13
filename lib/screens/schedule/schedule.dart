@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ums_staff/widgets/common/Link.dart';
 import '../../widgets/card/calendar.dart';
 import '../../widgets/card/card.dart';
 import '../../widgets/dataDisplay/shift.dart';
 import '../../widgets/dataDisplay/typography.dart';
+import 'details.dart';
 
 class ScheduleScreen extends StatelessWidget {
   const ScheduleScreen({super.key});
@@ -37,7 +39,9 @@ class ScheduleScreen extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (BuildContext context, int index) {
-                          return const JobShift(accept: true);
+                          return const AppLink(
+                              path: ScheduleDetailScreen.route,
+                              child: JobShift(accept: true));
                           // for dinamic usage: data[index].value
                         },
                         separatorBuilder: (BuildContext context, int index) =>

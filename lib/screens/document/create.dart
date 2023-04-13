@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import '../../shared/utils/image_picker.dart';
 import '../../shared/utils/initial_data.dart';
@@ -24,26 +23,6 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
 
   void changeSelectValue(String name, String value) {
     _formKey.currentState!.fields[name]!.didChange(value);
-  }
-
-  Future getImageGalery() async {
-    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (image == null) {
-      return;
-    }
-    setState(() {
-      _image = File(image.path);
-    });
-  }
-
-  Future getImageCamera() async {
-    final image = await ImagePicker().pickImage(source: ImageSource.camera);
-    if (image == null) {
-      return;
-    }
-    setState(() {
-      _image = File(image.path);
-    });
   }
 
   @override
@@ -104,6 +83,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                         AppSelectField(
                           error: _formKey
                               .currentState?.fields['document_type']!.errorText,
+                          title: 'What is your document type?',
                           bottom: 20,
                           onSelect: changeSelectValue,
                           option: AppInitialData().documentTypes,
@@ -132,9 +112,9 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                   )),
               SizedBox(height: _image == null ? 40 : 80),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 26),
-                child: _image == null
-                    ? ElevatedButton.icon(
+                  padding: const EdgeInsets.symmetric(horizontal: 26),
+                  child: Column(children: [
+                    ElevatedButton.icon(
                         onPressed: () {
                           ImagePick.pickerImage(context, (File image) {
                             setState(() {
@@ -143,12 +123,17 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                           });
                         },
                         icon: const Icon(Icons.wallpaper_outlined),
-                        label: const Text('SELECT Document'))
-                    : ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.wallpaper_outlined),
-                        label: const Text('UPLOAD Document')),
-              ),
+                        label: Text(_image == null
+                            ? 'SELECT DOCUMENT'
+                            : 'RESELECT DOCUMENT')),
+                    const SizedBox(height: 24),
+                    _image == null
+                        ? const SizedBox()
+                        : ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: const Icon(Icons.cloud_upload_outlined),
+                            label: const Text('UPLOAD DOCUMENT')),
+                  ])),
             ]),
           ),
         ));

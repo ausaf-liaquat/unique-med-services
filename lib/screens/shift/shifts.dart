@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ums_staff/widgets/card/card.dart';
 import '../../widgets/common/search_field.dart';
 import '../../widgets/dataDisplay/shift.dart';
+import 'details.dart';
 
 class ShiftScreen extends StatelessWidget {
   const ShiftScreen({super.key});
@@ -22,7 +23,10 @@ class ShiftScreen extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
-              return const AppCard(child: JobShift());
+              return const AppCard(
+                path: ShiftDetailScreen.route,
+                child: JobShift(),
+              );
               // for dinamic usage: data[index].value
             },
             separatorBuilder: (BuildContext context, int index) => Container(

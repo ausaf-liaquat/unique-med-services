@@ -71,6 +71,8 @@ class _AppDateFieldState extends State<AppDateField> {
               );
             },
             decoration: InputDecoration(
+              suffixIcon: Icon(Icons.date_range_outlined,
+                  color: AppColorScheme().black40),
               errorStyle: const TextStyle(height: 1, fontSize: 0),
               label: AppTypography(
                 text: widget.label,

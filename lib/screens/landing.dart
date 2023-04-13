@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ums_staff/screens/document/documents.dart';
 import 'package:ums_staff/screens/profile/profile.dart';
 import 'package:ums_staff/screens/schedule/schedule.dart';
+import 'package:ums_staff/screens/shift/edit.dart';
 import 'package:ums_staff/screens/shift/shifts.dart';
 import 'package:ums_staff/screens/wallet/payout_avtivity.dart';
 import 'package:ums_staff/screens/wallet/wallet.dart';
@@ -33,7 +34,11 @@ class _LandingScreenState extends State<LandingScreen> {
     final List<Widget> icons = <Widget>[
       IconButton(
           onPressed: () {}, icon: const Icon(Icons.notifications_outlined)),
-      IconButton(onPressed: () {}, icon: const Icon(Icons.tune)),
+      IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, FilterShiftScreen.route);
+          },
+          icon: const Icon(Icons.tune)),
       IconButton(
           onPressed: () {
             Navigator.pushNamed(context, PayoutActivtyScreen.route);
