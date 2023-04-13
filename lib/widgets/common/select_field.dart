@@ -104,6 +104,7 @@ class _AppSelectFieldState extends State<AppSelectField> {
                         },
                         child: AppTypography(
                           text: item,
+                          align: TextAlign.center,
                           size: 20,
                           spacing: 0.38,
                           color: Theme.of(context).colorScheme.primary,
