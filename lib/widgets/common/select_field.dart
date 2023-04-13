@@ -10,6 +10,7 @@ class AppSelectField extends StatefulWidget {
     required this.name,
     required this.label,
     this.validator,
+    required this.title,
     this.bottom,
     this.error,
     this.helpText = '',
@@ -18,6 +19,7 @@ class AppSelectField extends StatefulWidget {
   });
 
   final String name;
+  final String title;
   final String label;
   final String? Function(String?)? validator;
   final void Function(String, String) onSelect;
@@ -63,6 +65,8 @@ class _AppSelectFieldState extends State<AppSelectField> {
               letterSpacing: 0.5,
             ),
             decoration: InputDecoration(
+              suffixIcon: Icon(Icons.arrow_drop_down_outlined,
+                  color: AppColorScheme().black50),
               errorStyle: const TextStyle(height: 1, fontSize: 0),
               label: AppTypography(
                 text: widget.label,
@@ -76,7 +80,7 @@ class _AppSelectFieldState extends State<AppSelectField> {
                 context: context,
                 builder: (BuildContext context) => CupertinoActionSheet(
                     message: AppTypography(
-                      text: 'What is your document type?',
+                      text: widget.title,
                       align: TextAlign.center,
                       size: 13,
                       spacing: -0.08,

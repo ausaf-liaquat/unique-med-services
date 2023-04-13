@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../screens/landing.dart';
 import '../../screens/login.dart';
+import '../../screens/profile/edit.dart';
+import '../../screens/schedule/details.dart';
+import '../../screens/shift/details.dart';
 import '../../screens/wallet/payout_avtivity.dart';
 import '../../screens/document/create.dart';
 
@@ -9,4 +12,7 @@ var appRoutes = <String, WidgetBuilder>{
   LoginScreen.route: (context) => const LoginScreen(),
   PayoutActivtyScreen.route: (context) => const PayoutActivtyScreen(),
   CreateDocumentScreen.route: (context) => const CreateDocumentScreen(),
+  EditProfileScreen.route: (context) => const EditProfileScreen(),
+  ShiftDetailScreen.route: (context) => const ShiftDetailScreen(),
+  ScheduleDetailScreen.route: (context) => const ScheduleDetailScreen(),
 };
