@@ -10,8 +10,7 @@ class ShiftDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool midiumDevice = MediaQuery.of(context).size.width >= 392;
-    bool smallDevice = MediaQuery.of(context).size.width >= 375;
+    bool smallDevice = MediaQuery.of(context).size.width >= 350;
 
     return BackLayout(
       text: 'Shift Offer',
@@ -51,13 +50,13 @@ class ShiftDetailScreen extends StatelessWidget {
                                   child: OutlinedButton.icon(
                                       onPressed: () {},
                                       icon:
-                                          const Icon(Icons.thumb_down_rounded),
+                                          const Icon(Icons.thumb_down_outlined),
                                       label: const Text('Decline'))),
-                              SizedBox(width: midiumDevice ? 32 : 15),
+                              const SizedBox(width: 32),
                               Expanded(
                                   child: ElevatedButton.icon(
                                       onPressed: () {},
-                                      icon: const Icon(Icons.thumb_up_rounded),
+                                      icon: const Icon(Icons.thumb_up_outlined),
                                       label: const Text('Accept'))),
                             ],
                           )
@@ -66,7 +65,7 @@ class ShiftDetailScreen extends StatelessWidget {
                                 child: OutlinedButton(
                                     onPressed: () {},
                                     child: const Text('Decline'))),
-                            SizedBox(width: midiumDevice ? 32 : 15),
+                            const SizedBox(width: 32),
                             Expanded(
                                 child: ElevatedButton(
                                     onPressed: () {},

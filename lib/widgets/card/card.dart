@@ -17,6 +17,10 @@ class AppCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      focusColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      splashColor: Colors.transparent,
       onTap: () {
         path == null ? () {} : Navigator.pushNamed(context, path ?? '');
       },
