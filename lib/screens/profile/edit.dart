@@ -100,7 +100,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         error:
                             _formKey.currentState?.fields['phone']!.errorText,
                         bottom: 28,
-                        type: TextInputType.emailAddress,
+                        type: TextInputType.phone,
                         name: 'phone',
                         label: 'Phone Number',
                         validator: FormBuilderValidators.compose([

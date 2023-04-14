@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ums_staff/screens/wallet/payout_detail.dart';
 import '../../widgets/card/card.dart';
 import '../../widgets/common/back_layout.dart';
 import '../../widgets/common/search_field.dart';
@@ -27,6 +28,7 @@ class PayoutActivtyScreen extends StatelessWidget {
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
                 return const AppCard(
+                  path: PayoutDetailScreen.route,
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   child: Payout(),
                 );

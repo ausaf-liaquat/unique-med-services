@@ -110,7 +110,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                       ],
                     ),
                   )),
-              SizedBox(height: _image == null ? 40 : 80),
+              const SizedBox(height: 40),
               Container(
                   padding: const EdgeInsets.symmetric(horizontal: 26),
                   child: Column(children: [

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ums_staff/screens/wallet/payout_avtivity.dart';
+import 'package:ums_staff/screens/wallet/payout_detail.dart';
+import 'package:ums_staff/widgets/common/link.dart';
 import 'package:ums_staff/widgets/dataDisplay/payout.dart';
 
 import '../../widgets/card/account_balance.dart';
@@ -34,7 +37,10 @@ class WalletScreen extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
-                    return const Payout();
+                    return const AppLink(
+                      path: PayoutDetailScreen.route,
+                      child: Payout(),
+                    );
                     // for dinamic usage: data[index].value
                   },
                   separatorBuilder: (BuildContext context, int index) =>
@@ -45,7 +51,10 @@ class WalletScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 Center(
                   child: TextButton(
-                      onPressed: () {}, child: const Text('SEE ALL ')),
+                      onPressed: () {
+                        Navigator.pushNamed(context, PayoutActivtyScreen.route);
+                      },
+                      child: const Text('SEE ALL ')),
                 )
               ],
             ),
