@@ -23,9 +23,11 @@ class _AppCheckBoxState extends State<AppCheckBox> {
         activeColor: Theme.of(context).colorScheme.secondary,
         name: widget.name,
         initialValue: false,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
+            fillColor: AppColorScheme().black2,
             enabled: false,
-            contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 0)),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 8, horizontal: 0)),
         title: Transform.translate(
           offset: const Offset(-6, -1),
           child: AppTypography(

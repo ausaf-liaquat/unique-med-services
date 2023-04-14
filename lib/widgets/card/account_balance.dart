@@ -3,6 +3,7 @@ import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 
 import '../../screens/wallet/direct_deposit.dart';
+import '../../screens/wallet/w9_form.dart';
 
 class AccountBalance extends StatefulWidget {
   const AccountBalance({super.key});
@@ -98,7 +99,9 @@ class _AccountBalanceState extends State<AccountBalance> {
             children: [
               Expanded(
                   child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, W9FormScreen.route);
+                      },
                       child: Text(smallDevice ? 'W-9 form' : 'W-9'))),
               SizedBox(width: smallDevice ? 16 : 8),
               Expanded(

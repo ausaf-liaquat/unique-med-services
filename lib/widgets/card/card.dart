@@ -16,33 +16,53 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      focusColor: Colors.transparent,
-      hoverColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      splashColor: Colors.transparent,
-      onTap: () {
-        path == null ? () {} : Navigator.pushNamed(context, path ?? '');
-      },
-      child: Container(
-        padding: padding,
-        decoration: BoxDecoration(
-          color: AppColorScheme().black0,
-          borderRadius: radius ?? BorderRadius.circular(12),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Colors.black.withOpacity(0.02),
-              blurRadius: 6,
+    return path != null
+        ? InkWell(
+            focusColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            onTap: () {
+              path == null ? () {} : Navigator.pushNamed(context, path ?? '');
+            },
+            child: Container(
+              padding: padding,
+              decoration: BoxDecoration(
+                color: AppColorScheme().black0,
+                borderRadius: radius ?? BorderRadius.circular(12),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.02),
+                    blurRadius: 6,
+                  ),
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: child,
             ),
-            BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
+          )
+        : Container(
+            padding: padding,
+            decoration: BoxDecoration(
+              color: AppColorScheme().black0,
+              borderRadius: radius ?? BorderRadius.circular(12),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.02),
+                  blurRadius: 6,
+                ),
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
-          ],
-        ),
-        child: child,
-      ),
-    );
+            child: child,
+          );
   }
 }

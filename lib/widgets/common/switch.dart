@@ -26,9 +26,11 @@ class _AppSwitchState extends State<AppSwitch> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: FormBuilderSwitch(
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
+            fillColor: AppColorScheme().black2,
             enabled: false,
-            contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 0)),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 8, horizontal: 0)),
         validator: widget.validator,
         activeColor: Theme.of(context).colorScheme.secondary,
         title: AppTypography(
