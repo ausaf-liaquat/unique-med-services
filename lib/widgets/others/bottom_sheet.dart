@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ums_staff/widgets/common/link.dart';
 import 'package:ums_staff/widgets/dataDisplay/row_item.dart';
 
+import '../../screens/support.dart';
 import '../../shared/theme/color.dart';
 
 class ProfileBottomSheet extends StatelessWidget {
@@ -30,11 +32,13 @@ class ProfileBottomSheet extends StatelessWidget {
                         bottom: 32,
                         icon: Icons.notifications_outlined,
                         text: 'Notification'),
-                    RowItem(
-                        large: true,
-                        bottom: 32,
-                        icon: Icons.support_agent_outlined,
-                        text: 'Help'),
+                    AppLink(
+                        path: SupportScreen.route,
+                        child: RowItem(
+                            large: true,
+                            bottom: 32,
+                            icon: Icons.support_agent_outlined,
+                            text: 'Help')),
                     RowItem(
                         large: true,
                         bottom: 32,

@@ -5,6 +5,7 @@ import '../../screens/profile/edit.dart';
 import '../../screens/schedule/details.dart';
 import '../../screens/shift/details.dart';
 import '../../screens/shift/edit.dart';
+import '../../screens/support.dart';
 import '../../screens/wallet/direct_deposit.dart';
 import '../../screens/wallet/payout_avtivity.dart';
 import '../../screens/document/create.dart';
@@ -23,4 +24,5 @@ var appRoutes = <String, WidgetBuilder>{
   DirectDepositScreen.route: (context) => const DirectDepositScreen(),
   PayoutDetailScreen.route: (context) => const PayoutDetailScreen(),
   W9FormScreen.route: (context) => const W9FormScreen(),
+  SupportScreen.route: (context) => const SupportScreen(),
 };
