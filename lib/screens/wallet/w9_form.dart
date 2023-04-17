@@ -91,7 +91,7 @@ class _W9FormScreenState extends State<W9FormScreen> {
                         label: 'First Name',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'First Name is mendatory'),
+                              errorText: 'First Name is required'),
                         ]),
                       ),
                       AppTextField(
@@ -104,7 +104,7 @@ class _W9FormScreenState extends State<W9FormScreen> {
                         label: 'Middle Name',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Middle Name is mendatory'),
+                              errorText: 'Middle Name is required'),
                         ]),
                       ),
                       AppTextField(
@@ -117,7 +117,7 @@ class _W9FormScreenState extends State<W9FormScreen> {
                         label: 'Last Name',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Last Name is mendatory'),
+                              errorText: 'Last Name is required'),
                         ]),
                       ),
                       const AppTypography(
@@ -132,7 +132,7 @@ class _W9FormScreenState extends State<W9FormScreen> {
                         label: 'Address',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Address is mendatory'),
+                              errorText: 'Address is required'),
                         ]),
                       ),
                       AppSelectField(
@@ -145,7 +145,7 @@ class _W9FormScreenState extends State<W9FormScreen> {
                         label: 'City',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'City is mendatory'),
+                              errorText: 'City is required'),
                         ]),
                       ),
                       AppSelectField(
@@ -169,7 +169,7 @@ class _W9FormScreenState extends State<W9FormScreen> {
                         label: 'Zip Code',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Zip code is mendatory'),
+                              errorText: 'Zip code is required'),
                         ]),
                       ),
                       AppTextField(
@@ -182,7 +182,7 @@ class _W9FormScreenState extends State<W9FormScreen> {
                             : 'Social Security',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Social security number is mendatory'),
+                              errorText: 'Social security number is required'),
                         ]),
                       ),
                       AppTextField(
@@ -248,7 +248,7 @@ class _W9FormScreenState extends State<W9FormScreen> {
                         label: 'Name',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Name is mendatory'),
+                              errorText: 'Name is required'),
                         ]),
                       ),
                       const SizedBox(height: 48),

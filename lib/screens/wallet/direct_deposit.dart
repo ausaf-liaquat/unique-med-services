@@ -65,7 +65,7 @@ class _DirectDepositScreenState extends State<DirectDepositScreen> {
                         label: 'First Name',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'First Name is mendatory'),
+                              errorText: 'First Name is required'),
                         ]),
                       ),
                       AppTextField(
@@ -77,7 +77,7 @@ class _DirectDepositScreenState extends State<DirectDepositScreen> {
                         label: 'Last Name',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Last Name is mendatory'),
+                              errorText: 'Last Name is required'),
                         ]),
                       ),
                       AppTextField(
@@ -89,7 +89,7 @@ class _DirectDepositScreenState extends State<DirectDepositScreen> {
                         label: 'Router Number',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Router Number is mendatory'),
+                              errorText: 'Router Number is required'),
                         ]),
                       ),
                       AppTextField(
@@ -116,7 +116,7 @@ class _DirectDepositScreenState extends State<DirectDepositScreen> {
                         label: 'Account Number',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Account Number is mendatory'),
+                              errorText: 'Account Number is required'),
                         ]),
                       ),
                       AppTextField(

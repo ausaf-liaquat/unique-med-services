@@ -72,7 +72,7 @@ class _FilterShiftScreenState extends State<FilterShiftScreen> {
                         label: 'Shift Type',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Shift type is mendatory'),
+                              errorText: 'Shift type is required'),
                         ]),
                       ),
                       AppSelectField(
@@ -86,7 +86,7 @@ class _FilterShiftScreenState extends State<FilterShiftScreen> {
                         label: 'Facility',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Facility is mendatory'),
+                              errorText: 'Facility is required'),
                         ]),
                       ),
                       const AppSwitch(

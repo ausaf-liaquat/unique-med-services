@@ -67,7 +67,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         label: 'Name',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Name is mendatory'),
+                              errorText: 'Name is required'),
                         ]),
                       ),
                       AppSelectField(
@@ -81,7 +81,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         label: 'Clinician',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Clinician is mendatory'),
+                              errorText: 'Clinician is required'),
                         ]),
                       ),
                       AppTextField(
@@ -93,7 +93,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         label: 'Email',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Email is mendatory'),
+                              errorText: 'Email is required'),
                         ]),
                       ),
                       AppTextField(
@@ -105,7 +105,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         label: 'Phone Number',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Phone number is mendatory'),
+                              errorText: 'Phone number is required'),
                         ]),
                       ),
                       const AppTypography(
@@ -123,7 +123,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         label: 'Address',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Address is mendatory'),
+                              errorText: 'Address is required'),
                         ]),
                       ),
                       AppSelectField(
@@ -136,7 +136,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         label: 'City',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'City is mendatory'),
+                              errorText: 'City is required'),
                         ]),
                       ),
                       AppSelectField(
@@ -160,7 +160,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         label: 'Zip Code',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Zip code is mendatory'),
+                              errorText: 'Zip code is required'),
                         ]),
                       ),
                       Container(

@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               label: 'Username or Email',
                               validator: FormBuilderValidators.compose([
                                 FormBuilderValidators.required(
-                                    errorText: 'Email is mendatory'),
+                                    errorText: 'Email is required'),
                               ]),
                             ),
                             AppTextField(
@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               label: 'Password',
                               validator: FormBuilderValidators.compose([
                                 FormBuilderValidators.required(
-                                    errorText: 'Password is mendatory'),
+                                    errorText: 'Password is required'),
                               ]),
                             ),
                             ElevatedButton(
