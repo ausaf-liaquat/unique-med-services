@@ -30,15 +30,18 @@ class _W9FormScreenState extends State<W9FormScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     bool smallDevice = MediaQuery.of(context).size.width >= 365;
+    final List<Widget> _steps = <Widget>[
+      const Step1(),
+      Step2(onSelect: changeSelectValue, fieldsError: fieldsErrors),
+      Step3(onSelect: changeSelectValue, fieldsError: fieldsErrors),
+      Step4(onSelect: changeSelectValue, fieldsError: fieldsErrors),
+    ];
 
     return BackLayout(
+        totalTabs: 4,
+        currentTabs: _currentStep + 1,
         text: 'ELectronic W-9',
         page: SingleChildScrollView(
           child: Container(
@@ -80,10 +83,7 @@ class _W9FormScreenState extends State<W9FormScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      FormSteps(
-                          fieldsError: fieldsErrors,
-                          index: _currentStep,
-                          onSelect: changeSelectValue),
+                      _steps[_currentStep],
                       const SizedBox(height: 40),
                       Container(
                         padding: EdgeInsets.symmetric(
