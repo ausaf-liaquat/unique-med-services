@@ -4,8 +4,6 @@ import 'package:ums_staff/screens/profile/profile.dart';
 import 'package:ums_staff/screens/schedule/schedule.dart';
 import 'package:ums_staff/screens/shift/edit.dart';
 import 'package:ums_staff/screens/shift/shifts.dart';
-import 'package:ums_staff/screens/wallet/payout_avtivity.dart';
-import 'package:ums_staff/screens/wallet/wallet.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 
@@ -24,9 +22,9 @@ class _LandingScreenState extends State<LandingScreen> {
   static const List<Widget> _tabs = <Widget>[
     ScheduleScreen(),
     ShiftScreen(),
-    WalletScreen(),
     DocumentScreen(),
     ProfileScreen(),
+    // WalletScreen(),
   ];
 
   @override
@@ -39,11 +37,11 @@ class _LandingScreenState extends State<LandingScreen> {
             Navigator.pushNamed(context, FilterShiftScreen.route);
           },
           icon: const Icon(Icons.tune)),
-      IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, PayoutActivtyScreen.route);
-          },
-          icon: const Icon(Icons.schedule)),
+      // IconButton(
+      //     onPressed: () {
+      //       Navigator.pushNamed(context, PayoutActivtyScreen.route);
+      //     },
+      //     icon: const Icon(Icons.schedule)),
       IconButton(
           onPressed: () {
             Navigator.pushNamed(context, CreateDocumentScreen.route);

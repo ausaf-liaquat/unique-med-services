@@ -23,6 +23,17 @@ class AppInitialData {
     'Summary/Checklist TB 2-Step',
     'TB Test or Chest X-Ray'
   ];
+
+  List<String> federalTaxClassification = [
+    'Individual/sole proprietor or',
+    'C Corporation',
+    'S Corporation',
+    'Partnership',
+    'Trust/estate',
+    'Limited liability company',
+    'Other'
+  ];
+
   List frequentAskQuestion = [
     {
       "title": 'When can I cancel a shift?',

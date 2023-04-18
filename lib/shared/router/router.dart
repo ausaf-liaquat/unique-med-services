@@ -10,7 +10,7 @@ import '../../screens/wallet/direct_deposit.dart';
 import '../../screens/wallet/payout_avtivity.dart';
 import '../../screens/document/create.dart';
 import '../../screens/wallet/payout_detail.dart';
-import '../../screens/wallet/w9_form.dart';
+import '../../screens/w9_form/w9_form.dart';
 
 var appRoutes = <String, WidgetBuilder>{
   LandingScreen.route: (context) => const LandingScreen(),
