@@ -11,7 +11,7 @@ class AppTextField extends StatefulWidget {
       this.validator,
       this.bottom,
       this.error,
-      this.end = const SizedBox(),
+      this.end,
       this.helpText = '',
       this.type = TextInputType.text,
       this.onTap});
@@ -23,7 +23,7 @@ class AppTextField extends StatefulWidget {
   final String helpText;
   final double? bottom;
   final String? error;
-  final Widget end;
+  final Widget? end;
   final TextInputType type;
 
   @override
@@ -56,6 +56,8 @@ class _AppTextFieldState extends State<AppTextField> {
             ],
           ),
           child: FormBuilderTextField(
+            maxLines: widget.type == TextInputType.multiline ? 10 : 1,
+            minLines: widget.type == TextInputType.multiline ? 5 : 1,
             keyboardType: widget.type,
             name: widget.name,
             onTap: widget.onTap,

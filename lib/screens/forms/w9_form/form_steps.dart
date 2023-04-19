@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
-import '../../shared/theme/color.dart';
-import '../../shared/utils/initial_data.dart';
-import '../../widgets/common/check_box.dart';
-import '../../widgets/common/date_field.dart';
-import '../../widgets/common/select_field.dart';
-import '../../widgets/common/text_field.dart';
-import '../../widgets/dataDisplay/list_item.dart';
-import '../../widgets/dataDisplay/typography.dart';
+import '../../../shared/theme/color.dart';
+import '../../../shared/utils/initial_data.dart';
+import '../../../widgets/common/check_box.dart';
+import '../../../widgets/common/date_field.dart';
+import '../../../widgets/common/select_field.dart';
+import '../../../widgets/common/text_field.dart';
+import '../../../widgets/dataDisplay/list_item.dart';
+import '../../../widgets/dataDisplay/typography.dart';
 
 class Step1 extends StatelessWidget {
   const Step1({super.key});
@@ -177,7 +177,6 @@ class Step2 extends StatelessWidget {
         AppDateField(
           error: fieldsError('date'),
           bottom: 40,
-          type: TextInputType.datetime,
           name: 'date',
           label: 'Date',
         ),

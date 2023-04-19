@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/dataDisplay/list_item.dart';
 
-import '../../widgets/common/back_layout.dart';
-import '../../widgets/common/search_field.dart';
-import '../shared/utils/initial_data.dart';
-import '../widgets/dataDisplay/accordion.dart';
-import '../widgets/dataDisplay/typography.dart';
-import '../widgets/others/contact_accordion.dart';
+import '../../../widgets/common/back_layout.dart';
+import '../../../widgets/common/search_field.dart';
+import '../../shared/utils/initial_data.dart';
+import '../../widgets/dataDisplay/accordion.dart';
+import '../../widgets/dataDisplay/typography.dart';
+import '../../widgets/others/contact_accordion.dart';
 
 class SupportScreen extends StatelessWidget {
   const SupportScreen({super.key});

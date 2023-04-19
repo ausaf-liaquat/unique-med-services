@@ -94,7 +94,6 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                           error: _formKey
                               .currentState?.fields['expire_date']!.errorText,
                           bottom: 40,
-                          type: TextInputType.datetime,
                           name: 'expire_date',
                           label: 'Expiration Date',
                         ),

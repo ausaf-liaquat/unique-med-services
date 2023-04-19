@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:ums_staff/screens/w9_form/form_steps.dart';
+import 'package:ums_staff/screens/forms/w9_form/form_steps.dart';
 
-import '../../shared/utils/initial_data.dart';
-import '../../widgets/common/back_layout.dart';
+import '../../../shared/utils/initial_data.dart';
+import '../../../widgets/common/back_layout.dart';
 
 class W9FormScreen extends StatefulWidget {
   const W9FormScreen({super.key});
@@ -32,7 +32,7 @@ class _W9FormScreenState extends State<W9FormScreen> {
   @override
   Widget build(BuildContext context) {
     bool smallDevice = MediaQuery.of(context).size.width >= 365;
-    final List<Widget> _steps = <Widget>[
+    final List<Widget> steps = <Widget>[
       const Step1(),
       Step2(onSelect: changeSelectValue, fieldsError: fieldsErrors),
       Step3(onSelect: changeSelectValue, fieldsError: fieldsErrors),
@@ -41,7 +41,7 @@ class _W9FormScreenState extends State<W9FormScreen> {
 
     return BackLayout(
         totalTabs: 4,
-        currentTabs: _currentStep + 1,
+        currentTabs: _currentStep,
         text: 'ELectronic W-9',
         page: SingleChildScrollView(
           child: Container(
@@ -83,13 +83,13 @@ class _W9FormScreenState extends State<W9FormScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _steps[_currentStep],
+                      steps[_currentStep],
                       const SizedBox(height: 40),
                       Container(
                         padding: EdgeInsets.symmetric(
                             horizontal: smallDevice ? 40 : 0),
                         child: ElevatedButton(
-                          child: const Text('Next'),
+                          child: Text(_currentStep == 5 ? 'Finish' : 'Next'),
                           onPressed: () {
                             if (_formKey.currentState?.validate() ?? false) {
                               if (_currentStep == 3) {

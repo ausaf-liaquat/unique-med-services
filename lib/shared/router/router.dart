@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import '../../screens/landing.dart';
+
+import '../../screens/forms/BCA_form/emplotment_bca_form.dart';
+import '../../screens/forms/w9_form/w9_form.dart';
 import '../../screens/login.dart';
+import '../../screens/landing.dart';
+import '../../screens/other/support.dart';
 import '../../screens/profile/edit.dart';
 import '../../screens/schedule/details.dart';
 import '../../screens/shift/details.dart';
 import '../../screens/shift/edit.dart';
-import '../../screens/support.dart';
 import '../../screens/wallet/direct_deposit.dart';
 import '../../screens/wallet/payout_avtivity.dart';
 import '../../screens/document/create.dart';
 import '../../screens/wallet/payout_detail.dart';
-import '../../screens/w9_form/w9_form.dart';
 
 var appRoutes = <String, WidgetBuilder>{
   LandingScreen.route: (context) => const LandingScreen(),
@@ -25,4 +27,5 @@ var appRoutes = <String, WidgetBuilder>{
   PayoutDetailScreen.route: (context) => const PayoutDetailScreen(),
   W9FormScreen.route: (context) => const W9FormScreen(),
   SupportScreen.route: (context) => const SupportScreen(),
+  EmplotmentFormScreen.route: (context) => const EmplotmentFormScreen(),
 };
