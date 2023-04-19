@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../screens/forms/BCA_form/emplotment_bca_form.dart';
-import '../../screens/forms/w9_form/w9_form.dart';
-import '../../screens/login.dart';
+import '../../screens/Auth/forget_password.dart';
+import '../../screens/auth/change_password.dart';
+import '../../screens/auth/create_account/create_account_form.dart';
+import '../../screens/auth/verification.dart';
+import '../../screens/other/BCA_form/emplotment_bca_form.dart';
+import '../../screens/other/w9_form/w9_form.dart';
+import '../../screens/auth/login.dart';
 import '../../screens/landing.dart';
 import '../../screens/other/support.dart';
 import '../../screens/profile/edit.dart';
@@ -28,4 +32,8 @@ var appRoutes = <String, WidgetBuilder>{
   W9FormScreen.route: (context) => const W9FormScreen(),
   SupportScreen.route: (context) => const SupportScreen(),
   EmplotmentFormScreen.route: (context) => const EmplotmentFormScreen(),
+  CreateAccountScreen.route: (context) => const CreateAccountScreen(),
+  VerificationScreen.route: (context) => const VerificationScreen(),
+  ForgetPasswordScreen.route: (context) => const ForgetPasswordScreen(),
+  ChangePasswordScreen.route: (context) => const ChangePasswordScreen(),
 };

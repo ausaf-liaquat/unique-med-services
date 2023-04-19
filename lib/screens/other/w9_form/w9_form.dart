@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:ums_staff/screens/forms/w9_form/form_steps.dart';
+import 'package:ums_staff/screens/other/w9_form/form_steps.dart';
 
 import '../../../shared/utils/initial_data.dart';
 import '../../../widgets/common/back_layout.dart';

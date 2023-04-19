@@ -14,6 +14,7 @@ class ContactAccordion extends StatelessWidget {
         child: Theme(
           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
           child: ExpansionTile(
+              initiallyExpanded: true,
               tilePadding: const EdgeInsets.all(0),
               collapsedIconColor: Theme.of(context).colorScheme.secondary,
               title: AppTypography(

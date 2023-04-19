@@ -21,7 +21,9 @@ class AppInitialData {
     'Profile Photo',
     'Prophecy Skills',
     'Summary/Checklist TB 2-Step',
-    'TB Test or Chest X-Ray'
+    'TB Test or Chest X-Ray',
+    'Other Credentials',
+    'Other Documents'
   ];
 
   List<String> federalTaxClassification = [

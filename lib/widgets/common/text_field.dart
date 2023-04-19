@@ -31,7 +31,7 @@ class AppTextField extends StatefulWidget {
 }
 
 class _AppTextFieldState extends State<AppTextField> {
-  bool _passwordVisible = false;
+  bool _passwordVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,9 @@ class _AppTextFieldState extends State<AppTextField> {
             keyboardType: widget.type,
             name: widget.name,
             onTap: widget.onTap,
-            obscureText: widget.name == 'password' ? !_passwordVisible : false,
+            obscureText: widget.type == TextInputType.visiblePassword
+                ? _passwordVisible
+                : false,
             validator: widget.validator,
             style: TextStyle(
               color: AppColorScheme().black80,
@@ -69,7 +71,7 @@ class _AppTextFieldState extends State<AppTextField> {
               letterSpacing: 0.5,
             ),
             decoration: InputDecoration(
-              suffixIcon: widget.name == 'password'
+              suffixIcon: widget.type == TextInputType.visiblePassword
                   ? Container(
                       padding: const EdgeInsets.only(right: 8),
                       child: IconButton(
