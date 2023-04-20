@@ -323,7 +323,11 @@ class Step4 extends StatelessWidget {
                 "Certify that the information contained hersin is true and understand that any fatalfication will result is the rejection of my opplication.",
             size: 14,
             color: AppColorScheme().black60),
-        const AppCheckBox(
+        AppCheckBox(
+          validator: FormBuilderValidators.equal(
+            true,
+            errorText: 'You must accept to continue',
+          ),
           label: 'I agree to this top info.',
           name: 'agree',
         ),

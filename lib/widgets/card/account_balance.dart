@@ -3,7 +3,7 @@ import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 
 import '../../screens/other/w9_form/w9_form.dart';
-import '../../screens/wallet/direct_deposit.dart';
+import '../../screens/other/direct_deposit.dart';
 
 class AccountBalance extends StatefulWidget {
   const AccountBalance({super.key});

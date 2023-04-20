@@ -14,7 +14,7 @@ class CreateAccountScreen extends StatefulWidget {
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-  int _currentStep = 0;
+  int _currentStep = 1;
 
   void changeSelectValue(String name, String value) {
     _formKey.currentState!.fields[name]!.didChange(value);
@@ -39,7 +39,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     return BackLayout(
         totalTabs: 2,
         currentTabs: _currentStep,
-        text: 'Emplotment BCA',
+        text: 'Apply Clinician',
         page: SingleChildScrollView(
           child: Container(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
@@ -49,7 +49,16 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     _formKey.currentState!.save();
                   },
                   autovalidateMode: AutovalidateMode.disabled,
-                  initialValue: const {},
+                  initialValue: const {
+                    'first_name': '',
+                    'last_name': '',
+                    'phone_number': '',
+                    'code': '',
+                    'email': '',
+                    'password': '',
+                    'referred': '',
+                    'qualification_type': '',
+                  },
                   skipDisabled: true,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

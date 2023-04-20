@@ -435,7 +435,11 @@ class Step6 extends StatelessWidget {
                 "I certify that the information contained herein is true and understand that any falsification will result in the rejection of my application or termination of my employment. I also understand that the requested information is for the sole purpose of conducting a background investigation which may include a check of my identity, work history, education history, credit history, driving records, any criminal history which may be in the files of any federal, state or local criminal agency, and a post offer search of workers’ compensation claim history. Information regarding age, sex, or race will not be used as part of any employment decision. I agree that a facsimile (“fax”), electronic or photographic copy of this Authorization shall be as valid as the original.",
             size: 14,
             color: AppColorScheme().black60),
-        const AppCheckBox(
+        AppCheckBox(
+          validator: FormBuilderValidators.equal(
+            true,
+            errorText: 'You must accept to continue',
+          ),
           label: 'I agree to this top info.',
           name: 'agree',
         ),

@@ -13,7 +13,7 @@ import '../../screens/profile/edit.dart';
 import '../../screens/schedule/details.dart';
 import '../../screens/shift/details.dart';
 import '../../screens/shift/edit.dart';
-import '../../screens/wallet/direct_deposit.dart';
+import '../../screens/other/direct_deposit.dart';
 import '../../screens/wallet/payout_avtivity.dart';
 import '../../screens/document/create.dart';
 import '../../screens/wallet/payout_detail.dart';
