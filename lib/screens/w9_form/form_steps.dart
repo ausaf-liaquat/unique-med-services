@@ -177,7 +177,6 @@ class FormSteps extends StatelessWidget {
           AppDateField(
             error: fieldsError('date'),
             bottom: 40,
-            type: TextInputType.datetime,
             name: 'date',
             label: 'Date',
           ),

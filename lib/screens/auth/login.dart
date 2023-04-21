@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:ums_staff/core/http.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/common/text_field.dart';
 
 import '../../widgets/common/Link.dart';
 import '../../widgets/dataDisplay/typography.dart';
 import '../landing.dart';
+import '../messages/snackBar.dart';
 import 'create_account/create_account_form.dart';
 import 'forget_password.dart';
 
@@ -19,10 +21,13 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  void showInSnackBar(String value) {
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: Column(
         children: [
           Expanded(
@@ -76,8 +81,14 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: () {
                                 if (_formKey.currentState?.validate() ??
                                     false) {
-                                  Navigator.pushNamed(
-                                      context, LandingScreen.route);
+                                  var api = HttpRequest();
+                                  api.login(_formKey.currentState?.value).then((value) {
+                                    if( !value.success ){
+                                      SnackBarMessage.errorSnackbar(context, value.message);
+                                    }
+                                  });
+                                  // Navigator.pushNamed(
+                                  //     context, LandingScreen.route);
                                 } else {
                                   setState(() {});
                                 }
