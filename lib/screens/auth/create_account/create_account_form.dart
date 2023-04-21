@@ -16,7 +16,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   int _currentStep = 1;
 
-  void changeSelectValue(String name, String value) {
+  void changeSelectValue(String name, dynamic value) {
     _formKey.currentState!.fields[name]!.didChange(value);
   }
 

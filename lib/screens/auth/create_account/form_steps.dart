@@ -1,5 +1,4 @@
-import 'dart:html';
-
+import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -13,7 +12,7 @@ import '../../../widgets/dataDisplay/typography.dart';
 
 class Step1 extends StatelessWidget {
   const Step1({super.key, required this.onSelect, required this.fieldsError});
-  final void Function(String, String) onSelect;
+  final void Function(String, dynamic) onSelect;
   final String? Function(String) fieldsError;
 
   @override
@@ -122,14 +121,14 @@ class Step1 extends StatelessWidget {
 
 class Step2 extends StatelessWidget {
   const Step2({super.key, required this.onSelect, required this.fieldsError});
-  final void Function(String, String) onSelect;
+  final void Function(String, dynamic) onSelect;
   final String? Function(String) fieldsError;
 
   void resumePick() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
-      onSelect('resume', result.files.single.path ?? '');
+      onSelect('resume', File(result.files.single.path ?? ''));
     } else {
       // User canceled the picker
     }
