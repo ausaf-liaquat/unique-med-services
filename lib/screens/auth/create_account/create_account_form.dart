@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:ums_staff/screens/w9_form/form_steps.dart';
+import 'package:ums_staff/screens/auth/create_account/form_steps.dart';
 
-import '../../shared/utils/initial_data.dart';
-import '../../widgets/common/back_layout.dart';
+import '../../../widgets/common/back_layout.dart';
 
-class W9FormScreen extends StatefulWidget {
-  const W9FormScreen({super.key});
-  static const route = '/w9-form';
+class CreateAccountScreen extends StatefulWidget {
+  const CreateAccountScreen({super.key});
+  static const route = '/create-account';
 
   @override
-  State<W9FormScreen> createState() => _W9FormScreenState();
+  State<CreateAccountScreen> createState() => _CreateAccountScreenState();
 }
 
-class _W9FormScreenState extends State<W9FormScreen> {
+class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-  int _currentStep = 0;
+  int _currentStep = 1;
 
-  void changeSelectValue(String name, String value) {
+  void changeSelectValue(String name, dynamic value) {
     _formKey.currentState!.fields[name]!.didChange(value);
   }
 
@@ -30,69 +29,50 @@ class _W9FormScreenState extends State<W9FormScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     bool smallDevice = MediaQuery.of(context).size.width >= 365;
+    final List<Widget> steps = <Widget>[
+      Step1(onSelect: changeSelectValue, fieldsError: fieldsErrors),
+      Step2(onSelect: changeSelectValue, fieldsError: fieldsErrors),
+    ];
 
     return BackLayout(
-        text: 'ELectronic W-9',
+        totalTabs: 2,
+        currentTabs: _currentStep,
+        text: 'Apply Clinician',
         page: SingleChildScrollView(
           child: Container(
-              padding: const EdgeInsets.fromLTRB(20, 28, 20, 32),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
               child: FormBuilder(
                   key: _formKey,
                   onChanged: () {
                     _formKey.currentState!.save();
                   },
                   autovalidateMode: AutovalidateMode.disabled,
-                  initialValue: {
-                    // second step
-                    'name': '',
-                    'entity_name': '',
-                    'federal_tax_classification':
-                        AppInitialData().federalTaxClassification[0],
-                    'tax_classification': '',
-                    'payee_code': '',
-                    'reporting_code': '',
-                    'list_account_number': '',
-                    'social_security_number': '',
-                    'employer_identification_number': '',
-                    'date': DateTime.now(),
-                    // third step
-                    'requester_first_name': '',
-                    'requester_last_name': '',
-                    'requester_address': '',
-                    'requester_city': '',
-                    'requester_state': '',
-                    'requester_code': '',
-                    // fourth step
-                    'agree': false,
-                    'address': '',
-                    'city': '',
-                    'state': '',
-                    'code': ''
+                  initialValue: const {
+                    'first_name': '',
+                    'last_name': '',
+                    'phone_number': '',
+                    'code': '',
+                    'email': '',
+                    'password': '',
+                    'referred': '',
+                    'qualification_type': '',
                   },
                   skipDisabled: true,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      FormSteps(
-                          fieldsError: fieldsErrors,
-                          index: _currentStep,
-                          onSelect: changeSelectValue),
+                      steps[_currentStep],
                       const SizedBox(height: 40),
                       Container(
                         padding: EdgeInsets.symmetric(
                             horizontal: smallDevice ? 40 : 0),
                         child: ElevatedButton(
-                          child: const Text('Next'),
+                          child: Text(_currentStep == 1 ? 'Finish' : 'Next'),
                           onPressed: () {
                             if (_formKey.currentState?.validate() ?? false) {
-                              if (_currentStep == 3) {
+                              if (_currentStep == 1) {
                                 // form complete funtion
                               } else {
                                 setState(() {

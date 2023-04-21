@@ -24,6 +24,11 @@ class _AppCheckBoxState extends State<AppCheckBox> {
         name: widget.name,
         initialValue: false,
         decoration: InputDecoration(
+            errorStyle: TextStyle(
+                fontSize: 12,
+                height: 0,
+                letterSpacing: 0.04,
+                color: Theme.of(context).colorScheme.error),
             fillColor: AppColorScheme().black2,
             enabled: false,
             contentPadding:

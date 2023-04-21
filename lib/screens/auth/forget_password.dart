@@ -1,27 +1,22 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:ums_staff/screens/landing.dart';
+import 'package:ums_staff/screens/auth/verification.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/common/text_field.dart';
 
-import '../widgets/dataDisplay/typography.dart';
+import '../other/support.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
-  static const route = 'login';
+class ForgetPasswordScreen extends StatefulWidget {
+  const ForgetPasswordScreen({super.key});
+  static const route = '/forget-password';
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-  String passwordError = '';
-  String emailError = '';
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,20 +36,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         autovalidateMode: AutovalidateMode.disabled,
                         initialValue: const {
                           'email': '',
-                          'password': '',
                         },
                         skipDisabled: true,
                         child: Column(
                           children: [
                             Center(
-                              heightFactor: 1.9,
+                              heightFactor: 2,
                               child: Image.asset('assets/images/logo.png',
                                   width: 150),
                             ),
                             AppTextField(
                               error: _formKey
                                   .currentState?.fields['email']!.errorText,
-                              bottom: 16,
+                              bottom: 48,
+                              helpText:
+                                  'Enter your email to change your password',
                               type: TextInputType.emailAddress,
                               name: 'email',
                               label: 'Username or Email',
@@ -63,62 +59,36 @@ class _LoginScreenState extends State<LoginScreen> {
                                     errorText: 'Email is required'),
                               ]),
                             ),
-                            AppTextField(
-                              error: _formKey
-                                  .currentState?.fields['password']!.errorText,
-                              bottom: 40,
-                              type: TextInputType.visiblePassword,
-                              name: 'password',
-                              label: 'Password',
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(
-                                    errorText: 'Password is required'),
-                              ]),
-                            ),
                             ElevatedButton(
+                              child: const Text('Send Code'),
                               onPressed: () {
-                                Navigator.pushNamed(
-                                    context, LandingScreen.route);
                                 if (_formKey.currentState?.validate() ??
                                     false) {
-                                  // error funtion
+                                  Navigator.pushNamed(
+                                      context, VerificationScreen.route);
                                 } else {
                                   setState(() {});
-                                  // sucess funtion
                                 }
                               },
-                              child: const Text('LOGIN'),
                             ),
                             const SizedBox(height: 24),
-                            Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  AppTypography(
-                                    text: 'Forget Password?',
-                                    size: 14,
-                                    spacing: 0.1,
-                                    color: AppColorScheme().black90,
-                                  ),
-                                  AppTypography(
-                                    text: 'Apply',
-                                    size: 14,
-                                    spacing: 0.1,
-                                    color: Theme.of(context).colorScheme.error,
-                                  )
-                                ])
+                            TextButton(
+                              child: const Text('Cancel'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
                           ],
                         )))),
           ),
           Container(
-            width: 260,
+            width: 270,
             margin: const EdgeInsets.only(
                 left: 20.0, right: 20.0, bottom: 24.0, top: 16.0),
             child: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                text: 'By using the app, you agree to our ',
+                text: 'Did you unable to change your password ',
                 style: TextStyle(
                     color: AppColorScheme().black90,
                     fontSize: 13,
@@ -126,13 +96,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 1.5),
                 children: <TextSpan>[
                   TextSpan(
-                      text: 'Privacy policy',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: Theme.of(context).colorScheme.primary)),
-                  const TextSpan(text: ' and '),
-                  TextSpan(
-                      text: 'Terms of Service.',
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.pushNamed(context, SupportScreen.route);
+                        },
+                      text: 'Did you Need Help?',
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
                           color: Theme.of(context).colorScheme.primary)),

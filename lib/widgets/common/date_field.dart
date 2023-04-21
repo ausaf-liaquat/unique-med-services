@@ -13,7 +13,6 @@ class AppDateField extends StatefulWidget {
       this.error,
       this.end = const SizedBox(),
       this.helpText = '',
-      this.type = TextInputType.text,
       this.onTap});
 
   final String name;
@@ -24,7 +23,6 @@ class AppDateField extends StatefulWidget {
   final double? bottom;
   final String? error;
   final Widget end;
-  final TextInputType type;
 
   @override
   State<AppDateField> createState() => _AppDateFieldState();
@@ -55,6 +53,7 @@ class _AppDateFieldState extends State<AppDateField> {
           ),
           child: FormBuilderDateTimePicker(
             name: widget.name,
+            keyboardType: TextInputType.datetime,
             validator: widget.validator,
             initialEntryMode: DatePickerEntryMode.calendarOnly,
             inputType: InputType.date,

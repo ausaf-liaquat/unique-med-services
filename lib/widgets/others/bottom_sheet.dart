@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ums_staff/widgets/common/link.dart';
 import 'package:ums_staff/widgets/dataDisplay/row_item.dart';
 
-import '../../screens/support.dart';
+import '../../screens/other/support.dart';
 import '../../shared/theme/color.dart';
 
 class ProfileBottomSheet extends StatelessWidget {

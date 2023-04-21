@@ -58,7 +58,6 @@ class _FilterShiftScreenState extends State<FilterShiftScreen> {
                       AppDateField(
                         error: _formKey.currentState?.fields['date']!.errorText,
                         bottom: 24,
-                        type: TextInputType.datetime,
                         name: 'date',
                         label: 'Shift Date',
                       ),

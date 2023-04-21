@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+
+import '../../screens/Auth/forget_password.dart';
+import '../../screens/auth/change_password.dart';
+import '../../screens/auth/create_account/create_account_form.dart';
+import '../../screens/auth/verification.dart';
+import '../../screens/other/BCA_form/emplotment_bca_form.dart';
+import '../../screens/other/w9_form/w9_form.dart';
+import '../../screens/auth/login.dart';
 import '../../screens/landing.dart';
-import '../../screens/login.dart';
+import '../../screens/other/support.dart';
 import '../../screens/profile/edit.dart';
 import '../../screens/schedule/details.dart';
 import '../../screens/shift/details.dart';
 import '../../screens/shift/edit.dart';
-import '../../screens/support.dart';
-import '../../screens/wallet/direct_deposit.dart';
+import '../../screens/other/direct_deposit.dart';
 import '../../screens/wallet/payout_avtivity.dart';
 import '../../screens/document/create.dart';
 import '../../screens/wallet/payout_detail.dart';
-import '../../screens/w9_form/w9_form.dart';
 
 var appRoutes = <String, WidgetBuilder>{
   LandingScreen.route: (context) => const LandingScreen(),
@@ -25,4 +31,9 @@ var appRoutes = <String, WidgetBuilder>{
   PayoutDetailScreen.route: (context) => const PayoutDetailScreen(),
   W9FormScreen.route: (context) => const W9FormScreen(),
   SupportScreen.route: (context) => const SupportScreen(),
+  EmplotmentFormScreen.route: (context) => const EmplotmentFormScreen(),
+  CreateAccountScreen.route: (context) => const CreateAccountScreen(),
+  VerificationScreen.route: (context) => const VerificationScreen(),
+  ForgetPasswordScreen.route: (context) => const ForgetPasswordScreen(),
+  ChangePasswordScreen.route: (context) => const ChangePasswordScreen(),
 };
