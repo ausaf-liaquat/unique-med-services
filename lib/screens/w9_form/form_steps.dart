@@ -73,9 +73,7 @@ class FormSteps extends StatelessWidget {
           ),
         ],
       ),
-
       // Second step
-
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
