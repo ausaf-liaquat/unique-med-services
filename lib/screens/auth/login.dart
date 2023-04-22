@@ -22,8 +22,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  void showInSnackBar(String value) {
-  }
+  void showInSnackBar(String value) {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +62,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               validator: FormBuilderValidators.compose([
                                 FormBuilderValidators.required(
                                     errorText: 'Email is required'),
+                                FormBuilderValidators.email(
+                                  errorText: 'Invalid email address'
+                                )
                               ]),
                             ),
                             AppTextField(
@@ -81,11 +83,16 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: () {
                                 if (_formKey.currentState?.validate() ??
                                     false) {
-                                  var api = HttpRequest();
-                                  api.login(_formKey.currentState?.value).then((value) {
-                                    if( !value.success ){
-                                      SnackBarMessage.errorSnackbar(context, value.message);
-                                    }
+                                  setState(() {
+                                    var api = HttpRequest();
+                                    api
+                                        .login(_formKey.currentState?.value)
+                                        .then((value) {
+                                      if (!value.success) {
+                                        SnackBarMessage.errorSnackbar(
+                                            context, value.message);
+                                      }
+                                    });
                                   });
                                   // Navigator.pushNamed(
                                   //     context, LandingScreen.route);
