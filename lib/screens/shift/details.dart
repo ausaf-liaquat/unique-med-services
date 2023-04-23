@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../shared/theme/color.dart';
-import '../../widgets/common/back_layout.dart';
+import '../../widgets/others/back_layout.dart';
 import '../../widgets/dataDisplay/sub_title.dart';
 import '../../widgets/dataDisplay/typography.dart';
 

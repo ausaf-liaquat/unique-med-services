@@ -3,7 +3,7 @@ import 'package:ums_staff/screens/shift/details.dart';
 import 'package:ums_staff/widgets/card/card.dart';
 import 'package:ums_staff/widgets/dataDisplay/shift.dart';
 import '../../widgets/card/payout_detail.dart';
-import '../../widgets/common/back_layout.dart';
+import '../../widgets/others/back_layout.dart';
 
 class PayoutDetailScreen extends StatelessWidget {
   const PayoutDetailScreen({super.key});

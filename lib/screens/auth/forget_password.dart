@@ -4,8 +4,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:ums_staff/screens/auth/verification.dart';
 import 'package:ums_staff/shared/theme/color.dart';
-import 'package:ums_staff/widgets/common/text_field.dart';
 
+import '../../widgets/inputs/text_field.dart';
 import '../other/support.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {

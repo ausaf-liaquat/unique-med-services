@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
-import '../../widgets/common/back_layout.dart';
-import '../../widgets/common/check_box.dart';
+import '../../widgets/others/back_layout.dart';
+import '../../widgets/inputs/check_box.dart';
 import '../../widgets/dataDisplay/sub_title.dart';
 
 class ScheduleDetailScreen extends StatelessWidget {

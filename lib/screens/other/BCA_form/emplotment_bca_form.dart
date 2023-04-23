@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
-import '../../../widgets/common/back_layout.dart';
+import '../../../widgets/others/back_layout.dart';
 import '../BCA_form/form_steps.dart';
 
 class EmplotmentFormScreen extends StatefulWidget {

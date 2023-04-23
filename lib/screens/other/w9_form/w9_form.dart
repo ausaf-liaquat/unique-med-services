@@ -3,7 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:ums_staff/screens/other/w9_form/form_steps.dart';
 
 import '../../../shared/utils/initial_data.dart';
-import '../../../widgets/common/back_layout.dart';
+import '../../../widgets/others/back_layout.dart';
 
 class W9FormScreen extends StatefulWidget {
   const W9FormScreen({super.key});

@@ -3,10 +3,10 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../shared/theme/color.dart';
 import '../../shared/utils/initial_data.dart';
-import '../../widgets/common/check_box.dart';
-import '../../widgets/common/date_field.dart';
-import '../../widgets/common/select_field.dart';
-import '../../widgets/common/text_field.dart';
+import '../../widgets/inputs/check_box.dart';
+import '../../widgets/inputs/date_field.dart';
+import '../../widgets/inputs/select_field.dart';
+import '../../widgets/inputs/text_field.dart';
 import '../../widgets/dataDisplay/list_item.dart';
 import '../../widgets/dataDisplay/typography.dart';
 

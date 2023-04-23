@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:ums_staff/screens/auth/create_account/form_steps.dart';
 
-import '../../../widgets/common/back_layout.dart';
+import '../../../widgets/others/back_layout.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});

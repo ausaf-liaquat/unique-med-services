@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../widgets/card/document.dart';
-import '../../widgets/common/search_field.dart';
+import '../../widgets/inputs/search_field.dart';
 
 class DocumentScreen extends StatelessWidget {
   const DocumentScreen({super.key});

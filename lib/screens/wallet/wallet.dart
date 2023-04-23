@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ums_staff/screens/wallet/payout_avtivity.dart';
 import 'package:ums_staff/screens/wallet/payout_detail.dart';
-import 'package:ums_staff/widgets/common/link.dart';
+import 'package:ums_staff/widgets/others/link.dart';
 import 'package:ums_staff/widgets/dataDisplay/payout.dart';
 
 import '../../widgets/card/account_balance.dart';

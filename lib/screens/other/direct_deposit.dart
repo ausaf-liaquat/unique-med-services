@@ -3,11 +3,11 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 import '../../shared/theme/color.dart';
-import '../../widgets/common/back_layout.dart';
-import '../../widgets/common/check_box.dart';
-import '../../widgets/common/date_field.dart';
-import '../../widgets/common/select_field.dart';
-import '../../widgets/common/text_field.dart';
+import '../../widgets/others/back_layout.dart';
+import '../../widgets/inputs/check_box.dart';
+import '../../widgets/inputs/date_field.dart';
+import '../../widgets/inputs/select_field.dart';
+import '../../widgets/inputs/text_field.dart';
 
 class DirectDepositScreen extends StatefulWidget {
   const DirectDepositScreen({super.key});
