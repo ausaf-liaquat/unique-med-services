@@ -6,7 +6,7 @@ import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/inputs/text_field.dart';
 
 import '../../widgets/dataDisplay/typography.dart';
-import '../../widgets/messages/snackBar.dart';
+import '../../widgets/messages/snack_bar.dart';
 import '../../widgets/others/link.dart';
 import '../landing.dart';
 import 'create_account/create_account_form.dart';
@@ -90,13 +90,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                       if (!value.success) {
                                         SnackBarMessage.errorSnackbar(
                                             context, value.message);
-                                      }else{
+                                      } else {
                                         Navigator.pushNamed(
                                             context, LandingScreen.route);
                                       }
                                     });
                                   });
-
                                 } else {
                                   setState(() {});
                                 }

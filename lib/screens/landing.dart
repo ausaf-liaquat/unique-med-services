@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ums_staff/screens/document/documents.dart';
+import 'package:ums_staff/screens/other/notification.dart';
 import 'package:ums_staff/screens/profile/profile.dart';
 import 'package:ums_staff/screens/schedule/schedule.dart';
 import 'package:ums_staff/screens/shift/edit.dart';
@@ -31,7 +32,10 @@ class _LandingScreenState extends State<LandingScreen> {
   Widget build(BuildContext context) {
     final List<Widget> icons = <Widget>[
       IconButton(
-          onPressed: () {}, icon: const Icon(Icons.notifications_outlined)),
+          onPressed: () {
+            Navigator.pushNamed(context, NotificationScreen.route);
+          },
+          icon: const Icon(Icons.notifications_outlined)),
       IconButton(
           onPressed: () {
             Navigator.pushNamed(context, FilterShiftScreen.route);

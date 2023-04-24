@@ -6,7 +6,7 @@ import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/inputs/text_field.dart';
 
 import '../../core/http.dart';
-import '../../widgets/messages/snackBar.dart';
+import '../../widgets/messages/snack_bar.dart';
 import 'change_password.dart';
 
 class VerificationScreen extends StatefulWidget {
@@ -21,7 +21,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final arguments = (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{}) as Map;
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
     var register = arguments['register'] ?? false;
     return Scaffold(
       body: Column(
@@ -68,17 +69,21 @@ class _VerificationScreenState extends State<VerificationScreen> {
                                 if (_formKey.currentState?.validate() ??
                                     false) {
                                   var http = HttpRequest();
-                                  if( register ){
-                                    var formatBody = _formKey.currentState?.value.map<String, String>((key, value) => MapEntry(key, value.toString()));
-                                    http.verify(formatBody ?? {}).then((value){
-                                        if( value.success == true ){
-                                          Navigator.pushReplacementNamed(context, LandingScreen.route);
-                                        }else{
-                                          SnackBarMessage.errorSnackbar(
-                                              context, value.message);
-                                        }
-                                      });
-                                  }else{
+                                  if (register) {
+                                    var formatBody = _formKey
+                                        .currentState?.value
+                                        .map<String, String>((key, value) =>
+                                            MapEntry(key, value.toString()));
+                                    http.verify(formatBody ?? {}).then((value) {
+                                      if (value.success == true) {
+                                        Navigator.pushReplacementNamed(
+                                            context, LandingScreen.route);
+                                      } else {
+                                        SnackBarMessage.errorSnackbar(
+                                            context, value.message);
+                                      }
+                                    });
+                                  } else {
                                     Navigator.pushNamed(
                                         context, ChangePasswordScreen.route);
                                   }

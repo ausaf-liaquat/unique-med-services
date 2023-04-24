@@ -3,6 +3,8 @@ import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/dataDisplay/row_item.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 
+import '../messages/snack_bar.dart';
+
 class JobShift extends StatelessWidget {
   const JobShift({super.key, this.accept = false});
   final bool accept;

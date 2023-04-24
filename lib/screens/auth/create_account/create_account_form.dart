@@ -6,7 +6,7 @@ import 'package:ums_staff/screens/auth/create_account/form_steps.dart';
 import 'package:ums_staff/screens/auth/verification.dart';
 
 import '../../../core/http.dart';
-import '../../../widgets/messages/snackBar.dart';
+import '../../../widgets/messages/snack_bar.dart';
 import '../../../widgets/others/back_layout.dart';
 
 class CreateAccountScreen extends StatefulWidget {

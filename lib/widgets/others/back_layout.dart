@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ums_staff/screens/landing.dart';
 
 import '../../shared/theme/color.dart';
+import 'link.dart';
 
 class BackLayout extends StatelessWidget {
   const BackLayout({
@@ -41,7 +43,10 @@ class BackLayout extends StatelessWidget {
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 20),
-              child: Image.asset('assets/images/app-bar-logo.png', width: 51),
+              child: AppLink(
+                  path: LandingScreen.route,
+                  child:
+                      Image.asset('assets/images/app-bar-logo.png', width: 51)),
             ),
           ],
         ),
