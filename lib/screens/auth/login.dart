@@ -3,12 +3,11 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:ums_staff/core/http.dart';
 import 'package:ums_staff/shared/theme/color.dart';
-import 'package:ums_staff/widgets/common/text_field.dart';
+import 'package:ums_staff/widgets/inputs/text_field.dart';
 
 import '../../widgets/common/Link.dart';
 import '../../widgets/dataDisplay/typography.dart';
-import '../landing.dart';
-import '../messages/snackBar.dart';
+import '../../widgets/messages/snackBar.dart';
 import 'create_account/create_account_form.dart';
 import 'forget_password.dart';
 
@@ -63,8 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 FormBuilderValidators.required(
                                     errorText: 'Email is required'),
                                 FormBuilderValidators.email(
-                                  errorText: 'Invalid email address'
-                                )
+                                    errorText: 'Invalid email address')
                               ]),
                             ),
                             AppTextField(

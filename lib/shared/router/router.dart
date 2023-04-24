@@ -5,6 +5,7 @@ import '../../screens/auth/change_password.dart';
 import '../../screens/auth/create_account/create_account_form.dart';
 import '../../screens/auth/verification.dart';
 import '../../screens/other/BCA_form/emplotment_bca_form.dart';
+import '../../screens/other/notification.dart';
 import '../../screens/other/w9_form/w9_form.dart';
 import '../../screens/auth/login.dart';
 import '../../screens/landing.dart';
@@ -36,4 +37,5 @@ var appRoutes = <String, WidgetBuilder>{
   VerificationScreen.route: (context) => const VerificationScreen(),
   ForgetPasswordScreen.route: (context) => const ForgetPasswordScreen(),
   ChangePasswordScreen.route: (context) => const ChangePasswordScreen(),
+  NotificationScreen.route: (context) => const NotificationScreen(),
 };

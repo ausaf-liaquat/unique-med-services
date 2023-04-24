@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../../shared/theme/color.dart';
-import '../../../widgets/common/group_check_box.dart';
-import '../../../widgets/common/group_radio_box.dart';
-import '../../../widgets/common/select_field.dart';
-import '../../../widgets/common/text_field.dart';
+import '../../../widgets/inputs/group_check_box.dart';
+import '../../../widgets/inputs/group_radio_box.dart';
+import '../../../widgets/inputs/select_field.dart';
+import '../../../widgets/inputs/text_field.dart';
 import '../../../widgets/dataDisplay/typography.dart';
 
 class Step1 extends StatelessWidget {

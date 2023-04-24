@@ -5,9 +5,9 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import '../../shared/utils/image_picker.dart';
 import '../../shared/utils/initial_data.dart';
-import '../../widgets/common/back_layout.dart';
-import '../../widgets/common/date_field.dart';
-import '../../widgets/common/select_field.dart';
+import '../../widgets/others/back_layout.dart';
+import '../../widgets/inputs/date_field.dart';
+import '../../widgets/inputs/select_field.dart';
 
 class CreateDocumentScreen extends StatefulWidget {
   const CreateDocumentScreen({super.key});

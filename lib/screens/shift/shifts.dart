@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ums_staff/widgets/card/card.dart';
-import '../../widgets/common/search_field.dart';
+import '../../widgets/inputs/search_field.dart';
 import '../../widgets/dataDisplay/shift.dart';
 import 'details.dart';
 

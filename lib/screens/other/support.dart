@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/dataDisplay/list_item.dart';
 
-import '../../../widgets/common/back_layout.dart';
-import '../../../widgets/common/search_field.dart';
+import '../../widgets/others/back_layout.dart';
+import '../../widgets/inputs/search_field.dart';
 import '../../shared/utils/initial_data.dart';
 import '../../widgets/dataDisplay/accordion.dart';
 import '../../widgets/dataDisplay/typography.dart';
