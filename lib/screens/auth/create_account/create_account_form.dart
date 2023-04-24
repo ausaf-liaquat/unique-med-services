@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:ums_staff/screens/auth/create_account/form_steps.dart';
+import 'package:ums_staff/screens/auth/verification.dart';
 
+import '../../../core/http.dart';
 import '../../../widgets/common/back_layout.dart';
+import '../../messages/snackBar.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -14,10 +19,15 @@ class CreateAccountScreen extends StatefulWidget {
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-  int _currentStep = 1;
+  dynamic resume;
+  int _currentStep = 0;
 
   void changeSelectValue(String name, dynamic value) {
-    _formKey.currentState!.fields[name]!.didChange(value);
+      _formKey.currentState!.fields[name]!.didChange(value);
+  }
+
+  void updateResume(dynamic value) {
+    resume = value;
   }
 
   String? fieldsErrors(String name) {
@@ -33,9 +43,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     bool smallDevice = MediaQuery.of(context).size.width >= 365;
     final List<Widget> steps = <Widget>[
       Step1(onSelect: changeSelectValue, fieldsError: fieldsErrors),
-      Step2(onSelect: changeSelectValue, fieldsError: fieldsErrors),
+      Step2(
+          onSelect: changeSelectValue,
+          fieldsError: fieldsErrors,
+          updateResume: updateResume),
     ];
-
     return BackLayout(
         totalTabs: 2,
         currentTabs: _currentStep,
@@ -52,12 +64,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   initialValue: const {
                     'first_name': '',
                     'last_name': '',
-                    'phone_number': '',
+                    'phone': '',
                     'code': '',
                     'email': '',
                     'password': '',
                     'referred': '',
                     'qualification_type': '',
+                    'resume': ''
                   },
                   skipDisabled: true,
                   child: Column(
@@ -73,7 +86,20 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           onPressed: () {
                             if (_formKey.currentState?.validate() ?? false) {
                               if (_currentStep == 1) {
-                                // form complete funtion
+                                var http = HttpRequest();
+                                var body = {..._formKey.currentState?.value ?? {}};
+                                var formatBody = body.map<String, String>((key, value) => MapEntry(key, value.toString()));
+                                formatBody['resume'] = (resume as File).path;
+                                http.register(formatBody).then((value){
+                                  if( value.success == true ){
+                                    Navigator.pushNamed(
+                                          context, VerificationScreen.route, arguments: {'register': true});
+                                  }else{
+                                    SnackBarMessage.errorSnackbar(
+                                        context, value.message);
+                                  }
+                                  print(value.message.toString());
+                                });
                               } else {
                                 setState(() {
                                   _currentStep = _currentStep + 1;
@@ -99,9 +125,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                   });
                                 },
                               ),
-                            )
+                      )
                     ],
-                  ))),
+                  )
+              )
+          ),
         ));
   }
 }

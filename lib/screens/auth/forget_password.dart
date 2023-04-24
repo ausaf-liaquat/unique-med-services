@@ -6,6 +6,8 @@ import 'package:ums_staff/screens/auth/verification.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/common/text_field.dart';
 
+import '../../core/http.dart';
+import '../messages/snackBar.dart';
 import '../other/support.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
@@ -62,10 +64,20 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                             ElevatedButton(
                               child: const Text('Send Code'),
                               onPressed: () {
+                                var api = HttpRequest();
                                 if (_formKey.currentState?.validate() ??
                                     false) {
-                                  Navigator.pushNamed(
-                                      context, VerificationScreen.route);
+                                  api.forgetPassword(_formKey.currentState?.value ?? {}).then((value){
+                                    print(value.data.toString());
+                                    if( value.success ){
+                                      // Navigator.pushNamed(
+                                      //     context, VerificationScreen.route);
+
+                                    }else{
+                                      SnackBarMessage.errorSnackbar(
+                                          context, value.message);
+                                    }
+                                  });
                                 } else {
                                   setState(() {});
                                 }

@@ -91,11 +91,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                       if (!value.success) {
                                         SnackBarMessage.errorSnackbar(
                                             context, value.message);
+                                      }else{
+                                        Navigator.pushNamed(
+                                            context, LandingScreen.route);
                                       }
                                     });
                                   });
-                                  // Navigator.pushNamed(
-                                  //     context, LandingScreen.route);
+
                                 } else {
                                   setState(() {});
                                 }

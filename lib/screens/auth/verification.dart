@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:ums_staff/screens/landing.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/common/text_field.dart';
 
+import '../../core/http.dart';
+import '../messages/snackBar.dart';
 import 'change_password.dart';
 
 class VerificationScreen extends StatefulWidget {
@@ -18,6 +21,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final arguments = (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{}) as Map;
+    var register = arguments['register'] ?? false;
     return Scaffold(
       body: Column(
         children: [
@@ -33,7 +38,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         },
                         autovalidateMode: AutovalidateMode.disabled,
                         initialValue: const {
-                          'code': '',
+                          'otp': '',
                         },
                         skipDisabled: true,
                         child: Column(
@@ -45,12 +50,12 @@ class _VerificationScreenState extends State<VerificationScreen> {
                             ),
                             AppTextField(
                               error: _formKey
-                                  .currentState?.fields['code']!.errorText,
+                                  .currentState?.fields['otp']!.errorText,
                               bottom: 48,
                               helpText:
                                   'Enter 4 digit code which has been send to email',
                               type: TextInputType.number,
-                              name: 'code',
+                              name: 'otp',
                               label: 'Verification Code',
                               validator: FormBuilderValidators.compose([
                                 FormBuilderValidators.required(
@@ -62,8 +67,20 @@ class _VerificationScreenState extends State<VerificationScreen> {
                               onPressed: () {
                                 if (_formKey.currentState?.validate() ??
                                     false) {
-                                  Navigator.pushNamed(
-                                      context, ChangePasswordScreen.route);
+                                  var http = HttpRequest();
+                                  if( register ){
+                                      http.verify(_formKey.currentState?.value ?? {}).then((value){
+                                        if( value.success == true ){
+                                          Navigator.pushReplacementNamed(context, LandingScreen.route);
+                                        }else{
+                                          SnackBarMessage.errorSnackbar(
+                                              context, value.message);
+                                        }
+                                      });
+                                  }else{
+                                    Navigator.pushNamed(
+                                        context, ChangePasswordScreen.route);
+                                  }
                                 } else {
                                   setState(() {});
                                 }

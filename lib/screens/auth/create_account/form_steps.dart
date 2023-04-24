@@ -52,10 +52,10 @@ class Step1 extends StatelessWidget {
           ]),
         ),
         AppTextField(
-          error: fieldsError('phone_number'),
+          error: fieldsError('phone'),
           bottom: 16,
           type: TextInputType.phone,
-          name: 'phone_number',
+          name: 'phone',
           label: 'Phone Number',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(
@@ -106,7 +106,7 @@ class Step1 extends StatelessWidget {
           title: 'Select the qualification type?',
           bottom: 16,
           onSelect: onSelect,
-          option: const ['CVS'],
+          option: const ['RN', 'MT', 'PST', 'PCT', 'PT', 'OT', 'RT', 'EKG', 'LPN / LVN', 'CNA / SRNA / GNA / LNA / STNA / NAC', 'CMA / QMAP / MAPS / LMA / CMT / RMA / UAP / AMAP'],
           name: 'qualification_type',
           label: 'Qualification Type',
           validator: FormBuilderValidators.compose([
@@ -120,17 +120,15 @@ class Step1 extends StatelessWidget {
 }
 
 class Step2 extends StatelessWidget {
-  const Step2({super.key, required this.onSelect, required this.fieldsError});
+  const Step2({super.key, required this.onSelect, required this.fieldsError, required this.updateResume});
   final void Function(String, dynamic) onSelect;
+  final void Function(dynamic) updateResume;
   final String? Function(String) fieldsError;
-
   void resumePick() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
-
+    print(result);
     if (result != null) {
-      onSelect('resume', File(result.files.single.path ?? ''));
-    } else {
-      // User canceled the picker
+      updateResume(File(result.files[0].path ?? ''));
     }
   }
 
@@ -146,10 +144,10 @@ class Step2 extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         AppGroupCheckBox(
-            name: 'avalabilty',
+            name: 'shift',
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.minLength(1,
-                  errorText: 'Atleast select one option'),
+                  errorText: 'At least select one option'),
             ]),
             options: const [
               'Day Shifts',
@@ -169,7 +167,7 @@ class Step2 extends StatelessWidget {
             name: 'experience',
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.minLength(1,
-                  errorText: 'Atleast select one option'),
+                  errorText: 'At least select one option'),
             ]),
             options: const ['0 - 3 months', '4 - 6 months', '6+ months']),
         const SizedBox(height: 40),
@@ -189,7 +187,7 @@ class Step2 extends StatelessWidget {
               width: 140,
               child: AppTypography(
                 align: TextAlign.center,
-                text: 'Upload Resume in PDF Formet',
+                text: 'Upload Resume in PDF Format',
                 size: 16,
                 height: 1.4,
                 color: AppColorScheme().black60,
