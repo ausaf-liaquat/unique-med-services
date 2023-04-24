@@ -6,7 +6,7 @@ import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/inputs/text_field.dart';
 
 import '../../core/http.dart';
-import '../messages/snackBar.dart';
+import '../../widgets/messages/snackBar.dart';
 import 'change_password.dart';
 
 class VerificationScreen extends StatefulWidget {

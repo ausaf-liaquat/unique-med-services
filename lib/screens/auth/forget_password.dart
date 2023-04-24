@@ -6,7 +6,7 @@ import 'package:ums_staff/screens/auth/verification.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 
 import '../../core/http.dart';
-import '../messages/snackBar.dart';
+import '../../widgets/messages/snackBar.dart';
 import '../../widgets/inputs/text_field.dart';
 import '../other/support.dart';
 
