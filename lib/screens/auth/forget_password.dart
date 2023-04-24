@@ -68,7 +68,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                                 if (_formKey.currentState?.validate() ??
                                     false) {
                                   api.forgetPassword(_formKey.currentState?.value ?? {}).then((value){
-                                    print(value.data.toString());
                                     if( value.success ){
                                       // Navigator.pushNamed(
                                       //     context, VerificationScreen.route);

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ums_staff/screens/auth/login.dart';
 
+import '../../core/http.dart';
 import '../../shared/theme/color.dart';
 import '../../widgets/card/profile.dart';
 import '../../widgets/dataDisplay/typography.dart';
@@ -12,7 +14,13 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     bool midiumDevice = MediaQuery.of(context).size.width >= 392;
     bool smallDevice = MediaQuery.of(context).size.width >= 375;
-
+    void logout(){
+      var http = HttpRequest();
+      http.logout().then((value){
+        http.clearToken();
+        Navigator.pushReplacementNamed(context, LoginScreen.route);
+      });
+    }
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -40,7 +48,7 @@ class ProfileScreen extends StatelessWidget {
                                 SizedBox(width: midiumDevice ? 32 : 15),
                                 Expanded(
                                     child: ElevatedButton.icon(
-                                        onPressed: () {},
+                                        onPressed: logout,
                                         icon: const Icon(Icons.logout_outlined),
                                         label: const Text('LOG OUT'))),
                               ],
@@ -57,7 +65,7 @@ class ProfileScreen extends StatelessWidget {
                                 SizedBox(width: midiumDevice ? 32 : 15),
                                 Expanded(
                                     child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: logout,
                                         child: const Text('LOG OUT'))),
                               ],
                             ),

@@ -69,7 +69,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                                     false) {
                                   var http = HttpRequest();
                                   if( register ){
-                                      http.verify(_formKey.currentState?.value ?? {}).then((value){
+                                    var formatBody = _formKey.currentState?.value.map<String, String>((key, value) => MapEntry(key, value.toString()));
+                                    http.verify(formatBody ?? {}).then((value){
                                         if( value.success == true ){
                                           Navigator.pushReplacementNamed(context, LandingScreen.route);
                                         }else{
@@ -103,7 +104,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
             child: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                text: 'Did you recive verification code ',
+                text: 'Did you receive verification code',
                 style: TextStyle(
                     color: AppColorScheme().black90,
                     fontSize: 13,

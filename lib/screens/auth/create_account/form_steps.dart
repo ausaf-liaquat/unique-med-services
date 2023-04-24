@@ -63,10 +63,10 @@ class Step1 extends StatelessWidget {
           ]),
         ),
         AppTextField(
-          error: fieldsError('code'),
+          error: fieldsError('zip_code'),
           bottom: 16,
           type: TextInputType.number,
-          name: 'code',
+          name: 'zip_code',
           label: 'Zip Code',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'Zip code is required'),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ums_staff/widgets/common/Link.dart';
 import '../../widgets/card/calendar.dart';
 import '../../widgets/card/card.dart';
 import '../../widgets/dataDisplay/shift.dart';
 import '../../widgets/dataDisplay/typography.dart';
+import '../../widgets/others/link.dart';
 import 'details.dart';
 
 class ScheduleScreen extends StatelessWidget {

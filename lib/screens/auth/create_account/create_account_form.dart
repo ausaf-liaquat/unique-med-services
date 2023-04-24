@@ -20,6 +20,7 @@ class CreateAccountScreen extends StatefulWidget {
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   dynamic resume;
+  bool loading = false;
   int _currentStep = 0;
 
   void changeSelectValue(String name, dynamic value) {
@@ -65,7 +66,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     'first_name': '',
                     'last_name': '',
                     'phone': '',
-                    'code': '',
+                    'zip_code': '',
                     'email': '',
                     'password': '',
                     'referred': '',
@@ -82,14 +83,20 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         padding: EdgeInsets.symmetric(
                             horizontal: smallDevice ? 40 : 0),
                         child: ElevatedButton(
+
                           child: Text(_currentStep == 1 ? 'Finish' : 'Next'),
-                          onPressed: () {
+                          onPressed: loading ? null : () {
                             if (_formKey.currentState?.validate() ?? false) {
                               if (_currentStep == 1) {
+                                setState(() {
+                                  loading = true;
+                                });
                                 var http = HttpRequest();
                                 var body = {..._formKey.currentState?.value ?? {}};
                                 var formatBody = body.map<String, String>((key, value) => MapEntry(key, value.toString()));
-                                formatBody['resume'] = (resume as File).path;
+                                if(resume != null){
+                                  formatBody['resume'] = (resume as File).path;
+                                }
                                 http.register(formatBody).then((value){
                                   if( value.success == true ){
                                     Navigator.pushNamed(
@@ -98,7 +105,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                     SnackBarMessage.errorSnackbar(
                                         context, value.message);
                                   }
-                                  print(value.message.toString());
                                 });
                               } else {
                                 setState(() {
