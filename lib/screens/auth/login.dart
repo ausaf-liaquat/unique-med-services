@@ -97,6 +97,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     });
                                   });
                                 } else {
+                                  Navigator.pushNamed(
+                                      context, LandingScreen.route);
                                   setState(() {});
                                 }
                               },
