@@ -2,7 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:ums_staff/core/http.dart';
 import 'package:ums_staff/shared/theme/color.dart';
+import 'package:ums_staff/widgets/inputs/text_field.dart';
+import 'package:ums_staff/widgets/messages/snack_bar.dart';
 import '../../shared/utils/image_picker.dart';
 import '../../shared/utils/initial_data.dart';
 import '../../widgets/others/back_layout.dart';
@@ -17,10 +21,20 @@ class CreateDocumentScreen extends StatefulWidget {
   State<CreateDocumentScreen> createState() => _CreateDocumentScreenState();
 }
 
+class DocType {
+  late int id;
+  late String name;
+  DocType({required this.id, required this.name });
+  static Iterable<DocType> getList(List<dynamic> data){
+    return data.map((e) => DocType(id: e['id'], name: e['name']));
+  }
+}
+
 class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   File? _image;
-
+  bool loading = false;
+  Iterable<DocType>  docTypeList = [];
   void changeSelectValue(String name, String value) {
     _formKey.currentState!.fields[name]!.didChange(value);
   }
@@ -28,6 +42,26 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
   @override
   void initState() {
     super.initState();
+    var http = HttpRequest();
+    setState(() {
+      loading = true;
+    });
+    http.docType().then((value) {
+      setState(() {
+        loading = false;
+      });
+    if (!value.success) {
+        SnackBarMessage.errorSnackbar(
+        context, value.message);
+    } else {
+      var docType =value.data['data']['document_types'];
+      if( docType != null ){
+        setState(() {
+          docTypeList = DocType.getList(docType);
+        });
+      }
+    }
+    });
   }
 
   @override
@@ -73,30 +107,33 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                       _formKey.currentState!.save();
                     },
                     autovalidateMode: AutovalidateMode.disabled,
-                    initialValue: {
-                      'document_type': AppInitialData().documentTypes[0],
-                      'expire_date': DateTime.now(),
+                    initialValue: const {
+                      'document_type_id': '',
+                      'title': "",
+                      "notes": '',
                     },
                     skipDisabled: true,
                     child: Column(
                       children: [
                         AppSelectField(
                           error: _formKey
-                              .currentState?.fields['document_type']!.errorText,
+                              .currentState?.fields['document_type_id']?.errorText,
                           title: 'What is your document type?',
                           bottom: 20,
                           onSelect: changeSelectValue,
-                          option: AppInitialData().documentTypes,
-                          name: 'document_type',
+                          option: docTypeList.map((e) => e.name).toList(),
+                          name: 'document_type_id',
                           label: 'Document Type',
                         ),
-                        AppDateField(
+                        AppTextField(name: 'title', label: "Title",
+                          bottom: 20,
                           error: _formKey
-                              .currentState?.fields['expire_date']!.errorText,
-                          bottom: 40,
-                          name: 'expire_date',
-                          label: 'Expiration Date',
+                              .currentState?.fields['title']?.errorText,
+                            validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(
+                            errorText: 'Title is required')]),
                         ),
+                        const AppTextField(name: 'notes', label: "Notes", bottom: 20,),
                         _image == null
                             ? Image.asset(
                                 'assets/images/select-image.png',
@@ -129,7 +166,37 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                     _image == null
                         ? const SizedBox()
                         : ElevatedButton.icon(
-                            onPressed: () {},
+                            onPressed: loading ? null: () {
+                              if (_formKey.currentState?.validate() ??
+                                  false) {
+                                var body = {..._formKey.currentState?.value ?? {}};
+                                var formatBody = body.map<String, String>((key, value) {
+                                  if( key == 'document_type' ){
+                                    var dt = docTypeList.firstWhere((element) => element.name == value);
+                                    return MapEntry(key, dt.id.toString());
+                                  }
+                                  return MapEntry(key, value.toString());
+                                });
+                                if(_image != null){
+                                  formatBody['file'] = (_image as File).path;
+                                }
+                                var http = HttpRequest();
+                                setState(() {
+                                  loading = true;
+                                });
+                                http.uploadDoc(formatBody).then((value) {
+                                  setState(() {
+                                    loading = false ;
+                                  });
+                                  if( value.success == true ){
+                                    SnackBarMessage.successSnackbar(context, "File Upload SuccessFully");
+                                    Navigator.pop(context);
+                                  }else{
+                                    SnackBarMessage.errorSnackbar(context, value.message);
+                                  }
+                                });
+                              }
+                            },
                             icon: const Icon(Icons.cloud_upload_outlined),
                             label: const Text('UPLOAD DOCUMENT')),
                   ])),

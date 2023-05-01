@@ -1,48 +1,53 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:ums_staff/screens/shift/models.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/dataDisplay/row_item.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
-
-import '../messages/snack_bar.dart';
-
 class JobShift extends StatelessWidget {
-  const JobShift({super.key, this.accept = false});
+  late ShiftModel shift;
+  JobShift({super.key, this.accept = false, required this.shift});
   final bool accept;
 
   @override
   Widget build(BuildContext context) {
+    var shiftNote = [];
+    if( shift.shiftNote != '' ){
+      shiftNote = (jsonDecode(shift.shiftNote.toString()) as List<dynamic>).map((e) => e.toString()).toList();
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppTypography(
-          text: 'Sabal Palms Health & Rehabilitation',
+          text: shift.title,
           size: 18,
           weight: FontWeight.w600,
           color: AppColorScheme().black90,
         ),
         const SizedBox(height: 4),
         AppTypography(
-          text: "Peds/Young Adults. Preferred experience in g-tubes and trachs",
+          text: shiftNote.join(', '),
           size: 14,
           weight: FontWeight.w500,
           color: AppColorScheme().black60,
         ),
         const SizedBox(height: 24),
-        const RowItem(
+        RowItem(
           icon: Icons.attach_money_rounded,
-          text: '45.00/hr',
+          text: shift.ratePerHour,
         ),
-        const RowItem(
+        RowItem(
           icon: Icons.calendar_month_outlined,
-          text: 'Monday, June 12, 2022 ',
+          text: shift.date,
         ),
-        const RowItem(
+        RowItem(
           icon: Icons.access_time,
-          text: '06:45am - 07:15pm',
+          text: shift.shiftHour,
         ),
-        const RowItem(
+        RowItem(
           icon: Icons.location_on_outlined,
-          text: '64 Sugar StreetYorktown Heights, NY 10598',
+          text: shift.shiftLocation,
         ),
         accept ? const SizedBox(height: 24) : const SizedBox(),
         accept

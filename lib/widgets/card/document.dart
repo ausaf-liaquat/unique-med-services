@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:ums_staff/screens/document/models.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/card/card.dart';
 import 'package:ums_staff/widgets/dataDisplay/row_item.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 
 class DocumentCard extends StatelessWidget {
-  const DocumentCard({super.key});
+  late Docs doc;
+  DocumentCard({super.key, required this.doc});
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +24,8 @@ class DocumentCard extends StatelessWidget {
               child: SizedBox(
                   width: 75,
                   height: 75,
-                  child: Image.asset(
-                    'assets/test/licence.png',
+                  child: Image.network(
+                    doc.documentUrl,
                     fit: BoxFit.cover,
                   )),
             ),
@@ -35,7 +38,7 @@ class DocumentCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 AppTypography(
                   align: TextAlign.start,
-                  text: 'Nursing Licensef.',
+                  text: doc.title,
                   overflow: TextOverflow.ellipsis,
                   size: 18,
                   color: AppColorScheme().black90,
@@ -44,7 +47,7 @@ class DocumentCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 RowItem(
                   icon: Icons.auto_delete_outlined,
-                  text: 'Apr 30, 2023',
+                  text: DateFormat('MMM dd, yyyy').format(DateTime.parse(doc.createdAt)),
                   textColor: AppColorScheme().black60,
                   iconColor: Theme.of(context).colorScheme.error,
                 )

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:ums_staff/core/http.dart';
 import 'package:ums_staff/screens/other/w9_form/form_steps.dart';
 
 import '../../../shared/utils/initial_data.dart';
+import '../../../widgets/messages/snack_bar.dart';
 import '../../../widgets/others/back_layout.dart';
 
 class W9FormScreen extends StatefulWidget {
@@ -32,6 +34,7 @@ class _W9FormScreenState extends State<W9FormScreen> {
   @override
   Widget build(BuildContext context) {
     bool smallDevice = MediaQuery.of(context).size.width >= 365;
+    bool loading = false;
     final List<Widget> steps = <Widget>[
       const Step1(),
       Step2(onSelect: changeSelectValue, fieldsError: fieldsErrors),
@@ -42,7 +45,7 @@ class _W9FormScreenState extends State<W9FormScreen> {
     return BackLayout(
         totalTabs: 4,
         currentTabs: _currentStep,
-        text: 'ELectronic W-9',
+        text: 'Electronic W-9',
         page: SingleChildScrollView(
           child: Container(
               padding: const EdgeInsets.fromLTRB(20, 28, 20, 32),
@@ -55,29 +58,29 @@ class _W9FormScreenState extends State<W9FormScreen> {
                   initialValue: {
                     // second step
                     'name': '',
-                    'entity_name': '',
+                    'business_name': '',
                     'federal_tax_classification':
                         AppInitialData().federalTaxClassification[0],
-                    'tax_classification': '',
-                    'payee_code': '',
-                    'reporting_code': '',
-                    'list_account_number': '',
+                    'classification_detail': '',
+                    'exempt_payee_code': '',
+                    'fatca_code': '',
+                    'account_number': '',
                     'social_security_number': '',
-                    'employer_identification_number': '',
-                    'date': DateTime.now(),
+                    'ei_number': '',
+                    // 'date': DateTime.now(),
                     // third step
                     'requester_first_name': '',
                     'requester_last_name': '',
                     'requester_address': '',
                     'requester_city': '',
                     'requester_state': '',
-                    'requester_code': '',
+                    'requester_zip_code': '',
                     // fourth step
                     'agree': false,
                     'address': '',
                     'city': '',
                     'state': '',
-                    'code': ''
+                    'zip_code': ''
                   },
                   skipDisabled: true,
                   child: Column(
@@ -89,11 +92,28 @@ class _W9FormScreenState extends State<W9FormScreen> {
                         padding: EdgeInsets.symmetric(
                             horizontal: smallDevice ? 40 : 0),
                         child: ElevatedButton(
-                          child: Text(_currentStep == 5 ? 'Finish' : 'Next'),
-                          onPressed: () {
+                          onPressed: _currentStep == 3 && loading ? null: () {
                             if (_formKey.currentState?.validate() ?? false) {
                               if (_currentStep == 3) {
-                                // form complete funtion
+                                setState(() {
+                                  loading = true;
+                                });
+                                var http = HttpRequest();
+                                var body = {..._formKey.currentState?.value ?? {}};
+                                var formatBody = body.map<String, String>((key, value) => MapEntry(key, value.toString()));
+                                http.w9(formatBody).then((value){
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                  if( value.success == true ){
+                                    SnackBarMessage.successSnackbar(context, "Electronic W-9 save successfully");
+                                    Navigator.pop(context);
+                                  }else{
+                                    SnackBarMessage
+                                        .errorSnackbar(
+                                        context, value.message);
+                                  }
+                                });
                               } else {
                                 setState(() {
                                   _currentStep = _currentStep + 1;
@@ -103,6 +123,7 @@ class _W9FormScreenState extends State<W9FormScreen> {
                               setState(() {});
                             }
                           },
+                          child: loading ? const  CircularProgressIndicator(): Text(_currentStep == 5 ? 'Finish' : 'Next'),
                         ),
                       ),
                       SizedBox(height: _currentStep == 0 ? 0 : 24),
@@ -119,7 +140,7 @@ class _W9FormScreenState extends State<W9FormScreen> {
                                   });
                                 },
                               ),
-                            )
+                         )
                     ],
                   ))),
         ));

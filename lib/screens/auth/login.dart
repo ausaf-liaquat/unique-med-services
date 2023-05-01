@@ -21,7 +21,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool loading = false;
   void showInSnackBar(String value) {}
   @override
   Widget build(BuildContext context) {
@@ -79,14 +80,19 @@ class _LoginScreenState extends State<LoginScreen> {
                               ]),
                             ),
                             ElevatedButton(
-                              onPressed: () {
+                              onPressed: loading ?  null : () {
                                 if (_formKey.currentState?.validate() ??
                                     false) {
                                   setState(() {
+                                  loading = true;
+                                  });
                                     var api = HttpRequest();
                                     api
                                         .login(_formKey.currentState?.value)
                                         .then((value) {
+                                      setState(() {
+                                        loading = false;
+                                      });
                                       if (!value.success) {
                                         SnackBarMessage.errorSnackbar(
                                             context, value.message);
@@ -95,14 +101,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                             context, LandingScreen.route);
                                       }
                                     });
-                                  });
+
                                 } else {
                                   Navigator.pushNamed(
                                       context, LandingScreen.route);
                                   setState(() {});
                                 }
                               },
-                              child: const Text('LOGIN'),
+                              child: loading ? const  CircularProgressIndicator() : const Text('LOGIN'),
                             ),
                             const SizedBox(height: 24),
                             Row(

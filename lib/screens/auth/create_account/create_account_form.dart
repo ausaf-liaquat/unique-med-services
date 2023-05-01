@@ -69,7 +69,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     'zip_code': '',
                     'email': '',
                     'password': '',
-                    'referred': '',
+                    'reffered_by': '',
                     'qualification_type': '',
                     'resume': ''
                   },
@@ -83,8 +83,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         padding: EdgeInsets.symmetric(
                             horizontal: smallDevice ? 40 : 0),
                         child: ElevatedButton(
-
-                          child: Text(_currentStep == 1 ? 'Finish' : 'Next'),
                           onPressed: loading ? null : () {
                             if (_formKey.currentState?.validate() ?? false) {
                               if (_currentStep == 1) {
@@ -98,6 +96,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                   formatBody['resume'] = (resume as File).path;
                                 }
                                 http.register(formatBody).then((value){
+                                  setState(() {
+                                    loading = false;
+                                  });
                                   if( value.success == true ){
                                     Navigator.pushNamed(
                                           context, VerificationScreen.route, arguments: {'register': true});
@@ -115,6 +116,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                               setState(() {});
                             }
                           },
+                          child: loading ? const CircularProgressIndicator() : Text(_currentStep == 1 ? 'Finish' : 'Next'),
                         ),
                       ),
                       SizedBox(height: _currentStep == 0 ? 0 : 24),

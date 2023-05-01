@@ -24,6 +24,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
     var register = arguments['register'] ?? false;
+    var email = arguments['email'] ?? '';
+    var loading = false;
     return Scaffold(
       body: Column(
         children: [
@@ -64,17 +66,22 @@ class _VerificationScreenState extends State<VerificationScreen> {
                               ]),
                             ),
                             ElevatedButton(
-                              child: const Text('Verify'),
-                              onPressed: () {
+                              onPressed:  loading ? null : () {
                                 if (_formKey.currentState?.validate() ??
                                     false) {
+                                  setState(() {
+                                    loading = true;
+                                  });
                                   var http = HttpRequest();
+                                  var formatBody = _formKey
+                                      .currentState?.value
+                                      .map<String, String>((key, value) =>
+                                      MapEntry(key, value.toString()));
                                   if (register) {
-                                    var formatBody = _formKey
-                                        .currentState?.value
-                                        .map<String, String>((key, value) =>
-                                            MapEntry(key, value.toString()));
                                     http.verify(formatBody ?? {}).then((value) {
+                                      setState(() {
+                                        loading = false;
+                                      });
                                       if (value.success == true) {
                                         Navigator.pushReplacementNamed(
                                             context, LandingScreen.route);
@@ -84,13 +91,27 @@ class _VerificationScreenState extends State<VerificationScreen> {
                                       }
                                     });
                                   } else {
-                                    Navigator.pushNamed(
-                                        context, ChangePasswordScreen.route);
+                                    var data = {'email': email.toString(), 'code': formatBody!['otp'].toString() ?? ''};
+                                    http.verify(data).then((value) {
+                                      setState(() {
+                                        loading = false;
+                                      });
+                                      if (value.success == true) {
+                                        Navigator.pushReplacementNamed(
+                                            context, ChangePasswordScreen.route,  arguments: {
+                                          "email": email
+                                        });
+                                      } else {
+                                        SnackBarMessage.errorSnackbar(
+                                            context, value.message);
+                                      }
+                                    });
                                   }
                                 } else {
                                   setState(() {});
                                 }
                               },
+                              child: loading ? const CircularProgressIndicator() : const Text('Verify'),
                             ),
                             const SizedBox(height: 24),
                             TextButton(

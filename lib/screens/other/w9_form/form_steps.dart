@@ -4,7 +4,6 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import '../../../shared/theme/color.dart';
 import '../../../shared/utils/initial_data.dart';
 import '../../../widgets/inputs/check_box.dart';
-import '../../../widgets/inputs/date_field.dart';
 import '../../../widgets/inputs/select_field.dart';
 import '../../../widgets/inputs/text_field.dart';
 import '../../../widgets/dataDisplay/list_item.dart';
@@ -99,11 +98,11 @@ class Step2 extends StatelessWidget {
         ),
         AppTextField(
           label: 'Disregarded Entity Name',
-          error: fieldsError('entity_name'),
+          error: fieldsError('business_name'),
           helpText: 'if different from above name',
           bottom: 16,
           type: TextInputType.name,
-          name: 'entity_name',
+          name: 'business_name',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(
                 errorText: 'Disregarded entity name is required'),
@@ -121,11 +120,11 @@ class Step2 extends StatelessWidget {
         ),
         AppTextField(
           label: 'Tax Classification',
-          error: fieldsError('tax_classification'),
+          error: fieldsError('classification_detail'),
           helpText: '(C=C corporation, S=S corporation, P=Partnership)',
           bottom: 16,
           type: TextInputType.name,
-          name: 'tax_classification',
+          name: 'classification_detail',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(
                 errorText: 'Tax classification is required'),
@@ -133,27 +132,27 @@ class Step2 extends StatelessWidget {
         ),
         AppTextField(
           label: 'Payee Code',
-          error: fieldsError('payee_code'),
+          error: fieldsError('exempt_payee_code'),
           helpText: '(optional)',
           bottom: 16,
           type: TextInputType.name,
-          name: 'payee_code',
+          name: 'exempt_payee_code',
         ),
         AppTextField(
           label: 'FATCA Reporting Code',
-          error: fieldsError('reporting_code'),
+          error: fieldsError('fatca_code'),
           helpText: '(optional)',
           bottom: 16,
           type: TextInputType.name,
-          name: 'reporting_code',
+          name: 'fatca_code',
         ),
         AppTextField(
           label: 'List Account Number',
-          error: fieldsError('list_account_number'),
+          error: fieldsError('account_number'),
           helpText: '(optional)',
           bottom: 16,
           type: TextInputType.name,
-          name: 'list_account_number',
+          name: 'account_number',
         ),
         AppTextField(
           label: 'Social Security Number',
@@ -168,18 +167,18 @@ class Step2 extends StatelessWidget {
         ),
         AppTextField(
           label: 'Employer Identification Number',
-          error: fieldsError('employer_identification_number'),
+          error: fieldsError('ei_number'),
           helpText: '(optional)',
           bottom: 16,
           type: TextInputType.name,
-          name: 'employer_identification_number',
+          name: 'ei_number',
         ),
-        AppDateField(
-          error: fieldsError('date'),
-          bottom: 40,
-          name: 'date',
-          label: 'Date',
-        ),
+        // AppDateField(
+        //   error: fieldsError('date'),
+        //   bottom: 40,
+        //   name: 'date',
+        //   label: 'Date',
+        // ),
       ],
     );
   }
@@ -225,21 +224,15 @@ class Step3 extends StatelessWidget {
           name: 'requester_address',
           label: 'Address',
         ),
-        AppSelectField(
+        AppTextField(
           error: fieldsError('requester_city'),
-          title: 'What is requester city?',
           bottom: 16,
-          onSelect: onSelect,
-          option: const [],
           name: 'requester_city',
           label: 'City',
         ),
-        AppSelectField(
+        AppTextField(
           error: fieldsError('requester_state'),
-          title: 'What is requester state?',
           bottom: 16,
-          onSelect: onSelect,
-          option: const [],
           name: 'requester_state',
           label: 'State',
         ),
@@ -247,7 +240,7 @@ class Step3 extends StatelessWidget {
           error: fieldsError('requester_code'),
           bottom: 16,
           type: TextInputType.number,
-          name: 'requester_code',
+          name: 'requester_zip_code',
           label: 'Zip Code',
         ),
       ],
@@ -284,24 +277,18 @@ class Step4 extends StatelessWidget {
             FormBuilderValidators.required(errorText: 'Address is required'),
           ]),
         ),
-        AppSelectField(
+        AppTextField(
           error: fieldsError('city'),
-          title: 'What is your city?',
           bottom: 16,
-          onSelect: onSelect,
-          option: const [],
           name: 'city',
           label: 'City',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'City is required'),
           ]),
         ),
-        AppSelectField(
+        AppTextField(
           error: fieldsError('state'),
-          title: 'What is your state?',
           bottom: 16,
-          onSelect: onSelect,
-          option: const [],
           name: 'state',
           label: 'State',
           validator: FormBuilderValidators.compose([
@@ -309,10 +296,10 @@ class Step4 extends StatelessWidget {
           ]),
         ),
         AppTextField(
-          error: fieldsError('code'),
+          error: fieldsError('zip_code'),
           bottom: 16,
           type: TextInputType.number,
-          name: 'code',
+          name: 'zip_code',
           label: 'Zip Code',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'Zip code is required'),

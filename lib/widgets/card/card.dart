@@ -7,13 +7,14 @@ class AppCard extends StatelessWidget {
       required this.child,
       this.path,
       this.radius,
-      this.padding = const EdgeInsets.all(20)});
+      this.padding = const EdgeInsets.all(20),
+      this.args});
 
   final EdgeInsetsGeometry padding;
   final Widget child;
   final BorderRadiusGeometry? radius;
   final String? path;
-
+  final dynamic args;
   @override
   Widget build(BuildContext context) {
     return path != null
@@ -23,7 +24,7 @@ class AppCard extends StatelessWidget {
             highlightColor: Colors.transparent,
             splashColor: Colors.transparent,
             onTap: () {
-              path == null ? () {} : Navigator.pushNamed(context, path ?? '');
+              path == null ? () {} : Navigator.pushNamed(context, path ?? '', arguments: args ?? {});
             },
             child: Container(
               padding: padding,

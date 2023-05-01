@@ -19,7 +19,7 @@ class ForgetPasswordScreen extends StatefulWidget {
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-
+  bool loading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,16 +62,26 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               ]),
                             ),
                             ElevatedButton(
-                              child: const Text('Send Code'),
-                              onPressed: () {
+                              onPressed:  loading ?  null : () {
                                 var api = HttpRequest();
                                 if (_formKey.currentState?.validate() ??
                                     false) {
-                                  api.forgetPassword(_formKey.currentState?.value ?? {}).then((value){
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                  var formatBody = _formKey
+                                      .currentState?.value
+                                      .map<String, String>((key, value) =>
+                                      MapEntry(key, value.toString()));
+                                  api.forgetPassword(formatBody).then((value){
+                                    setState(() {
+                                      loading = false;
+                                    });
                                     if( value.success ){
-                                      // Navigator.pushNamed(
-                                      //     context, VerificationScreen.route);
-
+                                      Navigator.pushNamed(
+                                          context, VerificationScreen.route, arguments: {
+                                             "email": _formKey.currentState?.value['email']
+                                      });
                                     }else{
                                       SnackBarMessage.errorSnackbar(
                                           context, value.message);
@@ -81,6 +91,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                                   setState(() {});
                                 }
                               },
+                              child: loading ? const  CircularProgressIndicator() :  const Text('Send Code'),
                             ),
                             const SizedBox(height: 24),
                             TextButton(

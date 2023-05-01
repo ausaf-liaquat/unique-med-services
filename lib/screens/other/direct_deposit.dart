@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
+import '../../core/http.dart';
 import '../../shared/theme/color.dart';
+import '../../widgets/messages/snack_bar.dart';
 import '../../widgets/others/back_layout.dart';
 import '../../widgets/inputs/check_box.dart';
 import '../../widgets/inputs/date_field.dart';
@@ -19,7 +21,7 @@ class DirectDepositScreen extends StatefulWidget {
 
 class _DirectDepositScreenState extends State<DirectDepositScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-
+  bool loading = false;
   void changeSelectValue(String name, String value) {
     _formKey.currentState!.fields[name]!.didChange(value);
   }
@@ -58,12 +60,12 @@ class _DirectDepositScreenState extends State<DirectDepositScreen> {
                     'address': '',
                     'city': '',
                     'state': '',
-                    'code': '',
-                    'router_number': '',
-                    'conform_router_number': '',
+                    'zip_code': '',
+                    'bank_name': '',
+                    'routing_number': '',
                     'account_number': '',
                     'conform_account_number': '',
-                    'depositor_account': '',
+                    'depositor_type_account': '',
                     'date': DateTime.now(),
                     'agree': false
                   },
@@ -77,10 +79,28 @@ class _DirectDepositScreenState extends State<DirectDepositScreen> {
                           fieldsError: fieldsErrors),
                       const SizedBox(height: 48),
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: loading ? null: () {
                           if (_formKey.currentState?.validate() ?? false) {
-                          } else {
-                            setState(() {});
+                            setState(() {
+                              loading = true;
+                            });
+                            var http = HttpRequest();
+                            var body = {..._formKey.currentState?.value ?? {}};
+                            var formatBody = body.map<String, String>((key, value) => MapEntry(key, value.toString()));
+                            http.depositForm(formatBody).then((value){
+                              setState(() {
+                                loading = false;
+                              });
+                              if( value.success == true ){
+                                SnackBarMessage
+                                    .successSnackbar(context, "Direct Deposit save successfully");
+                                Navigator.pop(context);
+                              }else{
+                                SnackBarMessage
+                                    .errorSnackbar(
+                                    context, value.message);
+                              }
+                            });
                           }
                         },
                         child: const Text('Finish'),
@@ -132,24 +152,18 @@ class DepositForm extends StatelessWidget {
             FormBuilderValidators.required(errorText: 'Address is required'),
           ]),
         ),
-        AppSelectField(
+        AppTextField(
           error: fieldsError('city'),
-          title: 'What is city?',
           bottom: 16,
-          onSelect: onSelect,
-          option: const [],
           name: 'city',
           label: 'City',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'City is required'),
           ]),
         ),
-        AppSelectField(
+        AppTextField(
           error: fieldsError('state'),
-          title: 'What is state?',
           bottom: 16,
-          onSelect: onSelect,
-          option: const [],
           name: 'state',
           label: 'State',
           validator: FormBuilderValidators.compose([
@@ -157,10 +171,10 @@ class DepositForm extends StatelessWidget {
           ]),
         ),
         AppTextField(
-          error: fieldsError('code'),
+          error: fieldsError('zip_code'),
           bottom: 16,
           type: TextInputType.number,
-          name: 'code',
+          name: 'zip_code',
           label: 'Zip Code',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'Zip code is required'),
@@ -175,18 +189,6 @@ class DepositForm extends StatelessWidget {
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(
                 errorText: 'Router Number is required'),
-          ]),
-        ),
-        AppTextField(
-          error: fieldsError('conform_router_number'),
-          bottom: 16,
-          type: TextInputType.number,
-          name: 'conform_router_number',
-          label: 'Conform Router Number',
-          validator: FormBuilderValidators.compose([
-            FormBuilderValidators.equal(fieldsValue('router_number'),
-                errorText:
-                    'Conform router number number must be same as router number'),
           ]),
         ),
         AppTextField(
@@ -213,12 +215,12 @@ class DepositForm extends StatelessWidget {
           ]),
         ),
         AppSelectField(
-          error: fieldsError('depositor_account'),
+          error: fieldsError('depositor_type_account'),
           title: 'Select the depositor account',
           bottom: 16,
           onSelect: onSelect,
-          option: const [],
-          name: 'depositor_account',
+          option: const ["Savings"],
+          name: 'depositor_type_account',
           label: 'Depositor Account',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(

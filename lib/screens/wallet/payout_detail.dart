@@ -23,7 +23,7 @@ class PayoutDetailScreen extends StatelessWidget {
               AppCard(
                   child: Column(
                 children: [
-                  const JobShift(),
+                  // JobShift(),
                   const SizedBox(height: 24),
                   TextButton(
                       onPressed: () {

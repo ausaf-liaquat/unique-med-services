@@ -4,6 +4,8 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/inputs/text_field.dart';
 
+import '../../core/http.dart';
+import '../../widgets/messages/snack_bar.dart';
 import 'login.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -15,9 +17,12 @@ class ChangePasswordScreen extends StatefulWidget {
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-
+  bool loading = false;
   @override
   Widget build(BuildContext context) {
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+    var email = arguments['email'] ?? '';
     return Scaffold(
       body: Column(
         children: [
@@ -72,16 +77,34 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               ]),
                             ),
                             ElevatedButton(
-                              child: const Text('Change Password'),
-                              onPressed: () {
+                              onPressed:  loading ?  null : () {
                                 if (_formKey.currentState?.validate() ??
                                     false) {
-                                  Navigator.pushNamed(
-                                      context, LoginScreen.route);
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                  var http = HttpRequest();
+                                  var formatBody = _formKey
+                                      .currentState?.value
+                                      .map<String, String>((key, value) =>
+                                      MapEntry(key, value.toString()));
+                                  http.changePassword({'email': email.toString(), 'password': formatBody!['password'] ?? '', 'password_confirmation': formatBody['conform_password'] ?? '' }).then((value) {
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                    if( value.success ){
+                                      Navigator.pushNamed(
+                                          context, LoginScreen.route);
+                                    }else{
+                                      SnackBarMessage.errorSnackbar(
+                                          context, value.message);
+                                    }
+                                  });
                                 } else {
                                   setState(() {});
                                 }
                               },
+                              child: loading ? const  CircularProgressIndicator() :  const Text('Change Password'),
                             ),
                             const SizedBox(height: 24),
                             TextButton(

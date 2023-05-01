@@ -93,11 +93,11 @@ class Step1 extends StatelessWidget {
           ]),
         ),
         AppTextField(
-          error: fieldsError('referred'),
+          error: fieldsError('reffered_by'),
           bottom: 16,
           type: TextInputType.name,
-          name: 'referred',
-          label: 'Referred ',
+          name: 'reffered_by',
+          label: 'Referred',
           helpText:
               'Both will get \$100 bonus after they complete first shift!',
         ),
@@ -126,7 +126,6 @@ class Step2 extends StatelessWidget {
   final String? Function(String) fieldsError;
   void resumePick() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
-    print(result);
     if (result != null) {
       updateResume(File(result.files[0].path ?? ''));
     }

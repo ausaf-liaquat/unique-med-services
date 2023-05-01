@@ -41,7 +41,8 @@ class ScheduleScreen extends StatelessWidget {
                         itemBuilder: (BuildContext context, int index) {
                           return const AppLink(
                               path: ScheduleDetailScreen.route,
-                              child: JobShift(accept: true));
+                              child: Text('a'),);
+                              // JobShift(accept: true));
                           // for dinamic usage: data[index].value
                         },
                         separatorBuilder: (BuildContext context, int index) =>

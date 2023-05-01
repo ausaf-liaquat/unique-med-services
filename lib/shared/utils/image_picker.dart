@@ -55,7 +55,7 @@ class ImagePick {
                     isDestructiveAction: true,
                     onPressed: () async {
                       Navigator.pop(context, 'Gallery');
-                      final image = await ImagePicker()
+                      final image =  await ImagePicker()
                           .pickImage(source: ImageSource.gallery);
                       if (image == null) {
                         return;
