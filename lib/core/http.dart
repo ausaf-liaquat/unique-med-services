@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:localstorage/localstorage.dart';
 import 'package:ums_staff/core/constants.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
  class HttpRequest extends BaseHttpRequest {
   Future<ResponseBody> login(dynamic body){
     return post('api/v1/auth/login', body, body, true);
@@ -201,10 +200,7 @@ class BaseHttpRequest {
     storage.setItem('token', token);
   }
    clearToken(){
-     AndroidOptions getAndroidOptions() => const AndroidOptions(
-       encryptedSharedPreferences: true,
-     );
-     final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
-     storage.deleteAll();
+     final LocalStorage storage = LocalStorage('LocalStorage');
+     storage.clear();
    }
 }
