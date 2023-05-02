@@ -64,7 +64,6 @@ class _DirectDepositScreenState extends State<DirectDepositScreen> {
                     'bank_name': '',
                     'routing_number': '',
                     'account_number': '',
-                    'conform_account_number': '',
                     'depositor_type_account': '',
                     'date': DateTime.now(),
                     'agree': false
@@ -81,6 +80,7 @@ class _DirectDepositScreenState extends State<DirectDepositScreen> {
                       ElevatedButton(
                         onPressed: loading ? null: () {
                           if (_formKey.currentState?.validate() ?? false) {
+                            print('aaaaaaaa');
                             setState(() {
                               loading = true;
                             });
@@ -200,18 +200,6 @@ class DepositForm extends StatelessWidget {
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(
                 errorText: 'Account Number is required'),
-          ]),
-        ),
-        AppTextField(
-          error: fieldsError('conform_account_number'),
-          bottom: 16,
-          type: TextInputType.number,
-          name: 'conform_account_number',
-          label: 'Conform Account Number',
-          validator: FormBuilderValidators.compose([
-            FormBuilderValidators.equal(fieldsValue('account_number'),
-                errorText:
-                    'Conform account number must be same as account number'),
           ]),
         ),
         AppSelectField(
