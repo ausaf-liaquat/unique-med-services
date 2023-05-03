@@ -37,7 +37,7 @@ class WalletScreen extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
-                    return const AppLink(
+                    return AppLink(
                       path: PayoutDetailScreen.route,
                       child: Payout(),
                     );

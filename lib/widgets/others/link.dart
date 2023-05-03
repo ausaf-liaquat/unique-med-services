@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 class AppLink extends StatelessWidget {
-  const AppLink({
+  var params;
+
+  AppLink({
     super.key,
     required this.child,
     this.path,
+    this.params
   });
 
   final Widget child;
@@ -18,7 +21,7 @@ class AppLink extends StatelessWidget {
       highlightColor: Colors.transparent,
       splashColor: Colors.transparent,
       onTap: () {
-        path == null ? () {} : Navigator.pushNamed(context, path ?? '');
+        path == null ? () {} : Navigator.pushNamed(context, path ?? '', arguments: params ?? {});
       },
       child: child,
     );

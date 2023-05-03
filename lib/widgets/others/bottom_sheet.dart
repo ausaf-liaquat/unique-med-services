@@ -30,38 +30,38 @@ class ProfileBottomSheet extends StatelessWidget {
                 height: 500,
                 padding: const EdgeInsets.fromLTRB(30, 68, 30, 0),
                 child: Column(
-                  children: const [
+                  children: [
                     AppLink(
                         path: W9FormScreen.route,
-                        child: RowItem(
+                        child: const RowItem(
                             large: true,
                             bottom: 32,
                             icon: Icons.feed_outlined,
                             text: 'W9 Form')),
                     AppLink(
                         path: EmplotmentFormScreen.route,
-                        child: RowItem(
+                        child: const RowItem(
                             large: true,
                             bottom: 32,
                             icon: Icons.feed_outlined,
                             text: 'Employee BCA Form')),
                     AppLink(
                         path: DirectDepositScreen.route,
-                        child: RowItem(
+                        child: const RowItem(
                             large: true,
                             bottom: 32,
                             icon: Icons.feed_outlined,
                             text: 'Deposit Form')),
                     AppLink(
                         path: NotificationScreen.route,
-                        child: RowItem(
+                        child: const RowItem(
                             large: true,
                             bottom: 32,
                             icon: Icons.notifications_outlined,
                             text: 'Notification')),
                     AppLink(
                         path: SupportScreen.route,
-                        child: RowItem(
+                        child: const RowItem(
                             large: true,
                             bottom: 32,
                             icon: Icons.support_agent_outlined,

@@ -92,6 +92,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         itemBuilder: (BuildContext context, int index) {
                           return AppLink(
                               path: ScheduleDetailScreen.route,
+                              params: {"shiftModel": listShift.elementAt(index)},
                               child: JobShift(accept: true, shift: listShift.elementAt(index),));
                         },
                         separatorBuilder: (BuildContext context, int index) =>
