@@ -4,7 +4,10 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../shared/theme/color.dart';
 
 class CalendarCard extends StatefulWidget {
-  const CalendarCard({super.key});
+  DateTime focusedDay;
+  Function changeDate;
+  var timeSet = <String>{};
+  CalendarCard({super.key, required this.focusedDay, required this.changeDate, required this.timeSet});
 
   @override
   State<CalendarCard> createState() => _CalendarCardState();
@@ -12,7 +15,6 @@ class CalendarCard extends StatefulWidget {
 
 class _CalendarCardState extends State<CalendarCard> {
   // ignore: unused_field
-  DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
   @override
@@ -34,7 +36,8 @@ class _CalendarCardState extends State<CalendarCard> {
           rowHeight: 43,
           firstDay: DateTime.utc(2010, 10, 16),
           lastDay: DateTime.utc(2030, 3, 14),
-          focusedDay: DateTime.now(),
+          focusedDay: widget.focusedDay,
+          currentDay: widget.focusedDay,
           daysOfWeekHeight: 43,
           availableGestures: AvailableGestures.none,
           daysOfWeekStyle: DaysOfWeekStyle(
@@ -93,8 +96,8 @@ class _CalendarCardState extends State<CalendarCard> {
           onDaySelected: (selectedDay, focusedDay) {
             if (!isSameDay(_selectedDay, selectedDay)) {
               setState(() {
-                _selectedDay = selectedDay;
-                _focusedDay = focusedDay;
+                // _selectedDay = selectedDay;
+                widget.changeDate(selectedDay);
               });
             }
           },

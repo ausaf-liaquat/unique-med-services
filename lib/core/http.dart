@@ -10,6 +10,9 @@ import 'package:http/http.dart' as http;
   Future<ResponseBody> getShift(dynamic body){
     return get('api/v1/shifts', body);
   }
+  Future<ResponseBody> getAcceptShift(){
+    return post('api/v1/accepted/shifts/list', {"": ""}, null, false);
+  }
   Future<ResponseBody> docType(){
     return post('api/v1/document/types', {"": ""}, null, false);
   }
@@ -128,6 +131,7 @@ class BaseHttpRequest {
    var response = await http.get(url, headers: {
      "Authorization": 'Bearer ${token ?? ''}'
    });
+   print(response.statusCode);
    return parseResponse(response, false);
  }
  Future<ResponseBody> postWithOutQp(String urlPath, dynamic body, bool saveT) async {
@@ -143,6 +147,7 @@ class BaseHttpRequest {
    return parseResponse(response, saveT);
  }
  Future<ResponseBody> parseResponse(dynamic response, bool saveT) async {
+   print(response.toString());
    var responseBody = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
    if( response.statusCode == 401 ){
      clearToken();
@@ -185,17 +190,12 @@ class BaseHttpRequest {
      return ResponseBody(success: true, message: '', data: responseBody );
    }
  }
-  Future<String?> getToken() async{
+  Future<String> getToken() async{
     final LocalStorage storage = LocalStorage('LocalStorage');
-    var value = storage.getItem('token');
-    print('aaaaa');
-    print(value);
-    print('aaaaa');
+    var value = storage.getItem('token') ?? '';
     return value;
   }
   saveToken(token) async {
-    print('token');
-    print(token);
     final LocalStorage storage = LocalStorage('LocalStorage');
     storage.setItem('token', token);
   }
