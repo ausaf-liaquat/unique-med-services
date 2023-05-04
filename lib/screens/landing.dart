@@ -60,10 +60,16 @@ class _LandingScreenState extends State<LandingScreen> {
         appBar: AppBar(
           leadingWidth: 150,
           leading: Padding(
-            padding: const EdgeInsets.only(left: 0),
-            child:
-                Image.asset('assets/images/app-bar-text-logo.png', width: 107),
-          ),
+              padding: const EdgeInsets.only(left: 0),
+              child: InkWell(
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                onTap: () {},
+                child: Image.asset('assets/images/app-bar-text-logo.png',
+                    width: 107),
+              )),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 12),
