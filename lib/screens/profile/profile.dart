@@ -7,9 +7,14 @@ import '../../widgets/card/profile.dart';
 import '../../widgets/dataDisplay/typography.dart';
 import 'edit.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     bool midiumDevice = MediaQuery.of(context).size.width >= 392;
