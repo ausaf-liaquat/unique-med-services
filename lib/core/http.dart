@@ -10,6 +10,9 @@ import 'package:http/http.dart' as http;
   Future<ResponseBody> getShift(dynamic body){
     return get('api/v1/shifts', body);
   }
+  Future<ResponseBody> getProfileData(){
+    return post('api/v1/get/user', {"": ""}, null, false);
+  }
   Future<ResponseBody> getAcceptShift(){
     return post('api/v1/accepted/shifts/list', {"": ""}, null, false);
   }
@@ -81,6 +84,20 @@ import 'package:http/http.dart' as http;
 
   Future<ResponseBody> logout(){
     return post('api/v1/auth/logout', {"": ""}, {"": ""}, false);
+  }
+  Future<dynamic> updateProfile(dynamic body) async {
+    var url = Uri.https(Constants.baseUrl, 'api/v1/user/update');
+    var request = http.MultipartRequest('POST', url);
+    var token = await getToken();
+    Map<String, String>  header = { "Authorization": 'Bearer ${token ?? ''}'};
+    print(token);
+    request.headers.addAll(header);
+    request.fields.addAll(body);
+    if( body['image'] != null){
+      request.files.add( await http.MultipartFile.fromPath('pic', body['pic']!));
+    }
+    var res = await request.send();
+    return await parseResponseForm(res);
   }
   Future<dynamic> register(dynamic body) async {
     var url = Uri.https(Constants.baseUrl, 'api/v1/auth/register');

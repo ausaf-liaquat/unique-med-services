@@ -3,11 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:ums_staff/core/http.dart';
+import 'package:ums_staff/screens/profile/model.dart';
 import 'package:ums_staff/widgets/card/card.dart';
 import 'package:ums_staff/widgets/card/upload_file.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 import '../../shared/theme/color.dart';
 import '../../shared/utils/image_picker.dart';
+import '../../widgets/messages/snack_bar.dart';
 import '../../widgets/others/back_layout.dart';
 import '../../widgets/inputs/select_field.dart';
 import '../../widgets/inputs/text_field.dart';
@@ -23,7 +26,7 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   File? _profileImage;
-
+  bool loading = false;
   void changeSelectValue(String name, String value) {
     _formKey.currentState!.fields[name]!.didChange(value);
   }
@@ -35,6 +38,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+    Profile? profile = arguments['profile'];
     return BackLayout(
         text: 'Edit Profile',
         page: SingleChildScrollView(
@@ -46,15 +52,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     _formKey.currentState!.save();
                   },
                   autovalidateMode: AutovalidateMode.disabled,
-                  initialValue: const {
-                    'name': '',
-                    'clinician': '',
-                    'email': '',
-                    'phone': '',
-                    'address': '',
-                    'city': '',
-                    'state': '',
-                    'code': ''
+                  initialValue: {
+                    'first_name': profile?.firstName ?? '',
+                    'last_name': profile?.lastName ?? '',
+                    'qualification_type': profile?.qualificationType ?? '',
+                    'email': profile?.email ?? '',
+                    'phone': profile?.phoneNumber ?? '',
+                    'address':profile?.address ?? '',
+                    'city': profile?.city ?? '',
+                    'state': profile?.state ?? '',
+                    'zip_code': profile?.zipCode ?? ''
                   },
                   skipDisabled: true,
                   child: Column(
@@ -67,28 +74,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       const SizedBox(height: 16),
                       AppTextField(
-                        error: _formKey.currentState?.fields['name']!.errorText,
+                        error: _formKey.currentState?.fields['first_name']!.errorText,
                         bottom: 16,
                         type: TextInputType.name,
-                        name: 'name',
-                        label: 'Name',
+                        name: 'first_name',
+                        label: 'First Name',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Name is required'),
+                              errorText: 'First Name is required'),
                         ]),
                       ),
-                      AppSelectField(
-                        error: _formKey
-                            .currentState?.fields['clinician']!.errorText,
-                        title: 'What is your clinician?',
+                      AppTextField(
+                        error: _formKey.currentState?.fields['last_name']!.errorText,
                         bottom: 16,
-                        onSelect: changeSelectValue,
-                        option: const [],
-                        name: 'clinician',
-                        label: 'Clinician',
+                        type: TextInputType.name,
+                        name: 'last_name',
+                        label: 'Last Name',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
-                              errorText: 'Clinician is required'),
+                              errorText: 'Last Name is required'),
                         ]),
                       ),
                       AppTextField(
@@ -133,12 +137,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               errorText: 'Address is required'),
                         ]),
                       ),
-                      AppSelectField(
+                      AppTextField(
                         error: _formKey.currentState?.fields['city']!.errorText,
-                        title: 'What is your city?',
                         bottom: 16,
-                        onSelect: changeSelectValue,
-                        option: const [],
                         name: 'city',
                         label: 'City',
                         validator: FormBuilderValidators.compose([
@@ -146,13 +147,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               errorText: 'City is required'),
                         ]),
                       ),
-                      AppSelectField(
+                      AppTextField(
                         error:
                             _formKey.currentState?.fields['state']!.errorText,
-                        title: 'What is your state?',
                         bottom: 16,
-                        onSelect: changeSelectValue,
-                        option: const [],
                         name: 'state',
                         label: 'State',
                         validator: FormBuilderValidators.compose([
@@ -160,10 +158,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ]),
                       ),
                       AppTextField(
-                        error: _formKey.currentState?.fields['code']!.errorText,
+                        error: _formKey.currentState?.fields['zip_code']!.errorText,
                         bottom: 28,
                         type: TextInputType.number,
-                        name: 'code',
+                        name: 'zip_code',
                         label: 'Zip Code',
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
@@ -217,10 +215,30 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         child: ElevatedButton.icon(
                           onPressed: () {
                             if (_formKey.currentState?.validate() ?? false) {
-                              // error funtion
+                                setState(() {
+                                  loading = true;
+                                });
+                                var http = HttpRequest();
+                                var body = {..._formKey.currentState?.value ?? {}};
+                                var formatBody = body.map<String, String>((key, value) => MapEntry(key, value.toString()));
+                                if(_profileImage != null){
+                                  formatBody['pic'] = (_profileImage as File).path;
+                                }
+                                http.updateProfile(formatBody).then((value){
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                  if( value.success == true ){
+                                    SnackBarMessage.successSnackbar(
+                                        context, "Profile updated");
+                                    Navigator.pop(context);
+                                  }else{
+                                    SnackBarMessage.errorSnackbar(
+                                        context, value.message);
+                                  }
+                                });
                             } else {
                               setState(() {});
-                              // sucess funtion
                             }
                           },
                           icon: const Icon(Icons.save_outlined),

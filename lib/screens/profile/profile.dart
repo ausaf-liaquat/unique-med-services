@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ums_staff/screens/auth/login.dart';
+import 'package:ums_staff/screens/profile/model.dart';
+import 'package:ums_staff/widgets/messages/snack_bar.dart';
 
 import '../../core/http.dart';
 import '../../shared/theme/color.dart';
@@ -15,6 +17,31 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  bool loading = false;
+  Profile? profile;
+  void getProfile(){
+    var http = HttpRequest();
+    setState(() {
+      loading = true;
+    });
+    http.getProfileData().then((value) {
+      if (!value.success) {
+        SnackBarMessage.errorSnackbar(
+            context, value.message);
+      } else {
+        var docType =value.data['data'];
+        if( docType != null ){
+          setState(() {
+            profile = Profile.fromJson(docType);
+          });
+        }
+      }
+    });
+  }
+  @override
+  void initState() {
+    getProfile();
+  }
   @override
   Widget build(BuildContext context) {
     bool midiumDevice = MediaQuery.of(context).size.width >= 392;
@@ -37,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     children: [
                       const SizedBox(height: 20),
-                      const ProfileCard(),
+                      ProfileCard(profile:profile),
                       const SizedBox(height: 32),
                       smallDevice
                           ? Row(
@@ -46,7 +73,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     child: OutlinedButton.icon(
                                         onPressed: () {
                                           Navigator.pushNamed(
-                                              context, EditProfileScreen.route);
+                                              context, EditProfileScreen.route, arguments: {'profile': profile}).then((value) {
+                                                setState(() {
+                                                  getProfile();
+                                                });
+                                          });
                                         },
                                         icon: const Icon(Icons.edit_outlined),
                                         label: const Text('PROFILE'))),
@@ -64,7 +95,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     child: OutlinedButton(
                                         onPressed: () {
                                           Navigator.pushNamed(
-                                              context, EditProfileScreen.route);
+                                              context, EditProfileScreen.route, arguments: {'profile': profile}).then((value) {
+
+                                                setState(() {
+                                                  getProfile();
+                                            });
+                                          });
                                         },
                                         child: const Text('PROFILE'))),
                                 SizedBox(width: midiumDevice ? 32 : 15),

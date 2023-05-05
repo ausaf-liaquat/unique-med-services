@@ -3,13 +3,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:ums_staff/widgets/card/card.dart';
 
+import '../../screens/profile/model.dart';
 import '../../shared/theme/color.dart';
 import '../../shared/utils/image_picker.dart';
 import '../dataDisplay/row_item.dart';
 import '../dataDisplay/typography.dart';
 
 class ProfileCard extends StatelessWidget {
-  const ProfileCard({super.key});
+  Profile? profile;
+  ProfileCard({super.key, required this.profile});
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +44,8 @@ class ProfileCard extends StatelessWidget {
                         ]),
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: Image.asset(
-                            'assets/test/profile.jpg',
+                        child: profile?.imageUrl != null ? Image.network(profile?.imageUrl ?? '') : Image.asset(
+                          'assets/test/profile.jpg',
                             fit: BoxFit.cover,
                           ),
                         )),
@@ -58,18 +60,10 @@ class ProfileCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 8),
-                        const AppTypography(
-                          overflow: TextOverflow.ellipsis,
-                          text: 'Cornelia Selvan',
-                          size: 20,
-                          weight: FontWeight.w500,
-                        ),
-                        const SizedBox(height: 4),
                         AppTypography(
                           overflow: TextOverflow.ellipsis,
-                          text: 'Plumber',
-                          size: 15,
-                          color: AppColorScheme().black50,
+                          text: '${profile?.firstName ?? ''} ${profile?.lastName ?? ''}',
+                          size: 20,
                           weight: FontWeight.w500,
                         ),
                       ],
@@ -79,15 +73,15 @@ class ProfileCard extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           ProfileShiftData(
-                              quentity: '24', title: 'Assigned Shifts'),
-                          SizedBox(width: 13),
+                              quentity:( (profile?.completedShifts ?? 0 ) + (profile?.unCompletedShifts ?? 0 )).toString() , title: 'Assigned Shifts'),
+                          const SizedBox(width: 13),
                           ProfileShiftData(
-                              quentity: '56', title: 'Complete Shifts'),
-                          SizedBox(width: 13),
+                              quentity:  (profile?.completedShifts ?? 0 ).toString(), title: 'Complete Shifts'),
+                          const SizedBox(width: 13),
                           ProfileShiftData(
-                              quentity: '27', title: 'UnComplete Shifts'),
+                              quentity: (profile?.unCompletedShifts ?? 0 ).toString(), title: 'UnComplete Shifts'),
                         ],
                       ),
                     )
@@ -99,38 +93,38 @@ class ProfileCard extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(12, 24, 12, 0),
               child: Column(
                 children: [
-                  const RowItem(
+                  RowItem(
                     icon: Icons.call_outlined,
-                    text: '7274631685',
+                    text: profile?.phoneNumber ?? '',
                     bottom: 16,
                   ),
-                  const RowItem(
+                  RowItem(
                       icon: Icons.location_on_outlined,
                       bottom: 16,
-                      text: 'uvsoffl@gmail.co'),
-                  const RowItem(
+                      text: profile?.email ?? 'not found'),
+                  RowItem(
                       icon: Icons.call_outlined,
                       bottom: 16,
-                      text: '11929 Bahia Valley Drive'),
+                      text: profile?.address ?? 'not found'),
                   Row(
-                    children: const [
+                    children: [
                       Expanded(
                           child: RowItem(
                               icon: Icons.apartment_outlined,
                               bottom: 16,
-                              text: 'Riverview')),
+                              text: profile?.city ?? 'not found')),
                       SizedBox(width: 6),
                       Expanded(
                           child: RowItem(
                         icon: Icons.villa_outlined,
-                        text: 'FL',
+                        text: profile?.state ?? 'not found',
                         bottom: 16,
                       ))
                     ],
                   ),
-                  const RowItem(
+                  RowItem(
                     icon: Icons.map_outlined,
-                    text: '33579',
+                    text: profile?.zipCode ?? 'not found',
                     bottom: 16,
                   ),
                 ],
