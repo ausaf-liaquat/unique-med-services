@@ -132,6 +132,16 @@ import 'package:http/http.dart' as http;
     var res = await request.send();
     return await parseResponseForm(res);
   }
+  Future<dynamic> bca(dynamic body) async {
+    var url = Uri.https(Constants.baseUrl, 'api/v1/bca/form');
+    var request = http.MultipartRequest('POST', url);
+    var token = await getToken();
+    Map<String, String>  header = { "Authorization": 'Bearer ${token ?? ''}'};
+    request.headers.addAll(header);
+    request.fields.addAll(body);
+    var res = await request.send();
+    return await parseResponseForm(res);
+  }
   Future<dynamic> clockout(int id) async {
     return post('api/v1/shift/$id/clockout', {"": ""}, null, false);
   }
@@ -233,4 +243,8 @@ class BaseHttpRequest {
      final LocalStorage storage = LocalStorage('LocalStorage');
      storage.clear();
    }
+  checkToken(){
+   final LocalStorage storage = LocalStorage('LocalStorage');
+   return storage.getItem('token');
+ }
 }

@@ -39,6 +39,9 @@ class _CalendarCardState extends State<CalendarCard> {
           focusedDay: widget.focusedDay,
           currentDay: widget.focusedDay,
           daysOfWeekHeight: 43,
+          eventLoader: (_selectedDay){
+            return {}
+          },
           availableGestures: AvailableGestures.none,
           daysOfWeekStyle: DaysOfWeekStyle(
               weekdayStyle: TextStyle(

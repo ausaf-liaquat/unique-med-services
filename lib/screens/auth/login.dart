@@ -23,7 +23,15 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool loading = false;
-  void showInSnackBar(String value) {}
+  @override
+  void initState() {
+    super.initState();
+    var http = HttpRequest();
+    var token = http.checkToken();
+    if(token != null && token != ''){
+      Navigator.pushNamed(context, LandingScreen.route);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,8 +89,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             ElevatedButton(
                               onPressed: loading
-                                  ? (){}
+                                  ? null
                                   : () {
+                                print('aaaaaaaaaaaaaa');
                                       if (_formKey.currentState?.validate() ??
                                           false) {
                                         setState(() {
@@ -104,8 +113,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                           }
                                         });
                                       } else {
-                                        Navigator.pushNamed(
-                                            context, LandingScreen.route);
                                         setState(() {});
                                       }
                                     },
