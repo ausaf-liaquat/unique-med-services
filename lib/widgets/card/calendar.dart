@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../shared/theme/color.dart';
@@ -39,9 +40,29 @@ class _CalendarCardState extends State<CalendarCard> {
           focusedDay: widget.focusedDay,
           currentDay: widget.focusedDay,
           daysOfWeekHeight: 43,
-          eventLoader: (_selectedDay){
-            return {}
-          },
+          calendarBuilders: CalendarBuilders(defaultBuilder: (context, day, focusedDay){
+            var dayS = DateFormat('yyyy-MM-dd').format(day);
+            if(widget.timeSet.contains(dayS)){
+            return Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                border: Border.all(color: Theme.of(context).colorScheme.primary),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(100000),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  '${day.day}',
+                  style: const TextStyle(color: Colors.black, fontSize: 12),
+                ),
+              ),
+            );
+            }
+            return null;
+          }),
           availableGestures: AvailableGestures.none,
           daysOfWeekStyle: DaysOfWeekStyle(
               weekdayStyle: TextStyle(
