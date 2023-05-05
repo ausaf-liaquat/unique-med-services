@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:ums_staff/widgets/dataDisplay/list_item.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
@@ -6,6 +7,7 @@ import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 import '../../../shared/theme/color.dart';
 import '../../../widgets/inputs/check_box.dart';
 import '../../../widgets/inputs/date_field.dart';
+import '../../../widgets/inputs/group_radio_box.dart';
 import '../../../widgets/inputs/select_field.dart';
 import '../../../widgets/inputs/text_field.dart';
 
@@ -152,24 +154,20 @@ class Step2 extends StatelessWidget {
             FormBuilderValidators.required(errorText: 'Address is required'),
           ]),
         ),
-        AppSelectField(
+        AppTextField(
           error: fieldsError('current_state'),
-          title: 'What is State?',
           bottom: 16,
-          onSelect: onSelect,
-          option: const [],
+          type: TextInputType.streetAddress,
           name: 'current_state',
           label: 'State',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'State is required'),
           ]),
         ),
-        AppSelectField(
+        AppTextField(
           error: fieldsError('current_city'),
-          title: 'What is city?',
+          type: TextInputType.streetAddress,
           bottom: 16,
-          onSelect: onSelect,
-          option: const [],
           name: 'current_city',
           label: 'City',
           validator: FormBuilderValidators.compose([
@@ -223,24 +221,20 @@ class Step3 extends StatelessWidget {
             FormBuilderValidators.required(errorText: 'Address is required'),
           ]),
         ),
-        AppSelectField(
+        AppTextField(
+          type: TextInputType.streetAddress,
           error: fieldsError('previous_state'),
-          title: 'What is State?',
           bottom: 16,
-          onSelect: onSelect,
-          option: const [],
           name: 'previous_state',
           label: 'State',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'State is required'),
           ]),
         ),
-        AppSelectField(
+        AppTextField(
+          type: TextInputType.streetAddress,
           error: fieldsError('previous_city'),
-          title: 'What is city?',
           bottom: 16,
-          onSelect: onSelect,
-          option: const [],
           name: 'previous_city',
           label: 'City',
           validator: FormBuilderValidators.compose([
@@ -274,18 +268,28 @@ class Step3 extends StatelessWidget {
   }
 }
 
-class Step4 extends StatelessWidget {
-  const Step4({super.key, required this.onSelect, required this.fieldsError});
+class Step4 extends StatefulWidget {
+  Step4(
+      {super.key,
+      required this.onSelect,
+      required this.fieldsError,
+      required this.qValue});
   final void Function(String, String) onSelect;
   final String? Function(String) fieldsError;
+  String qValue;
 
+  @override
+  State<Step4> createState() => _Step4State();
+}
+
+class _Step4State extends State<Step4> {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const AppTypography(
-          text: 'Please Check The Following Question (optional)',
+          text: 'Please Check The Following Question',
           size: 24,
           weight: FontWeight.w500,
         ),
@@ -294,55 +298,77 @@ class Step4 extends StatelessWidget {
             text:
                 'Within the last seven (7) years have you been convicted of, plead guilty to, or plead “no contest” to a crime that has not been expunged from your record? (crime means felonies and misdemeanors, including vehicular misdemeanors and felonies) or been released from prison? (Examples of vehicular misdemeanors and felonies include reckless driving, driving while license has been suspended, driving without insurance, DUI’s involuntary manslaughter, damage to property, etc. Prison includes time spent in city and county jails as well as local, state, and federal prisons.) Applicants for employment in Hawaii should not answer this question at this time. Applicants in California should not answer this question as it relates to marijuana-related convictions more than 2 years old under California Health and Safety Code Sections 11357 (b) and (c), 11360 (c) 11364, 11365 or 11550.',
             listNumber: ' 1. '),
-        const SizedBox(height: 16),
-        AppDateField(
-          error: fieldsError('q1_date'),
-          bottom: 16,
-          name: 'q1_date',
-          label: 'Date',
-        ),
-        AppSelectField(
-          error: fieldsError('q1_state'),
-          title: 'What is State?',
-          bottom: 16,
-          onSelect: onSelect,
-          option: const [],
-          name: 'q1_state',
-          label: 'State',
-        ),
-        AppSelectField(
-          error: fieldsError('q1_city'),
-          title: 'What is city?',
-          bottom: 16,
-          onSelect: onSelect,
-          option: const [],
-          name: 'q1_city',
-          label: 'City',
-        ),
-        AppTextField(
-          error: fieldsError('q1_note'),
-          bottom: 16,
-          type: TextInputType.multiline,
-          name: 'q1_note',
-          label: 'Note',
-        ),
+        AppGroupRadioBox(
+            onchange: (e) {
+              setState(() {
+                widget.qValue = e ?? 'No';
+              });
+            },
+            direction: OptionsOrientation.horizontal,
+            name: 'q1',
+            options: const ['Yes', 'No']),
+        const SizedBox(height: 8),
+        widget.qValue == 'Yes'
+            ? Column(
+                children: [
+                  AppDateField(
+                    error: widget.fieldsError('q1_date'),
+                    bottom: 16,
+                    name: 'q1_date',
+                    label: 'Date',
+                  ),
+                  AppTextField(
+                    type: TextInputType.streetAddress,
+                    error: widget.fieldsError('q1_state'),
+                    bottom: 16,
+                    name: 'q1_state',
+                    label: 'State',
+                  ),
+                  AppTextField(
+                    type: TextInputType.streetAddress,
+                    error: widget.fieldsError('q1_city'),
+                    bottom: 16,
+                    name: 'q1_city',
+                    label: 'City',
+                  ),
+                  AppTextField(
+                    error: widget.fieldsError('q1_note'),
+                    bottom: 16,
+                    type: TextInputType.multiline,
+                    name: 'q1_note',
+                    label: 'Note',
+                  ),
+                ],
+              )
+            : const SizedBox()
       ],
     );
+    ;
   }
 }
 
-class Step5 extends StatelessWidget {
-  const Step5({super.key, required this.onSelect, required this.fieldsError});
+class Step5 extends StatefulWidget {
+  Step5(
+      {super.key,
+      required this.onSelect,
+      required this.fieldsError,
+      required this.qValue});
   final void Function(String, String) onSelect;
   final String? Function(String) fieldsError;
+  String qValue;
 
+  @override
+  State<Step5> createState() => _Step5State();
+}
+
+class _Step5State extends State<Step5> {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const AppTypography(
-          text: 'Please Check The Following Question (Optional)',
+          text: 'Please Check The Following Question',
           size: 24,
           weight: FontWeight.w500,
         ),
@@ -351,55 +377,76 @@ class Step5 extends StatelessWidget {
             text:
                 'Are you currently on probation or parole for a criminal offense or have you received an alternative disposition sentence for a criminal act?',
             listNumber: ' 2. '),
-        const SizedBox(height: 16),
-        AppDateField(
-          error: fieldsError('q2_date'),
-          bottom: 16,
-          name: 'q2_date',
-          label: 'Date',
-        ),
-        AppSelectField(
-          error: fieldsError('q2_state'),
-          title: 'What is State?',
-          bottom: 16,
-          onSelect: onSelect,
-          option: const [],
-          name: 'q2_state',
-          label: 'State',
-        ),
-        AppSelectField(
-          error: fieldsError('q2_city'),
-          title: 'What is city?',
-          bottom: 16,
-          onSelect: onSelect,
-          option: const [],
-          name: 'q2_city',
-          label: 'City',
-        ),
-        AppTextField(
-          error: fieldsError('q2_note'),
-          bottom: 16,
-          type: TextInputType.multiline,
-          name: 'q2_note',
-          label: 'Note',
-        ),
+        AppGroupRadioBox(
+            onchange: (e) {
+              setState(() {
+                widget.qValue = e ?? 'No';
+              });
+            },
+            direction: OptionsOrientation.horizontal,
+            name: 'q2',
+            options: const ['Yes', 'No']),
+        const SizedBox(height: 8),
+        widget.qValue == 'Yes'
+            ? Column(
+                children: [
+                  AppDateField(
+                    error: widget.fieldsError('q2_date'),
+                    bottom: 16,
+                    name: 'q2_date',
+                    label: 'Date',
+                  ),
+                  AppTextField(
+                    type: TextInputType.streetAddress,
+                    error: widget.fieldsError('q2_state'),
+                    bottom: 16,
+                    name: 'q2_state',
+                    label: 'State',
+                  ),
+                  AppTextField(
+                    type: TextInputType.streetAddress,
+                    error: widget.fieldsError('q2_city'),
+                    bottom: 16,
+                    name: 'q2_city',
+                    label: 'City',
+                  ),
+                  AppTextField(
+                    error: widget.fieldsError('q2_note'),
+                    bottom: 16,
+                    type: TextInputType.multiline,
+                    name: 'q2_note',
+                    label: 'Note',
+                  ),
+                ],
+              )
+            : const SizedBox()
       ],
     );
   }
 }
 
-class Step6 extends StatelessWidget {
-  const Step6({super.key, required this.onSelect, required this.fieldsError});
+class Step6 extends StatefulWidget {
+  Step6(
+      {super.key,
+      required this.onSelect,
+      required this.fieldsError,
+      required this.qValue});
   final void Function(String, String) onSelect;
   final String? Function(String) fieldsError;
+  String qValue;
 
+  @override
+  State<Step6> createState() => _Step6State();
+}
+
+class _Step6State extends State<Step6> {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const AppTypography(
-          text: 'Please Check The Following Question (Optional)',
+          text: 'Please Check The Following Question',
           size: 24,
           weight: FontWeight.w500,
         ),
@@ -407,32 +454,45 @@ class Step6 extends StatelessWidget {
         const ListItem(
             text: 'Name the specific court that adjudicated the admitted hit.',
             listNumber: ' 3. '),
-        const SizedBox(height: 16),
-        AppTextField(
-          error: fieldsError('q3_court_name'),
-          bottom: 16,
-          type: TextInputType.text,
-          name: 'q3_court_name',
-          label: 'Court Name',
-        ),
-        AppDateField(
-          error: fieldsError('q3_date'),
-          bottom: 16,
-          name: 'q3_date',
-          label: 'Date',
-        ),
-        AppSelectField(
-          error: fieldsError('q3_state'),
-          title: 'What is State?',
-          bottom: 16,
-          onSelect: onSelect,
-          option: const [],
-          name: 'q3_state',
-          label: 'State',
-        ),
+        AppGroupRadioBox(
+            onchange: (e) {
+              setState(() {
+                widget.qValue = e ?? 'No';
+              });
+            },
+            direction: OptionsOrientation.horizontal,
+            name: 'q3',
+            options: const ['Yes', 'No']),
+        const SizedBox(height: 8),
+        widget.qValue == 'Yes'
+            ? Column(
+          children: [
+            AppTextField(
+              error: widget.fieldsError('q3_court_name'),
+              bottom: 16,
+              type: TextInputType.text,
+              name: 'q3_court_name',
+              label: 'Court Name',
+            ),
+            AppDateField(
+              error: widget.fieldsError('q3_date'),
+              bottom: 16,
+              name: 'q3_date',
+              label: 'Date',
+            ),
+            AppTextField(
+              type: TextInputType.streetAddress,
+              error: widget.fieldsError('q3_state'),
+              bottom: 16,
+              name: 'q3_state',
+              label: 'State',
+            ),
+          ],
+        )
+            : const SizedBox(),
         AppTypography(
             text:
-                "I certify that the information contained herein is true and understand that any falsification will result in the rejection of my application or termination of my employment. I also understand that the requested information is for the sole purpose of conducting a background investigation which may include a check of my identity, work history, education history, credit history, driving records, any criminal history which may be in the files of any federal, state or local criminal agency, and a post offer search of workers’ compensation claim history. Information regarding age, sex, or race will not be used as part of any employment decision. I agree that a facsimile (“fax”), electronic or photographic copy of this Authorization shall be as valid as the original.",
+            "I certify that the information contained herein is true and understand that any falsification will result in the rejection of my application or termination of my employment. I also understand that the requested information is for the sole purpose of conducting a background investigation which may include a check of my identity, work history, education history, credit history, driving records, any criminal history which may be in the files of any federal, state or local criminal agency, and a post offer search of workers’ compensation claim history. Information regarding age, sex, or race will not be used as part of any employment decision. I agree that a facsimile (“fax”), electronic or photographic copy of this Authorization shall be as valid as the original.",
             size: 14,
             color: AppColorScheme().black60),
         AppCheckBox(
@@ -445,13 +505,13 @@ class Step6 extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         AppTextField(
-          error: fieldsError('print_name'),
+          error: widget.fieldsError('print_name'),
           bottom: 16,
           type: TextInputType.text,
           name: 'print_name',
           label: 'Print Name',
         ),
       ],
-    );
+    );;
   }
 }

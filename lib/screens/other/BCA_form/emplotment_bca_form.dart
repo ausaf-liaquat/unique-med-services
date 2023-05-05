@@ -19,6 +19,14 @@ class _EmplotmentFormScreenState extends State<EmplotmentFormScreen> {
   void changeSelectValue(String name, String value) {
     _formKey.currentState!.fields[name]!.didChange(value);
   }
+  
+  String fieldsValue(String name) {
+    if (_formKey.currentState?.value[name] == null) {
+      return '';
+    } else {
+      return _formKey.currentState!.value[name];
+    }
+  }
 
   String? fieldsErrors(String name) {
     if (_formKey.currentState!.fields[name] == null) {
@@ -35,9 +43,9 @@ class _EmplotmentFormScreenState extends State<EmplotmentFormScreen> {
       Step1(onSelect: changeSelectValue, fieldsError: fieldsErrors),
       Step2(onSelect: changeSelectValue, fieldsError: fieldsErrors),
       Step3(onSelect: changeSelectValue, fieldsError: fieldsErrors),
-      Step4(onSelect: changeSelectValue, fieldsError: fieldsErrors),
-      Step5(onSelect: changeSelectValue, fieldsError: fieldsErrors),
-      Step6(onSelect: changeSelectValue, fieldsError: fieldsErrors),
+      Step4(onSelect: changeSelectValue, fieldsError: fieldsErrors, qValue: fieldsValue('q1'),),
+      Step5(onSelect: changeSelectValue, fieldsError: fieldsErrors, qValue: fieldsValue('q2'),),
+      Step6(onSelect: changeSelectValue, fieldsError: fieldsErrors, qValue: fieldsValue('q3'),),
     ];
 
     return BackLayout(
@@ -85,6 +93,7 @@ class _EmplotmentFormScreenState extends State<EmplotmentFormScreen> {
                     'zip_code_two': '',
                     'q1_note': 'Enter notes...',
                     // fifth step
+                    'q1': 'No',
                     'q2_date': DateTime.now(),
                     'q2_state': '',
                     'q2_city': '',

@@ -93,8 +93,8 @@ import 'package:http/http.dart' as http;
     print(token);
     request.headers.addAll(header);
     request.fields.addAll(body);
-    if( body['image'] != null){
-      request.files.add( await http.MultipartFile.fromPath('pic', body['pic']!));
+    if( body['pic'] != null){
+      request.files.add( await http.MultipartFile.fromPath('image', body['pic']!));
     }
     var res = await request.send();
     return await parseResponseForm(res);

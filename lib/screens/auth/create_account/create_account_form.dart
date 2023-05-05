@@ -22,14 +22,16 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   dynamic resume;
   bool loading = false;
-  int _currentStep = 0;
+  int _currentStep = 1;
 
   void changeSelectValue(String name, dynamic value) {
-      _formKey.currentState!.fields[name]!.didChange(value);
+    _formKey.currentState!.fields[name]!.didChange(value);
   }
 
   void updateResume(dynamic value) {
-    resume = value;
+    setState(() {
+      resume = value;
+    });
   }
 
   String? fieldsErrors(String name) {
@@ -46,6 +48,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     final List<Widget> steps = <Widget>[
       Step1(onSelect: changeSelectValue, fieldsError: fieldsErrors),
       Step2(
+          resume: resume,
           onSelect: changeSelectValue,
           fieldsError: fieldsErrors,
           updateResume: updateResume),
@@ -84,42 +87,53 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         padding: EdgeInsets.symmetric(
                             horizontal: smallDevice ? 40 : 0),
                         child: ElevatedButton(
-                          onPressed: loading ? (){} : () {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              if (_currentStep == 1) {
-                                setState(() {
-                                  loading = true;
-                                });
-                                var http = HttpRequest();
-                                var body = {..._formKey.currentState?.value ?? {}};
-                                var formatBody = body.map<String, String>((key, value) => MapEntry(key, value.toString()));
-                                if(resume != null){
-                                  formatBody['resume'] = (resume as File).path;
-                                }
-                                http.register(formatBody).then((value){
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                  if( value.success == true ){
-                                    Navigator.pushNamed(
-                                          context, VerificationScreen.route, arguments: {'register': true});
-                                  }else{
-                                    SnackBarMessage.errorSnackbar(
-                                        context, value.message);
+                          onPressed: loading
+                              ? () {}
+                              : () {
+                                  if (_formKey.currentState?.validate() ??
+                                      false) {
+                                    if (_currentStep == 1) {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      var http = HttpRequest();
+                                      var body = {
+                                        ..._formKey.currentState?.value ?? {}
+                                      };
+                                      var formatBody = body.map<String, String>(
+                                          (key, value) =>
+                                              MapEntry(key, value.toString()));
+                                      if (resume != null) {
+                                        formatBody['resume'] =
+                                            (resume as File).path;
+                                      }
+                                      http.register(formatBody).then((value) {
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                        if (value.success == true) {
+                                          Navigator.pushNamed(
+                                              context, VerificationScreen.route,
+                                              arguments: {'register': true});
+                                        } else {
+                                          SnackBarMessage.errorSnackbar(
+                                              context, value.message);
+                                        }
+                                      });
+                                    } else {
+                                      setState(() {
+                                        _currentStep = _currentStep + 1;
+                                      });
+                                    }
+                                  } else {
+                                    setState(() {});
                                   }
-                                });
-                              } else {
-                                setState(() {
-                                  _currentStep = _currentStep + 1;
-                                });
-                              }
-                            } else {
-                              setState(() {});
-                            }
-                          },
-                          child: loading ? CircularProgressIndicator(
-                            color: AppColorScheme().black0,
-                          ) : Text(_currentStep == 1 ? 'Finish' : 'Next'),
+                                },
+                          child: loading
+                              ? CircularProgressIndicator(
+                                  color: AppColorScheme().black0,
+                                )
+                              : Text(_currentStep == 1 ? 'Finish' : 'Next'),
                         ),
                       ),
                       SizedBox(height: _currentStep == 0 ? 0 : 24),
@@ -136,11 +150,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                   });
                                 },
                               ),
-                      )
+                            )
                     ],
-                  )
-              )
-          ),
+                  ))),
         ));
   }
 }

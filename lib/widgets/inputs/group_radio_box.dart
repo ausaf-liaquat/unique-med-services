@@ -9,10 +9,14 @@ class AppGroupRadioBox extends StatefulWidget {
       required this.name,
       this.label,
       this.validator,
-      required this.options});
+      this.onchange,
+      required this.options,
+      this.direction = OptionsOrientation.vertical});
   final String name;
+  final OptionsOrientation direction;
   final String? label;
   final String? Function(String?)? validator;
+  final void Function(String?)? onchange;
   final List<String> options;
 
   @override
@@ -23,6 +27,7 @@ class _AppGroupRadioBoxState extends State<AppGroupRadioBox> {
   @override
   Widget build(BuildContext context) {
     return FormBuilderRadioGroup<String>(
+        onChanged: widget.onchange,
         activeColor: Theme.of(context).colorScheme.secondary,
         name: widget.name,
         decoration: InputDecoration(
@@ -36,7 +41,7 @@ class _AppGroupRadioBoxState extends State<AppGroupRadioBox> {
           fillColor: AppColorScheme().black2,
           enabled: false,
         ),
-        orientation: OptionsOrientation.vertical,
+        orientation: widget.direction,
         options: widget.options.map((Object item) {
           return FormBuilderFieldOption(
             value: item as String,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../../shared/theme/color.dart';
+import '../../../widgets/card/upload_file.dart';
 import '../../../widgets/inputs/group_check_box.dart';
 import '../../../widgets/inputs/group_radio_box.dart';
 import '../../../widgets/inputs/select_field.dart';
@@ -106,7 +107,19 @@ class Step1 extends StatelessWidget {
           title: 'Select the qualification type?',
           bottom: 16,
           onSelect: onSelect,
-          option: const ['RN', 'MT', 'PST', 'PCT', 'PT', 'OT', 'RT', 'EKG', 'LPN / LVN', 'CNA / SRNA / GNA / LNA / STNA / NAC', 'CMA / QMAP / MAPS / LMA / CMT / RMA / UAP / AMAP'],
+          option: const [
+            'RN',
+            'MT',
+            'PST',
+            'PCT',
+            'PT',
+            'OT',
+            'RT',
+            'EKG',
+            'LPN / LVN',
+            'CNA / SRNA / GNA / LNA / STNA / NAC',
+            'CMA / QMAP / MAPS / LMA / CMT / RMA / UAP / AMAP'
+          ],
           name: 'qualification_type',
           label: 'Qualification Type',
           validator: FormBuilderValidators.compose([
@@ -120,10 +133,16 @@ class Step1 extends StatelessWidget {
 }
 
 class Step2 extends StatelessWidget {
-  const Step2({super.key, required this.onSelect, required this.fieldsError, required this.updateResume});
+  const Step2(
+      {super.key,
+      required this.onSelect,
+      required this.fieldsError,
+      required this.updateResume,
+      this.resume});
   final void Function(String, dynamic) onSelect;
   final void Function(dynamic) updateResume;
   final String? Function(String) fieldsError;
+  final File? resume;
   void resumePick() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
@@ -172,27 +191,29 @@ class Step2 extends StatelessWidget {
         const SizedBox(height: 40),
         InkWell(
           onTap: resumePick,
-          child: Container(
-            height: 150,
-            decoration: BoxDecoration(
-                color: AppColorScheme().black0,
-                borderRadius: const BorderRadius.all(Radius.circular(16)),
-                border: Border.all(
-                  width: 2,
-                  color: Theme.of(context).colorScheme.secondary,
-                )),
-            child: Center(
-                child: SizedBox(
-              width: 140,
-              child: AppTypography(
-                align: TextAlign.center,
-                text: 'Upload Resume in PDF Format',
-                size: 16,
-                height: 1.4,
-                color: AppColorScheme().black60,
-              ),
-            )),
-          ),
+          child: resume == null
+              ? Container(
+                  height: 150,
+                  decoration: BoxDecoration(
+                      color: AppColorScheme().black0,
+                      borderRadius: const BorderRadius.all(Radius.circular(16)),
+                      border: Border.all(
+                        width: 2,
+                        color: Theme.of(context).colorScheme.secondary,
+                      )),
+                  child: Center(
+                      child: SizedBox(
+                    width: 140,
+                    child: AppTypography(
+                      align: TextAlign.center,
+                      text: 'Upload Your Resume',
+                      size: 16,
+                      height: 1.4,
+                      color: AppColorScheme().black60,
+                    ),
+                  )),
+                )
+              : UploadFileCard(file: resume s),
         ),
         const SizedBox(height: 40),
       ],
