@@ -75,10 +75,10 @@ class Step1 extends StatelessWidget {
           ]),
         ),
         AppTextField(
-          error: fieldsError('social_security_number'),
+          error: fieldsError('social_security'),
           bottom: 16,
           type: TextInputType.name,
-          name: 'social_security_number',
+          name: 'social_security',
           label: 'Social Security Number',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(
@@ -86,9 +86,9 @@ class Step1 extends StatelessWidget {
           ]),
         ),
         AppDateField(
-          error: fieldsError('date_of_birth'),
+          error: fieldsError('dob'),
           bottom: 16,
-          name: 'date_of_birth',
+          name: 'dob',
           label: 'Date Of Birth',
         ),
         AppTextField(
@@ -102,19 +102,19 @@ class Step1 extends StatelessWidget {
           ]),
         ),
         AppTextField(
-          error: fieldsError('maiden'),
+          error: fieldsError('maiden_name'),
           bottom: 16,
           type: TextInputType.name,
           helpText: '(optional)',
-          name: 'maiden',
+          name: 'maiden_name',
           label: 'Maiden',
         ),
         AppTextField(
-          error: fieldsError('date_last_used'),
+          error: fieldsError('last_used'),
           bottom: 16,
           type: TextInputType.name,
           helpText: '(Month/Year) (optional)',
-          name: 'date_last_used',
+          name: 'last_used',
           label: 'Date Last Used',
         ),
       ],
@@ -145,40 +145,40 @@ class Step2 extends StatelessWidget {
             color: AppColorScheme().black60),
         const SizedBox(height: 24),
         AppTextField(
-          error: fieldsError('current_address'),
+          error: fieldsError('address'),
           bottom: 16,
           type: TextInputType.streetAddress,
-          name: 'current_address',
+          name: 'address',
           label: 'Address',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'Address is required'),
           ]),
         ),
         AppTextField(
-          error: fieldsError('current_state'),
+          error: fieldsError('state'),
           bottom: 16,
           type: TextInputType.streetAddress,
-          name: 'current_state',
+          name: 'state',
           label: 'State',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'State is required'),
           ]),
         ),
         AppTextField(
-          error: fieldsError('current_city'),
+          error: fieldsError('city'),
           type: TextInputType.streetAddress,
           bottom: 16,
-          name: 'current_city',
+          name: 'city',
           label: 'City',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'City is required'),
           ]),
         ),
         AppTextField(
-          error: fieldsError('current_code'),
+          error: fieldsError('zip_code'),
           bottom: 16,
           type: TextInputType.number,
-          name: 'current_code',
+          name: 'zip_code',
           label: 'Zip Code',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'Zip code is required'),
@@ -212,10 +212,10 @@ class Step3 extends StatelessWidget {
             color: AppColorScheme().black60),
         const SizedBox(height: 24),
         AppTextField(
-          error: fieldsError('previous_address'),
+          error: fieldsError('address_one'),
           bottom: 16,
           type: TextInputType.streetAddress,
-          name: 'previous_address',
+          name: 'address_one',
           label: 'Address',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'Address is required'),
@@ -223,9 +223,9 @@ class Step3 extends StatelessWidget {
         ),
         AppTextField(
           type: TextInputType.streetAddress,
-          error: fieldsError('previous_state'),
+          error: fieldsError('state_one'),
           bottom: 16,
-          name: 'previous_state',
+          name: 'state_one',
           label: 'State',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'State is required'),
@@ -233,34 +233,34 @@ class Step3 extends StatelessWidget {
         ),
         AppTextField(
           type: TextInputType.streetAddress,
-          error: fieldsError('previous_city'),
+          error: fieldsError('city_one'),
           bottom: 16,
-          name: 'previous_city',
+          name: 'city_one',
           label: 'City',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'City is required'),
           ]),
         ),
         AppTextField(
-          error: fieldsError('previous_code'),
+          error: fieldsError('zip_one'),
           bottom: 16,
           type: TextInputType.number,
-          name: 'previous_code',
+          name: 'zip_one',
           label: 'Zip Code',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'Zip code is required'),
           ]),
         ),
         AppDateField(
-          error: fieldsError('date_form'),
+          error: fieldsError('date_from_one'),
           bottom: 16,
-          name: 'date_form',
+          name: 'date_from_one',
           label: 'Date Lived in Residence: FROM',
         ),
         AppDateField(
-          error: fieldsError('date_to'),
+          error: fieldsError('date_to_one'),
           bottom: 16,
-          name: 'date_to',
+          name: 'date_to_one',
           label: 'Date Lived in Residence: TO',
         ),
       ],
@@ -305,37 +305,37 @@ class _Step4State extends State<Step4> {
               });
             },
             direction: OptionsOrientation.horizontal,
-            name: 'q1',
+            name: 'response_1',
             options: const ['Yes', 'No']),
         const SizedBox(height: 8),
         widget.qValue == 'Yes'
             ? Column(
                 children: [
                   AppDateField(
-                    error: widget.fieldsError('q1_date'),
+                    error: widget.fieldsError('response_1_date'),
                     bottom: 16,
-                    name: 'q1_date',
+                    name: 'response_1_date',
                     label: 'Date',
                   ),
                   AppTextField(
                     type: TextInputType.streetAddress,
-                    error: widget.fieldsError('q1_state'),
+                    error: widget.fieldsError('response_1_state'),
                     bottom: 16,
-                    name: 'q1_state',
+                    name: 'response_1_state',
                     label: 'State',
                   ),
                   AppTextField(
                     type: TextInputType.streetAddress,
-                    error: widget.fieldsError('q1_city'),
+                    error: widget.fieldsError('response_1_city'),
                     bottom: 16,
-                    name: 'q1_city',
+                    name: 'response_1_city',
                     label: 'City',
                   ),
                   AppTextField(
-                    error: widget.fieldsError('q1_note'),
+                    error: widget.fieldsError('response_1_note'),
                     bottom: 16,
                     type: TextInputType.multiline,
-                    name: 'q1_note',
+                    name: 'response_1_note',
                     label: 'Note',
                   ),
                 ],
@@ -384,37 +384,37 @@ class _Step5State extends State<Step5> {
               });
             },
             direction: OptionsOrientation.horizontal,
-            name: 'q2',
+            name: 'response_2',
             options: const ['Yes', 'No']),
         const SizedBox(height: 8),
         widget.qValue == 'Yes'
             ? Column(
                 children: [
                   AppDateField(
-                    error: widget.fieldsError('q2_date'),
+                    error: widget.fieldsError('response_2_date'),
                     bottom: 16,
-                    name: 'q2_date',
+                    name: 'response_2_date',
                     label: 'Date',
                   ),
                   AppTextField(
                     type: TextInputType.streetAddress,
-                    error: widget.fieldsError('q2_state'),
+                    error: widget.fieldsError('response_2_state'),
                     bottom: 16,
-                    name: 'q2_state',
+                    name: 'response_2_state',
                     label: 'State',
                   ),
                   AppTextField(
                     type: TextInputType.streetAddress,
-                    error: widget.fieldsError('q2_city'),
+                    error: widget.fieldsError('response_2_city'),
                     bottom: 16,
-                    name: 'q2_city',
+                    name: 'response_2_city',
                     label: 'City',
                   ),
                   AppTextField(
-                    error: widget.fieldsError('q2_note'),
+                    error: widget.fieldsError('response_2_note'),
                     bottom: 16,
                     type: TextInputType.multiline,
-                    name: 'q2_note',
+                    name: 'response_2_note',
                     label: 'Note',
                   ),
                 ],
@@ -429,11 +429,9 @@ class Step6 extends StatefulWidget {
   Step6(
       {super.key,
       required this.onSelect,
-      required this.fieldsError,
-      required this.qValue});
+      required this.fieldsError});
   final void Function(String, String) onSelect;
   final String? Function(String) fieldsError;
-  String qValue;
 
   @override
   State<Step6> createState() => _Step6State();
@@ -445,51 +443,34 @@ class _Step6State extends State<Step6> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const AppTypography(
-          text: 'Please Check The Following Question',
-          size: 24,
-          weight: FontWeight.w500,
-        ),
-        const SizedBox(height: 12),
         const ListItem(
             text: 'Name the specific court that adjudicated the admitted hit.',
             listNumber: ' 3. '),
-        AppGroupRadioBox(
-            onchange: (e) {
-              setState(() {
-                widget.qValue = e ?? 'No';
-              });
-            },
-            direction: OptionsOrientation.horizontal,
-            name: 'q3',
-            options: const ['Yes', 'No']),
         const SizedBox(height: 8),
-        widget.qValue == 'Yes'
-            ? Column(
+            Column(
           children: [
             AppTextField(
-              error: widget.fieldsError('q3_court_name'),
+              error: widget.fieldsError('court_name'),
               bottom: 16,
               type: TextInputType.text,
-              name: 'q3_court_name',
+              name: 'court_name',
               label: 'Court Name',
             ),
             AppDateField(
-              error: widget.fieldsError('q3_date'),
+              error: widget.fieldsError('court_date'),
               bottom: 16,
-              name: 'q3_date',
+              name: 'court_date',
               label: 'Date',
             ),
             AppTextField(
               type: TextInputType.streetAddress,
               error: widget.fieldsError('q3_state'),
               bottom: 16,
-              name: 'q3_state',
+              name: 'court_state',
               label: 'State',
             ),
           ],
-        )
-            : const SizedBox(),
+        ),
         AppTypography(
             text:
             "I certify that the information contained herein is true and understand that any falsification will result in the rejection of my application or termination of my employment. I also understand that the requested information is for the sole purpose of conducting a background investigation which may include a check of my identity, work history, education history, credit history, driving records, any criminal history which may be in the files of any federal, state or local criminal agency, and a post offer search of workers’ compensation claim history. Information regarding age, sex, or race will not be used as part of any employment decision. I agree that a facsimile (“fax”), electronic or photographic copy of this Authorization shall be as valid as the original.",
