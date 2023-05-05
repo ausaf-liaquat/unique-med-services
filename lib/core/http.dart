@@ -122,6 +122,19 @@ import 'package:http/http.dart' as http;
     var res = await request.send();
     return await parseResponseForm(res);
   }
+  Future<dynamic> clockin(dynamic body, int id) async {
+    var url = Uri.https(Constants.baseUrl, 'api/v1/shift/9/clockin');
+    var request = http.MultipartRequest('POST', url);
+    var token = await getToken();
+    Map<String, String>  header = { "Authorization": 'Bearer ${token ?? ''}'};
+    request.headers.addAll(header);
+    request.fields.addAll(body);
+    var res = await request.send();
+    return await parseResponseForm(res);
+  }
+  Future<dynamic> clockout(int id) async {
+    return post('api/v1/shift/$id/clockout', {"": ""}, null, false);
+  }
 }
 class ResponseBody{
   bool success;

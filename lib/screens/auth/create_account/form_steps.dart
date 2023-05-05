@@ -213,7 +213,7 @@ class Step2 extends StatelessWidget {
                     ),
                   )),
                 )
-              : UploadFileCard(file: resume s),
+              : UploadFileCard(file: resume ),
         ),
         const SizedBox(height: 40),
       ],
