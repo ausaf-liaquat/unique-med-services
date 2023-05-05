@@ -3,8 +3,10 @@ import 'package:ums_staff/core/http.dart';
 import 'package:ums_staff/screens/shift/models.dart';
 import 'package:ums_staff/widgets/card/card.dart';
 import 'package:ums_staff/widgets/messages/snack_bar.dart';
+import '../../widgets/dataDisplay/typography.dart';
 import '../../widgets/inputs/search_field.dart';
 import '../../widgets/dataDisplay/shift.dart';
+import '../../widgets/skeleton/shift.dart';
 import 'details.dart';
 
 class ShiftScreen extends StatefulWidget {
@@ -24,16 +26,15 @@ class _ShiftScreenState extends State<ShiftScreen> {
     setState(() {
       loading = true;
     });
-    http.shifts().then((value){
+    http.shifts().then((value) {
       setState(() {
         loading = false;
       });
       if (!value.success) {
-        SnackBarMessage.errorSnackbar(
-            context, value.message);
+        SnackBarMessage.errorSnackbar(context, value.message);
       } else {
-        var docType =value.data['data']['shifts'];
-        if( docType != null ){
+        var docType = value.data['data']['shifts'];
+        if (docType != null) {
           setState(() {
             listShift = ShiftModel.listShiftModels(docType);
           });
@@ -41,6 +42,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     const data = ['a', 'b', 'c', 'd'];
@@ -52,23 +54,47 @@ class _ShiftScreenState extends State<ShiftScreen> {
         children: [
           const SearchField(),
           const SizedBox(height: 24),
-          loading ? const CircularProgressIndicator() : listShift.isEmpty ? const Center(
-            child: Text("There is not shift available"),
-          ):  ListView.separated(
-            itemCount: listShift.length,
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context, int index) {
-              return AppCard(
-                path: ShiftDetailScreen.route,
-                args: { 'shiftModel': listShift.elementAt(index) },
-                child: JobShift(shift: listShift.elementAt(index)),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) => Container(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: const Divider()),
-          )
+          loading
+              ? ListView.separated(
+                  itemCount: 2,
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    return const AppCard(child: ShiftSkeleton());
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      Container(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: const Divider()),
+                )
+              : listShift.isEmpty
+                  ? Column(
+                      children: [
+                        const SizedBox(height: 32),
+                        Image.asset(
+                          'assets/images/no-shift.png',
+                          width: 280,
+                        ),
+                        const SizedBox(height: 20),
+                        const AppTypography(text: 'No Shift Found!', size: 18)
+                      ],
+                    )
+                  : ListView.separated(
+                      itemCount: listShift.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return AppCard(
+                          path: ShiftDetailScreen.route,
+                          args: {'shiftModel': listShift.elementAt(index)},
+                          child: JobShift(shift: listShift.elementAt(index)),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                          Container(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              child: const Divider()),
+                    )
         ],
       ),
     ));
