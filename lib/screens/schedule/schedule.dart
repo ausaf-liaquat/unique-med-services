@@ -30,16 +30,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     setState(() {
       loading = true;
     });
-    http.getAcceptShift().then((value){
+    http.getAcceptShift().then((value) {
       setState(() {
         loading = false;
       });
       if (!value.success) {
-        SnackBarMessage.errorSnackbar(
-            context, value.message);
+        SnackBarMessage.errorSnackbar(context, value.message);
       } else {
-        var docType =value.data['data']['shifts'];
-        if( docType != null ){
+        var docType = value.data['data']['shifts'];
+        if (docType != null) {
           setState(() {
             allListShift = ShiftModel.listShiftModels(docType);
             var dateset = <String>{};
@@ -48,29 +47,34 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             }
             timeSet = dateset;
             listShift = allListShift.where((element) {
-              return element.date == DateFormat('yyyy-MM-dd').format(todate);});
+              return element.date == DateFormat('yyyy-MM-dd').format(todate);
+            });
           });
         }
       }
     });
   }
-  changeDate(date){
+
+  changeDate(date) {
     setState(() {
       todate = date;
       listShift = allListShift.where((element) {
-        return element.date == DateFormat('yyyy-MM-dd').format(date);});
+        return element.date == DateFormat('yyyy-MM-dd').format(date);
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return SingleChildScrollView(
         child: Container(
             padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
             child: Column(
               children: [
-                CalendarCard(focusedDay: todate, changeDate: changeDate, timeSet: timeSet ),
+                CalendarCard(
+                    focusedDay: todate,
+                    changeDate: changeDate,
+                    timeSet: timeSet),
                 const SizedBox(height: 24),
                 AppCard(
                   child: Column(
@@ -86,23 +90,56 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 24),
                           child: Divider(
                               color: Theme.of(context).colorScheme.secondary)),
-                      const ShiftSkeleton(),
-                      ListView.separated(
-                        itemCount: listShift.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          return AppLink(
-                              path: ScheduleDetailScreen.route,
-                              params: {"shiftModel": listShift.elementAt(index)},
-                              child: JobShift(accept: true, shift: listShift.elementAt(index),));
-                        },
-                        separatorBuilder: (BuildContext context, int index) =>
-                            Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                child: const Divider()),
-                      )
+                      loading
+                          ? ListView.separated(
+                              itemCount: 2,
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) {
+                                return const ShiftSkeleton();
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) =>
+                                      Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 16),
+                                          child: const Divider()),
+                            )
+                          : listShift.isEmpty
+                              ? Column(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/no-shift.png',
+                                      width: 250,
+                                    ),
+                                    const SizedBox(height: 20),
+                                    const AppTypography(text: 'No Shift Found!', size: 18)
+                                  ],
+                                )
+                              : ListView.separated(
+                                  itemCount: listShift.length,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return AppLink(
+                                        path: ScheduleDetailScreen.route,
+                                        params: {
+                                          "shiftModel":
+                                              listShift.elementAt(index)
+                                        },
+                                        child: JobShift(
+                                          accept: true,
+                                          shift: listShift.elementAt(index),
+                                        ));
+                                  },
+                                  separatorBuilder: (BuildContext context,
+                                          int index) =>
+                                      Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 16),
+                                          child: const Divider()),
+                                )
                     ],
                   ),
                 )
