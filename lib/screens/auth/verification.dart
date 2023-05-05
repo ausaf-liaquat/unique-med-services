@@ -66,52 +66,66 @@ class _VerificationScreenState extends State<VerificationScreen> {
                               ]),
                             ),
                             ElevatedButton(
-                              onPressed:  loading ? null : () {
-                                if (_formKey.currentState?.validate() ??
-                                    false) {
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                  var http = HttpRequest();
-                                  var formatBody = _formKey
-                                      .currentState?.value
-                                      .map<String, String>((key, value) =>
-                                      MapEntry(key, value.toString()));
-                                  if (register) {
-                                    http.verify(formatBody ?? {}).then((value) {
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                      if (value.success == true) {
-                                        Navigator.pushReplacementNamed(
-                                            context, LandingScreen.route);
-                                      } else {
-                                        SnackBarMessage.errorSnackbar(
-                                            context, value.message);
-                                      }
-                                    });
-                                  } else {
-                                    var data = {'email': email.toString(), 'code': formatBody!['otp'].toString() ?? ''};
-                                    http.verify(data).then((value) {
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                      if (value.success == true) {
-                                        Navigator.pushReplacementNamed(
-                                            context, ChangePasswordScreen.route,  arguments: {
-                                          "email": email
+                              onPressed: loading
+                                  ? () {}
+                                  : () {
+                                      if (_formKey.currentState?.validate() ??
+                                          false) {
+                                        setState(() {
+                                          loading = true;
                                         });
+                                        var http = HttpRequest();
+                                        var formatBody = _formKey
+                                            .currentState?.value
+                                            .map<String, String>((key, value) =>
+                                                MapEntry(
+                                                    key, value.toString()));
+                                        if (register) {
+                                          http
+                                              .verify(formatBody ?? {})
+                                              .then((value) {
+                                            setState(() {
+                                              loading = false;
+                                            });
+                                            if (value.success == true) {
+                                              Navigator.pushReplacementNamed(
+                                                  context, LandingScreen.route);
+                                            } else {
+                                              SnackBarMessage.errorSnackbar(
+                                                  context, value.message);
+                                            }
+                                          });
+                                        } else {
+                                          var data = {
+                                            'email': email.toString(),
+                                            'code':
+                                                formatBody!['otp'].toString() ??
+                                                    ''
+                                          };
+                                          http.verify(data).then((value) {
+                                            setState(() {
+                                              loading = false;
+                                            });
+                                            if (value.success == true) {
+                                              Navigator.pushReplacementNamed(
+                                                  context,
+                                                  ChangePasswordScreen.route,
+                                                  arguments: {"email": email});
+                                            } else {
+                                              SnackBarMessage.errorSnackbar(
+                                                  context, value.message);
+                                            }
+                                          });
+                                        }
                                       } else {
-                                        SnackBarMessage.errorSnackbar(
-                                            context, value.message);
+                                        setState(() {});
                                       }
-                                    });
-                                  }
-                                } else {
-                                  setState(() {});
-                                }
-                              },
-                              child: loading ? const CircularProgressIndicator() : const Text('Verify'),
+                                    },
+                              child: loading
+                                  ? CircularProgressIndicator(
+                                      color: AppColorScheme().black0,
+                                    )
+                                  : const Text('Verify'),
                             ),
                             const SizedBox(height: 24),
                             TextButton(

@@ -13,7 +13,6 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    File? profileImage;
 
     return AppCard(
         radius: BorderRadius.circular(35),
@@ -43,17 +42,11 @@ class ProfileCard extends StatelessWidget {
                         ]),
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: InkWell(
-                          onTap: () {
-                            ImagePick.pickerImage(context, (File image) {
-                              profileImage = image;
-                            });
-                          },
-                          child: Image.asset(
+                        child: Image.asset(
                             'assets/test/profile.jpg',
                             fit: BoxFit.cover,
                           ),
-                        ))),
+                        )),
                 const SizedBox(width: 19),
                 Expanded(
                     child: Column(

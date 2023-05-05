@@ -6,6 +6,7 @@ import 'package:ums_staff/screens/auth/create_account/form_steps.dart';
 import 'package:ums_staff/screens/auth/verification.dart';
 
 import '../../../core/http.dart';
+import '../../../shared/theme/color.dart';
 import '../../../widgets/messages/snack_bar.dart';
 import '../../../widgets/others/back_layout.dart';
 
@@ -83,7 +84,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         padding: EdgeInsets.symmetric(
                             horizontal: smallDevice ? 40 : 0),
                         child: ElevatedButton(
-                          onPressed: loading ? null : () {
+                          onPressed: loading ? (){} : () {
                             if (_formKey.currentState?.validate() ?? false) {
                               if (_currentStep == 1) {
                                 setState(() {
@@ -116,7 +117,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                               setState(() {});
                             }
                           },
-                          child: loading ? const CircularProgressIndicator() : Text(_currentStep == 1 ? 'Finish' : 'Next'),
+                          child: loading ? CircularProgressIndicator(
+                            color: AppColorScheme().black0,
+                          ) : Text(_currentStep == 1 ? 'Finish' : 'Next'),
                         ),
                       ),
                       SizedBox(height: _currentStep == 0 ? 0 : 24),

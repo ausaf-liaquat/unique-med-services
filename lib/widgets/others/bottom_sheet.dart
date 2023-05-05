@@ -66,16 +66,16 @@ class ProfileBottomSheet extends StatelessWidget {
                             bottom: 32,
                             icon: Icons.support_agent_outlined,
                             text: 'Help')),
-                    // RowItem(
-                    //     large: true,
-                    //     bottom: 30,
-                    //     icon: Icons.article_outlined,
-                    //     text: 'Privacy Policy'),
-                    // RowItem(
-                    //     large: true,
-                    //     bottom: 30,
-                    //     icon: Icons.gavel_outlined,
-                    //     text: 'Terms & Conditions')
+                    const RowItem(
+                        large: true,
+                        bottom: 30,
+                        icon: Icons.article_outlined,
+                        text: 'Privacy Policy'),
+                    const RowItem(
+                        large: true,
+                        bottom: 30,
+                        icon: Icons.gavel_outlined,
+                        text: 'Terms & Conditions')
                   ],
                 ),
               );

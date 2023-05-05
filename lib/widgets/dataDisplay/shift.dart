@@ -49,20 +49,20 @@ class JobShift extends StatelessWidget {
           icon: Icons.location_on_outlined,
           text: shift.shiftLocation,
         ),
-        accept ? const SizedBox(height: 24) : const SizedBox(),
-        accept
-            ? SizedBox(
-                width: 135,
-                child: ElevatedButton.icon(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                        elevation: MaterialStateProperty.all(0),
-                        backgroundColor:
-                            MaterialStateProperty.all(HexColor('#E25C55'))),
-                    icon: const Icon(Icons.block_outlined),
-                    label: const Text('Call Out')),
-              )
-            : const SizedBox()
+        // accept ? const SizedBox(height: 24) : const SizedBox(),
+        // accept
+        //     ? SizedBox(
+        //         width: 135,
+        //         child: ElevatedButton.icon(
+        //             onPressed: () {},
+        //             style: ButtonStyle(
+        //                 elevation: MaterialStateProperty.all(0),
+        //                 backgroundColor:
+        //                     MaterialStateProperty.all(HexColor('#E25C55'))),
+        //             icon: const Icon(Icons.block_outlined),
+        //             label: const Text('Call Out')),
+        //       )
+        //     : const SizedBox()
       ],
     );
   }

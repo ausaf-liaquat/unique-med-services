@@ -80,35 +80,40 @@ class _LoginScreenState extends State<LoginScreen> {
                               ]),
                             ),
                             ElevatedButton(
-                              onPressed: loading ?  null : () {
-                                if (_formKey.currentState?.validate() ??
-                                    false) {
-                                  setState(() {
-                                  loading = true;
-                                  });
-                                    var api = HttpRequest();
-                                    api
-                                        .login(_formKey.currentState?.value)
-                                        .then((value) {
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                      if (!value.success) {
-                                        SnackBarMessage.errorSnackbar(
-                                            context, value.message);
+                              onPressed: loading
+                                  ? (){}
+                                  : () {
+                                      if (_formKey.currentState?.validate() ??
+                                          false) {
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        var api = HttpRequest();
+                                        api
+                                            .login(_formKey.currentState?.value)
+                                            .then((value) {
+                                          setState(() {
+                                            loading = false;
+                                          });
+                                          if (!value.success) {
+                                            SnackBarMessage.errorSnackbar(
+                                                context, value.message);
+                                          } else {
+                                            Navigator.pushNamed(
+                                                context, LandingScreen.route);
+                                          }
+                                        });
                                       } else {
                                         Navigator.pushNamed(
                                             context, LandingScreen.route);
+                                        setState(() {});
                                       }
-                                    });
-
-                                } else {
-                                  Navigator.pushNamed(
-                                      context, LandingScreen.route);
-                                  setState(() {});
-                                }
-                              },
-                              child: loading ? const  CircularProgressIndicator() : const Text('LOGIN'),
+                                    },
+                              child: loading
+                                  ? CircularProgressIndicator(
+                                      color: AppColorScheme().black0,
+                                    )
+                                  : const Text('LOGIN'),
                             ),
                             const SizedBox(height: 24),
                             Row(

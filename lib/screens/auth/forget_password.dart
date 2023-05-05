@@ -62,36 +62,47 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               ]),
                             ),
                             ElevatedButton(
-                              onPressed:  loading ?  null : () {
-                                var api = HttpRequest();
-                                if (_formKey.currentState?.validate() ??
-                                    false) {
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                  var formatBody = _formKey
-                                      .currentState?.value
-                                      .map<String, String>((key, value) =>
-                                      MapEntry(key, value.toString()));
-                                  api.forgetPassword(formatBody).then((value){
-                                    setState(() {
-                                      loading = false;
-                                    });
-                                    if( value.success ){
-                                      Navigator.pushNamed(
-                                          context, VerificationScreen.route, arguments: {
-                                             "email": _formKey.currentState?.value['email']
-                                      });
-                                    }else{
-                                      SnackBarMessage.errorSnackbar(
-                                          context, value.message);
-                                    }
-                                  });
-                                } else {
-                                  setState(() {});
-                                }
-                              },
-                              child: loading ? const  CircularProgressIndicator() :  const Text('Send Code'),
+                              onPressed: loading
+                                  ? () {}
+                                  : () {
+                                      var api = HttpRequest();
+                                      if (_formKey.currentState?.validate() ??
+                                          false) {
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        var formatBody = _formKey
+                                            .currentState?.value
+                                            .map<String, String>((key, value) =>
+                                                MapEntry(
+                                                    key, value.toString()));
+                                        api
+                                            .forgetPassword(formatBody)
+                                            .then((value) {
+                                          setState(() {
+                                            loading = false;
+                                          });
+                                          if (value.success) {
+                                            Navigator.pushNamed(context,
+                                                VerificationScreen.route,
+                                                arguments: {
+                                                  "email": _formKey.currentState
+                                                      ?.value['email']
+                                                });
+                                          } else {
+                                            SnackBarMessage.errorSnackbar(
+                                                context, value.message);
+                                          }
+                                        });
+                                      } else {
+                                        setState(() {});
+                                      }
+                                    },
+                              child: loading
+                                  ? CircularProgressIndicator(
+                                      color: AppColorScheme().black0,
+                                    )
+                                  : const Text('Send Code'),
                             ),
                             const SizedBox(height: 24),
                             TextButton(

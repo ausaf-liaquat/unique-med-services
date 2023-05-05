@@ -77,34 +77,48 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               ]),
                             ),
                             ElevatedButton(
-                              onPressed:  loading ?  null : () {
-                                if (_formKey.currentState?.validate() ??
-                                    false) {
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                  var http = HttpRequest();
-                                  var formatBody = _formKey
-                                      .currentState?.value
-                                      .map<String, String>((key, value) =>
-                                      MapEntry(key, value.toString()));
-                                  http.changePassword({'email': email.toString(), 'password': formatBody!['password'] ?? '', 'password_confirmation': formatBody['conform_password'] ?? '' }).then((value) {
-                                    setState(() {
-                                      loading = false;
-                                    });
-                                    if( value.success ){
-                                      Navigator.pushNamed(
-                                          context, LoginScreen.route);
-                                    }else{
-                                      SnackBarMessage.errorSnackbar(
-                                          context, value.message);
-                                    }
-                                  });
-                                } else {
-                                  setState(() {});
-                                }
-                              },
-                              child: loading ? const  CircularProgressIndicator() :  const Text('Change Password'),
+                              onPressed: loading
+                                  ? () {}
+                                  : () {
+                                      if (_formKey.currentState?.validate() ??
+                                          false) {
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        var http = HttpRequest();
+                                        var formatBody = _formKey
+                                            .currentState?.value
+                                            .map<String, String>((key, value) =>
+                                                MapEntry(
+                                                    key, value.toString()));
+                                        http.changePassword({
+                                          'email': email.toString(),
+                                          'password':
+                                              formatBody!['password'] ?? '',
+                                          'password_confirmation':
+                                              formatBody['conform_password'] ??
+                                                  ''
+                                        }).then((value) {
+                                          setState(() {
+                                            loading = false;
+                                          });
+                                          if (value.success) {
+                                            Navigator.pushNamed(
+                                                context, LoginScreen.route);
+                                          } else {
+                                            SnackBarMessage.errorSnackbar(
+                                                context, value.message);
+                                          }
+                                        });
+                                      } else {
+                                        setState(() {});
+                                      }
+                                    },
+                              child: loading
+                                  ? CircularProgressIndicator(
+                                      color: AppColorScheme().black0,
+                                    )
+                                  : const Text('Change Password'),
                             ),
                             const SizedBox(height: 24),
                             TextButton(

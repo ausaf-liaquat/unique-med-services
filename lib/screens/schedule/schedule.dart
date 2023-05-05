@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:ums_staff/widgets/skeleton/shift.dart';
 import '../../core/http.dart';
 import '../../widgets/card/calendar.dart';
 import '../../widgets/card/card.dart';
@@ -85,6 +86,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 24),
                           child: Divider(
                               color: Theme.of(context).colorScheme.secondary)),
+                      const ShiftSkeleton(),
                       ListView.separated(
                         itemCount: listShift.length,
                         physics: const NeverScrollableScrollPhysics(),

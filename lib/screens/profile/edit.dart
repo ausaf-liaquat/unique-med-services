@@ -1,7 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:ums_staff/widgets/card/card.dart';
+import 'package:ums_staff/widgets/card/upload_file.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
+import '../../shared/theme/color.dart';
+import '../../shared/utils/image_picker.dart';
 import '../../widgets/others/back_layout.dart';
 import '../../widgets/inputs/select_field.dart';
 import '../../widgets/inputs/text_field.dart';
@@ -16,6 +22,7 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
+  File? _profileImage;
 
   void changeSelectValue(String name, String value) {
     _formKey.currentState!.fields[name]!.didChange(value);
@@ -154,7 +161,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       AppTextField(
                         error: _formKey.currentState?.fields['code']!.errorText,
-                        bottom: 64,
+                        bottom: 28,
                         type: TextInputType.number,
                         name: 'code',
                         label: 'Zip Code',
@@ -163,6 +170,48 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               errorText: 'Zip code is required'),
                         ]),
                       ),
+                      const AppTypography(
+                        text: 'Picture',
+                        size: 24,
+                        weight: FontWeight.w500,
+                      ),
+                      const SizedBox(height: 16),
+                      InkWell(
+                        onTap: () {
+                          ImagePick.pickerImage(context, (File image) {
+                            setState(() {
+                              _profileImage = image;
+                            });
+                          });
+                        },
+                        child: _profileImage == null
+                            ? Container(
+                                height: 150,
+                                decoration: BoxDecoration(
+                                    color: AppColorScheme().black0,
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(16)),
+                                    border: Border.all(
+                                      width: 2,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    )),
+                                child: Center(
+                                    child: SizedBox(
+                                  width: 140,
+                                  child: AppTypography(
+                                    align: TextAlign.center,
+                                    text: 'Upload Profile Picture',
+                                    size: 16,
+                                    height: 1.4,
+                                    color: AppColorScheme().black60,
+                                  ),
+                                )),
+                              )
+                            : UploadFileCard(file: _profileImage, useImage: true)
+                      ),
+                      const SizedBox(height: 45),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 26),
                         child: ElevatedButton.icon(
