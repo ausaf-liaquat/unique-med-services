@@ -46,7 +46,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
       child: Column(
         children: [
-          const SearchField(),
+          // const SearchField(),
           const SizedBox(height: 24),
           loading ? const CircularProgressIndicator(): listDoc.isEmpty ? const Center(
             child: Text("Please update documents"),

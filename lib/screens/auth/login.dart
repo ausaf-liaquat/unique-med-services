@@ -91,7 +91,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: loading
                                   ? null
                                   : () {
-                                print('aaaaaaaaaaaaaa');
                                       if (_formKey.currentState?.validate() ??
                                           false) {
                                         setState(() {

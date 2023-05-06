@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
   Future<ResponseBody> getProfileData(){
     return post('api/v1/get/user', {"": ""}, null, false);
   }
+
   Future<ResponseBody> getAcceptShift(){
     return post('api/v1/accepted/shifts/list', {"": ""}, null, false);
   }
@@ -187,7 +188,6 @@ class BaseHttpRequest {
    return parseResponse(response, saveT);
  }
  Future<ResponseBody> parseResponse(dynamic response, bool saveT) async {
-   print(response.toString());
    var responseBody = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
    if( response.statusCode == 401 ){
      clearToken();

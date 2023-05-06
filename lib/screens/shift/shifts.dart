@@ -46,13 +46,12 @@ class _ShiftScreenState extends State<ShiftScreen> {
   @override
   Widget build(BuildContext context) {
     const data = ['a', 'b', 'c', 'd'];
-
     return SingleChildScrollView(
         child: Container(
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
       child: Column(
         children: [
-          const SearchField(),
+          // const SearchField(),
           const SizedBox(height: 24),
           loading
               ? ListView.separated(

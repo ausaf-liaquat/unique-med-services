@@ -36,11 +36,7 @@ class _LandingScreenState extends State<LandingScreen> {
             Navigator.pushNamed(context, NotificationScreen.route);
           },
           icon: const Icon(Icons.notifications_outlined)),
-      IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, FilterShiftScreen.route);
-          },
-          icon: const Icon(Icons.tune)),
+     Container(),
       // IconButton(
       //     onPressed: () {
       //       Navigator.pushNamed(context, PayoutActivtyScreen.route);

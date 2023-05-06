@@ -24,6 +24,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   bool loading = false;
   DateTime todate = DateTime.now();
   var timeSet = <String>{};
+  @override
   void initState() {
     super.initState();
     var http = HttpRequest();
@@ -35,7 +36,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         loading = false;
       });
       if (!value.success) {
-        SnackBarMessage.errorSnackbar(context, value.message);
+        // SnackBarMessage.errorSnackbar(context, value.message);
       } else {
         var docType = value.data['data']['shifts'];
         if (docType != null) {
