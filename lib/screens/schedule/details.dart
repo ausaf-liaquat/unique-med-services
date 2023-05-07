@@ -91,38 +91,12 @@ class _ScheduleDetailScreenState extends State<ScheduleDetailScreen> {
                         title: 'Timing',
                         subTitle: register.shiftHour ?? '',
                         bottom: 40),
-                    FormBuilder(
-                      key: formKey,
-                      onChanged: () {
-                        formKey.currentState!.save();
-                      },
-                      autovalidateMode: AutovalidateMode.disabled,
-                      initialValue: const {
-                        'break': false,
-                        'forget': false,
-                      },
-                      skipDisabled: true,
-                      child: Column(children: const [
-                        AppCheckBox(
-                            label: 'Took my full allotted break',
-                            name: 'break'),
-                        AppCheckBox(
-                            label: 'Forget to clock out', name: 'forget'),
-                      ]),
-                    ),
                   ]),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
               child: Column(
                 children: [
-                  ElevatedButton(
-                      onPressed: () {},
-                      child: const Text("I am being Send Home")),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                      onPressed: () {},
-                      child: const Text("issues clocking out")),
                   const SizedBox(height: 20),
                   Row(
                     children: [
