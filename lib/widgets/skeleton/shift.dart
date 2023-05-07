@@ -12,6 +12,7 @@ class ShiftSkeleton extends StatelessWidget {
       children: [
         SkeletonParagraph(
           style: SkeletonParagraphStyle(
+            padding: EdgeInsets.zero,
             lines: 1,
             lineStyle: SkeletonLineStyle(
                 width: MediaQuery.of(context).size.width / 1.6,
@@ -19,10 +20,11 @@ class ShiftSkeleton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(6)),
           ),
         ),
-        const SizedBox(height: 2),
+        const SizedBox(height: 10),
         SkeletonParagraph(
           style: SkeletonParagraphStyle(
-            spacing: 8,
+            padding: EdgeInsets.zero,
+            spacing: 6,
             lines: 2,
             lineStyle: SkeletonLineStyle(
                 randomLength: true,
@@ -31,19 +33,19 @@ class ShiftSkeleton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(6)),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 24),
         RowItemSkeleton(
           maxLength: MediaQuery.of(context).size.width / 2,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         RowItemSkeleton(
           maxLength: MediaQuery.of(context).size.width / 2,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         RowItemSkeleton(
           maxLength: MediaQuery.of(context).size.width / 2,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         RowItemSkeleton(
           minLength: MediaQuery.of(context).size.width / 1.5,
         ),

@@ -1,6 +1,7 @@
 import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 import 'package:ums_staff/widgets/messages/snack_bar.dart';
 import 'package:ums_staff/widgets/others/map.dart';
@@ -20,8 +21,8 @@ class ScheduleDetailScreen extends StatefulWidget {
 }
 
 class _ScheduleDetailScreenState extends State<ScheduleDetailScreen> {
-  double lat =  37.43296265331129;
-  double long =  -122.08832357078792;
+  double lat = 37.43296265331129;
+  double long = -122.08832357078792;
   bool showMap = false;
   bool loading = false;
   Future<Position> _determinePosition() async {
@@ -42,8 +43,10 @@ class _ScheduleDetailScreenState extends State<ScheduleDetailScreen> {
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
   }
+
   @override
   void initState() {
     super.initState();
@@ -54,25 +57,46 @@ class _ScheduleDetailScreenState extends State<ScheduleDetailScreen> {
         showMap = true;
       });
       print(value.toString());
-    }).catchError((e){
+    }).catchError((e) {
       print(e);
-      SnackBarMessage.errorSnackbar(context, "Please allow location to able to clocking");
+      SnackBarMessage.errorSnackbar(
+          context, "Please allow location to able to clocking");
     });
   }
+
   @override
   Widget build(BuildContext context) {
     bool midiumDevice = MediaQuery.of(context).size.width >= 350;
     final formKey = GlobalKey<FormBuilderState>();
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
-    var register = arguments['shiftModel'] ?? ShiftModel(id: 1, title: '', createdAt: '', additionalComments: '', clinicianType: '', date: '', ratePerHour: '', shiftHour: '', shiftLocation: '', shiftNote: '', totalAmount: '', updatedAt: '', userId: '');
+    var register = arguments['shiftModel'] ??
+        ShiftModel(
+            id: 1,
+            title: '',
+            createdAt: '',
+            additionalComments: '',
+            clinicianType: '',
+            date: '',
+            ratePerHour: '',
+            shiftHour: '',
+            shiftLocation: '',
+            shiftNote: '',
+            totalAmount: '',
+            updatedAt: '',
+            userId: '');
     return BackLayout(
       text: 'SHIFT',
       page: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            showMap ? MapView(lat: lat,long: long,) : const SizedBox(),
+            showMap
+                ? MapView(
+                    lat: lat,
+                    long: long,
+                  )
+                : const SizedBox(),
             Container(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: Column(
@@ -98,53 +122,62 @@ class _ScheduleDetailScreenState extends State<ScheduleDetailScreen> {
               child: Column(
                 children: [
                   const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                          child: OutlinedButton(
-                              onPressed: loading ? (){}: () {
-                                var http = HttpRequest();
+                  ElevatedButton(
+                      onPressed: loading
+                          ? () {}
+                          : () {
+                              var http = HttpRequest();
+                              setState(() {
+                                loading = true;
+                              });
+                              http.clockin({
+                                'lat': lat.toString(),
+                                'lon': long.toString(),
+                                'location_name':
+                                    register.shiftLocation.toString()
+                              }, register.id).then((value) {
                                 setState(() {
-                                  loading = true;
+                                  loading = false;
                                 });
-                                http.clockin({'lat': lat.toString(), 'lon': long.toString(), 'location_name': register.shiftLocation.toString() }, register.id).then((value) {
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                  if (!value.success) {
-                                    SnackBarMessage.errorSnackbar(
-                                        context, value.message);
-                                  } else {
-                                    SnackBarMessage.successSnackbar(
-                                        context, "CheckIn is SuccessFull");
-                                  }
-                                });
-                              },
-                              child: loading ? const CircularProgressIndicator():  const Text('clock in'))),
-                      SizedBox(width: midiumDevice ? 32 : 15),
-                      Expanded(
-                          child: ElevatedButton(
-                              onPressed: loading ? (){}: () {
-                                var http = HttpRequest();
+                                if (!value.success) {
+                                  SnackBarMessage.errorSnackbar(
+                                      context, value.message);
+                                } else {
+                                  SnackBarMessage.successSnackbar(
+                                      context, "CheckIn is SuccessFull");
+                                }
+                              });
+                            },
+                      child: loading
+                          ? CircularProgressIndicator(
+                              color: AppColorScheme().black0,
+                            )
+                          : const Text('clock in')),
+                  SizedBox(height: 24),
+                  OutlinedButton(
+                      onPressed: loading
+                          ? () {}
+                          : () {
+                              var http = HttpRequest();
+                              setState(() {
+                                loading = true;
+                              });
+                              http.clockout(register.id).then((value) {
                                 setState(() {
-                                  loading = true;
+                                  loading = false;
                                 });
-                                http.clockout(register.id).then((value) {
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                  if (!value.success) {
-                                    SnackBarMessage.errorSnackbar(
-                                        context, value.message);
-                                  } else {
-                                    SnackBarMessage.successSnackbar(
-                                        context, "Checkout is SuccessFull");
-                                  }
-                                });
-                              },
-                              child: loading ? const CircularProgressIndicator():  const Text('clock out'))),
-                    ],
-                  ),
+                                if (!value.success) {
+                                  SnackBarMessage.errorSnackbar(
+                                      context, value.message);
+                                } else {
+                                  SnackBarMessage.successSnackbar(
+                                      context, "Checkout is SuccessFull");
+                                }
+                              });
+                            },
+                      child: loading
+                          ? CircularProgressIndicator()
+                          : const Text('clock out'))
                 ],
               ),
             )

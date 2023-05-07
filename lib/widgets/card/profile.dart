@@ -15,7 +15,6 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return AppCard(
         radius: BorderRadius.circular(35),
         child: Column(
@@ -43,12 +42,18 @@ class ProfileCard extends StatelessWidget {
                           ),
                         ]),
                     child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: profile?.imageUrl != null ? Image.network(profile?.imageUrl ?? '') : Image.asset(
-                          'assets/test/profile.jpg',
-                            fit: BoxFit.cover,
-                          ),
-                        )),
+                      borderRadius: BorderRadius.circular(100),
+                      child: Container(
+                        color: AppColorScheme().black6,
+                        child: profile?.imageUrl != null
+                            ? Image.network(profile?.imageUrl ?? '',
+                                fit: BoxFit.cover)
+                            : Image.asset(
+                                'assets/test/profile.jpg',
+                                fit: BoxFit.cover,
+                              ),
+                      ),
+                    )),
                 const SizedBox(width: 19),
                 Expanded(
                     child: Column(
@@ -62,7 +67,8 @@ class ProfileCard extends StatelessWidget {
                         const SizedBox(height: 8),
                         AppTypography(
                           overflow: TextOverflow.ellipsis,
-                          text: '${profile?.firstName ?? ''} ${profile?.lastName ?? ''}',
+                          text:
+                              '${profile?.firstName ?? ''} ${profile?.lastName ?? ''}',
                           size: 20,
                           weight: FontWeight.w500,
                         ),
@@ -75,13 +81,20 @@ class ProfileCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ProfileShiftData(
-                              quentity:( (profile?.completedShifts ?? 0 ) + (profile?.unCompletedShifts ?? 0 )).toString() , title: 'Assigned Shifts'),
+                              quentity: ((profile?.completedShifts ?? 0) +
+                                      (profile?.unCompletedShifts ?? 0))
+                                  .toString(),
+                              title: 'Assigned Shifts'),
                           const SizedBox(width: 13),
                           ProfileShiftData(
-                              quentity:  (profile?.completedShifts ?? 0 ).toString(), title: 'Complete Shifts'),
+                              quentity:
+                                  (profile?.completedShifts ?? 0).toString(),
+                              title: 'Complete Shifts'),
                           const SizedBox(width: 13),
                           ProfileShiftData(
-                              quentity: (profile?.unCompletedShifts ?? 0 ).toString(), title: 'UnComplete Shifts'),
+                              quentity:
+                                  (profile?.unCompletedShifts ?? 0).toString(),
+                              title: 'UnComplete Shifts'),
                         ],
                       ),
                     )

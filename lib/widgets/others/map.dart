@@ -10,7 +10,7 @@ class MapView extends StatelessWidget {
   Widget build(BuildContext context) {
     const mkid = MarkerId('aa');
     return SizedBox(
-      height: 500,
+      height: 340,
       child: GoogleMap(
           mapType: MapType.hybrid,
           markers: {Marker(position: LatLng(lat, long), markerId: mkid )},

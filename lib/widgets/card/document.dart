@@ -21,7 +21,8 @@ class DocumentCard extends StatelessWidget {
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(12),
                   bottomLeft: Radius.circular(12)),
-              child: SizedBox(
+              child: Container(
+                color: AppColorScheme().black6,
                   width: 75,
                   height: 75,
                   child: Image.network(

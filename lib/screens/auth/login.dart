@@ -56,10 +56,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         skipDisabled: true,
                         child: Column(
                           children: [
-                            Center(
-                              heightFactor: 1.9,
-                              child: Image.asset('assets/images/logo.png',
-                                  width: 150),
+                            const SizedBox(height: 25),
+                            SizedBox(
+                              height: 300,
+                              child: Center(
+                                child: Image.asset('assets/images/logo.png',
+                                    width: 150),
+                              ),
                             ),
                             AppTextField(
                               error: _formKey
@@ -89,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             ElevatedButton(
                               onPressed: loading
-                                  ? null
+                                  ? () {}
                                   : () {
                                       if (_formKey.currentState?.validate() ??
                                           false) {

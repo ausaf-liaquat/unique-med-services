@@ -7,6 +7,7 @@ import '../../core/http.dart';
 import '../../shared/theme/color.dart';
 import '../../widgets/card/profile.dart';
 import '../../widgets/dataDisplay/typography.dart';
+import '../../widgets/skeleton/profile.dart';
 import 'edit.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -25,6 +26,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       loading = true;
     });
     http.getProfileData().then((value) {
+      setState(() {
+        loading = false;
+      });
       if (!value.success) {
         SnackBarMessage.errorSnackbar(
             context, value.message);
@@ -64,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     children: [
                       const SizedBox(height: 20),
-                      ProfileCard(profile:profile),
+                      loading ? const ProfileSkeleton() : ProfileCard(profile:profile),
                       const SizedBox(height: 32),
                       smallDevice
                           ? Row(

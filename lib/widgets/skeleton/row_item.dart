@@ -15,6 +15,7 @@ class RowItemSkeleton extends StatelessWidget {
         Expanded(
           child: SkeletonParagraph(
             style: SkeletonParagraphStyle(
+              padding: EdgeInsets.zero,
               lines: 1,
               lineStyle: SkeletonLineStyle(
                   randomLength: true,
