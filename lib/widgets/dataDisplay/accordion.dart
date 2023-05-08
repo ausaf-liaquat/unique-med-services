@@ -32,6 +32,7 @@ class AppAccordion extends StatelessWidget {
                       AppTypography(
                         text: text ?? "",
                         size: 13,
+                        height: 1.3,
                         color: AppColorScheme().black50,
                       ),
                 ),

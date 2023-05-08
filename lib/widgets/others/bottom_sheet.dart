@@ -32,6 +32,7 @@ class ProfileBottomSheet extends StatelessWidget {
                 child: Column(
                   children: [
                     AppLink(
+                        pop: true,
                         path: W9FormScreen.route,
                         child: const RowItem(
                             large: true,
@@ -39,6 +40,7 @@ class ProfileBottomSheet extends StatelessWidget {
                             icon: Icons.feed_outlined,
                             text: 'W9 Form')),
                     AppLink(
+                        pop: true,
                         path: EmplotmentFormScreen.route,
                         child: const RowItem(
                             large: true,
@@ -46,6 +48,7 @@ class ProfileBottomSheet extends StatelessWidget {
                             icon: Icons.feed_outlined,
                             text: 'Employee BCA Form')),
                     AppLink(
+                        pop: true,
                         path: DirectDepositScreen.route,
                         child: const RowItem(
                             large: true,
@@ -53,6 +56,7 @@ class ProfileBottomSheet extends StatelessWidget {
                             icon: Icons.feed_outlined,
                             text: 'Deposit Form')),
                     AppLink(
+                        pop: true,
                         path: NotificationScreen.route,
                         child: const RowItem(
                             large: true,
@@ -60,6 +64,7 @@ class ProfileBottomSheet extends StatelessWidget {
                             icon: Icons.notifications_outlined,
                             text: 'Notification')),
                     AppLink(
+                        pop: true,
                         path: SupportScreen.route,
                         child: const RowItem(
                             large: true,

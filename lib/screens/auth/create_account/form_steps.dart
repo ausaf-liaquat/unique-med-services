@@ -190,6 +190,10 @@ class Step2 extends StatelessWidget {
             options: const ['0 - 3 months', '4 - 6 months', '6+ months']),
         const SizedBox(height: 40),
         InkWell(
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
           onTap: resumePick,
           child: resume == null
               ? Container(
@@ -213,7 +217,7 @@ class Step2 extends StatelessWidget {
                     ),
                   )),
                 )
-              : UploadFileCard(file: resume ),
+              : UploadFileCard(file: resume),
         ),
         const SizedBox(height: 40),
       ],

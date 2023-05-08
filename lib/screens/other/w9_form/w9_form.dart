@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:ums_staff/core/http.dart';
 import 'package:ums_staff/screens/other/w9_form/form_steps.dart';
+import 'package:ums_staff/shared/theme/color.dart';
 
 import '../../../shared/utils/initial_data.dart';
 import '../../../widgets/messages/snack_bar.dart';
@@ -92,38 +93,50 @@ class _W9FormScreenState extends State<W9FormScreen> {
                         padding: EdgeInsets.symmetric(
                             horizontal: smallDevice ? 40 : 0),
                         child: ElevatedButton(
-                          onPressed: _currentStep == 3 && loading ? null: () {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              if (_currentStep == 3) {
-                                setState(() {
-                                  loading = true;
-                                });
-                                var http = HttpRequest();
-                                var body = {..._formKey.currentState?.value ?? {}};
-                                var formatBody = body.map<String, String>((key, value) => MapEntry(key, value.toString()));
-                                http.w9(formatBody).then((value){
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                  if( value.success == true ){
-                                    SnackBarMessage.successSnackbar(context, "Electronic W-9 save successfully");
-                                    Navigator.pop(context);
-                                  }else{
-                                    SnackBarMessage
-                                        .errorSnackbar(
-                                        context, value.message);
+                          onPressed: _currentStep == 3 && loading
+                              ? () {}
+                              : () {
+                                  if (_formKey.currentState?.validate() ??
+                                      false) {
+                                    if (_currentStep == 3) {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      var http = HttpRequest();
+                                      var body = {
+                                        ..._formKey.currentState?.value ?? {}
+                                      };
+                                      var formatBody = body.map<String, String>(
+                                          (key, value) =>
+                                              MapEntry(key, value.toString()));
+                                      http.w9(formatBody).then((value) {
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                        if (value.success == true) {
+                                          SnackBarMessage.successSnackbar(
+                                              context,
+                                              "Electronic W-9 save successfully");
+                                          Navigator.pop(context);
+                                        } else {
+                                          SnackBarMessage.errorSnackbar(
+                                              context, value.message);
+                                        }
+                                      });
+                                    } else {
+                                      setState(() {
+                                        _currentStep = _currentStep + 1;
+                                      });
+                                    }
+                                  } else {
+                                    setState(() {});
                                   }
-                                });
-                              } else {
-                                setState(() {
-                                  _currentStep = _currentStep + 1;
-                                });
-                              }
-                            } else {
-                              setState(() {});
-                            }
-                          },
-                          child: loading ? const  CircularProgressIndicator(): Text(_currentStep == 5 ? 'Finish' : 'Next'),
+                                },
+                          child: loading
+                              ? CircularProgressIndicator(
+                                  color: AppColorScheme().black0,
+                                )
+                              : Text(_currentStep == 5 ? 'Finish' : 'Next'),
                         ),
                       ),
                       SizedBox(height: _currentStep == 0 ? 0 : 24),
@@ -140,7 +153,7 @@ class _W9FormScreenState extends State<W9FormScreen> {
                                   });
                                 },
                               ),
-                         )
+                            )
                     ],
                   ))),
         ));

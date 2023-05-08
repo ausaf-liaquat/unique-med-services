@@ -49,7 +49,7 @@ class ProfileCard extends StatelessWidget {
                             ? Image.network(profile?.imageUrl ?? '',
                                 fit: BoxFit.cover)
                             : Image.asset(
-                                'assets/test/profile.jpg',
+                                'assets/images/default-profile.jpg',
                                 fit: BoxFit.cover,
                               ),
                       ),

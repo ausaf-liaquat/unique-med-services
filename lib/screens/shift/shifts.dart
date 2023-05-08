@@ -55,7 +55,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
           const SizedBox(height: 24),
           loading
               ? ListView.separated(
-                  itemCount: 2,
+                  itemCount: 3,
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {

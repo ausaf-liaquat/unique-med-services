@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:ums_staff/core/http.dart';
 
+import '../../../shared/theme/color.dart';
 import '../../../widgets/messages/snack_bar.dart';
 import '../../../widgets/others/back_layout.dart';
 import '../BCA_form/form_steps.dart';
@@ -21,7 +22,7 @@ class _EmplotmentFormScreenState extends State<EmplotmentFormScreen> {
   void changeSelectValue(String name, String value) {
     _formKey.currentState!.fields[name]!.didChange(value);
   }
-  
+
   String fieldsValue(String name) {
     if (_formKey.currentState?.value[name] == null) {
       return '';
@@ -45,8 +46,16 @@ class _EmplotmentFormScreenState extends State<EmplotmentFormScreen> {
       Step1(onSelect: changeSelectValue, fieldsError: fieldsErrors),
       Step2(onSelect: changeSelectValue, fieldsError: fieldsErrors),
       Step3(onSelect: changeSelectValue, fieldsError: fieldsErrors),
-      Step4(onSelect: changeSelectValue, fieldsError: fieldsErrors, qValue: fieldsValue('response_1'),),
-      Step5(onSelect: changeSelectValue, fieldsError: fieldsErrors, qValue: fieldsValue('response_2'),),
+      Step4(
+        onSelect: changeSelectValue,
+        fieldsError: fieldsErrors,
+        qValue: fieldsValue('response_1'),
+      ),
+      Step5(
+        onSelect: changeSelectValue,
+        fieldsError: fieldsErrors,
+        qValue: fieldsValue('response_2'),
+      ),
       Step6(onSelect: changeSelectValue, fieldsError: fieldsErrors),
     ];
 
@@ -122,38 +131,49 @@ class _EmplotmentFormScreenState extends State<EmplotmentFormScreen> {
                         padding: EdgeInsets.symmetric(
                             horizontal: smallDevice ? 40 : 0),
                         child: ElevatedButton(
-                          child: Text(_currentStep == 5 ? 'Finish' : 'Next'),
-                          onPressed: () {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              if (_currentStep == 5) {
-                                var http = HttpRequest();
-                                var body = {..._formKey.currentState?.value ?? {}};
-                                var formatBody = body.map<String, String>((key, value) => MapEntry(key, value.toString()));
-                                setState(() {
-                                  loading = true;
-                                });
-                                http.bca(formatBody).then((value) {
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                  if( value.success == true ){
-                                    SnackBarMessage.successSnackbar(context, "Bca save successfully");
-                                    Navigator.pop(context);
-                                  }else{
-                                    SnackBarMessage
-                                        .errorSnackbar(
-                                        context, value.message);
+                          onPressed: loading
+                              ? () {}
+                              : () {
+                                  if (_formKey.currentState?.validate() ??
+                                      false) {
+                                    if (_currentStep == 5) {
+                                      var http = HttpRequest();
+                                      var body = {
+                                        ..._formKey.currentState?.value ?? {}
+                                      };
+                                      var formatBody = body.map<String, String>(
+                                          (key, value) =>
+                                              MapEntry(key, value.toString()));
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      http.bca(formatBody).then((value) {
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                        if (value.success == true) {
+                                          SnackBarMessage.successSnackbar(
+                                              context, "Bca save successfully");
+                                          Navigator.pop(context);
+                                        } else {
+                                          SnackBarMessage.errorSnackbar(
+                                              context, value.message);
+                                        }
+                                      });
+                                    } else {
+                                      setState(() {
+                                        _currentStep = _currentStep + 1;
+                                      });
+                                    }
+                                  } else {
+                                    setState(() {});
                                   }
-                                });
-                              } else {
-                                setState(() {
-                                  _currentStep = _currentStep + 1;
-                                });
-                              }
-                            } else {
-                              setState(() {});
-                            }
-                          },
+                                },
+                          child: loading
+                              ? CircularProgressIndicator(
+                                  color: AppColorScheme().black0,
+                                )
+                              : Text(_currentStep == 5 ? 'Finish' : 'Next'),
                         ),
                       ),
                       SizedBox(height: _currentStep == 0 ? 0 : 24),

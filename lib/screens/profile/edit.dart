@@ -58,7 +58,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     'qualification_type': profile?.qualificationType ?? '',
                     'email': profile?.email ?? '',
                     'phone': profile?.phoneNumber ?? '',
-                    'address':profile?.address ?? '',
+                    'address': profile?.address ?? '',
                     'city': profile?.city ?? '',
                     'state': profile?.state ?? '',
                     'zip_code': profile?.zipCode ?? ''
@@ -74,7 +74,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       const SizedBox(height: 16),
                       AppTextField(
-                        error: _formKey.currentState?.fields['first_name']!.errorText,
+                        error: _formKey
+                            .currentState?.fields['first_name']!.errorText,
                         bottom: 16,
                         type: TextInputType.name,
                         name: 'first_name',
@@ -85,7 +86,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ]),
                       ),
                       AppTextField(
-                        error: _formKey.currentState?.fields['last_name']!.errorText,
+                        error: _formKey
+                            .currentState?.fields['last_name']!.errorText,
                         bottom: 16,
                         type: TextInputType.name,
                         name: 'last_name',
@@ -158,7 +160,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ]),
                       ),
                       AppTextField(
-                        error: _formKey.currentState?.fields['zip_code']!.errorText,
+                        error: _formKey
+                            .currentState?.fields['zip_code']!.errorText,
                         bottom: 28,
                         type: TextInputType.number,
                         name: 'zip_code',
@@ -175,68 +178,77 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       const SizedBox(height: 16),
                       InkWell(
-                        onTap: () {
-                          ImagePick.pickerImage(context, (File image) {
-                            setState(() {
-                              _profileImage = image;
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          onTap: () {
+                            ImagePick.pickerImage(context, (File image) {
+                              setState(() {
+                                _profileImage = image;
+                              });
                             });
-                          });
-                        },
-                        child: _profileImage == null
-                            ? Container(
-                                height: 150,
-                                decoration: BoxDecoration(
-                                    color: AppColorScheme().black0,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(16)),
-                                    border: Border.all(
-                                      width: 2,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                    )),
-                                child: Center(
-                                    child: SizedBox(
-                                  width: 140,
-                                  child: AppTypography(
-                                    align: TextAlign.center,
-                                    text: 'Upload Profile Picture',
-                                    size: 16,
-                                    height: 1.4,
-                                    color: AppColorScheme().black60,
-                                  ),
-                                )),
-                              )
-                            : UploadFileCard(file: _profileImage, useImage: true)
-                      ),
+                          },
+                          child: _profileImage == null
+                              ? Container(
+                                  height: 150,
+                                  decoration: BoxDecoration(
+                                      color: AppColorScheme().black0,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(16)),
+                                      border: Border.all(
+                                        width: 2,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                      )),
+                                  child: Center(
+                                      child: SizedBox(
+                                    width: 140,
+                                    child: AppTypography(
+                                      align: TextAlign.center,
+                                      text: 'Upload Profile Picture',
+                                      size: 16,
+                                      height: 1.4,
+                                      color: AppColorScheme().black60,
+                                    ),
+                                  )),
+                                )
+                              : UploadFileCard(
+                                  file: _profileImage, useImage: true)),
                       const SizedBox(height: 45),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 26),
                         child: ElevatedButton.icon(
                           onPressed: () {
                             if (_formKey.currentState?.validate() ?? false) {
+                              setState(() {
+                                loading = true;
+                              });
+                              var http = HttpRequest();
+                              var body = {
+                                ..._formKey.currentState?.value ?? {}
+                              };
+                              var formatBody = body.map<String, String>(
+                                  (key, value) =>
+                                      MapEntry(key, value.toString()));
+                              if (_profileImage != null) {
+                                formatBody['pic'] =
+                                    (_profileImage as File).path;
+                              }
+                              http.updateProfile(formatBody).then((value) {
                                 setState(() {
-                                  loading = true;
+                                  loading = false;
                                 });
-                                var http = HttpRequest();
-                                var body = {..._formKey.currentState?.value ?? {}};
-                                var formatBody = body.map<String, String>((key, value) => MapEntry(key, value.toString()));
-                                if(_profileImage != null){
-                                  formatBody['pic'] = (_profileImage as File).path;
+                                if (value.success == true) {
+                                  SnackBarMessage.successSnackbar(
+                                      context, "Profile updated");
+                                  Navigator.pop(context);
+                                } else {
+                                  SnackBarMessage.errorSnackbar(
+                                      context, value.message);
                                 }
-                                http.updateProfile(formatBody).then((value){
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                  if( value.success == true ){
-                                    SnackBarMessage.successSnackbar(
-                                        context, "Profile updated");
-                                    Navigator.pop(context);
-                                  }else{
-                                    SnackBarMessage.errorSnackbar(
-                                        context, value.message);
-                                  }
-                                });
+                              });
                             } else {
                               setState(() {});
                             }

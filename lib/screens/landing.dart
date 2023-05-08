@@ -36,7 +36,7 @@ class _LandingScreenState extends State<LandingScreen> {
             Navigator.pushNamed(context, NotificationScreen.route);
           },
           icon: const Icon(Icons.notifications_outlined)),
-     Container(),
+      Container(),
       // IconButton(
       //     onPressed: () {
       //       Navigator.pushNamed(context, PayoutActivtyScreen.route);
@@ -74,73 +74,79 @@ class _LandingScreenState extends State<LandingScreen> {
           ],
         ),
         body: _tabs[_selectedIndex],
-        bottomNavigationBar: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16.0),
-                topRight: Radius.circular(16.0),
+        bottomNavigationBar: Container(
+            color: AppColorScheme().black0,
+            child: SafeArea(
+              child: Container(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 14),
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16.0),
+                    topRight: Radius.circular(16.0),
+                  ),
+                  color: AppColorScheme().black0,
+                  boxShadow: [
+                    BoxShadow(
+                        color: AppColorScheme().black8,
+                        offset: const Offset(0, -1)),
+                  ],
+                ),
+                child: GNav(
+                    tabBackgroundColor: HexColor('#A018F8'),
+                    // padding: EdgeInsets.symmetric(
+                    //     vertical: smallDevice ? 12 : 9,
+                    //     horizontal: smallDevice ? 20 : 17),
+                    // iconSize: smallDevice ? 24 : 21,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 20),
+                    iconSize: 24,
+                    selectedIndex: _selectedIndex,
+                    hoverColor: HexColor('#A018F8'),
+                    curve: Curves.fastOutSlowIn,
+                    color: AppColorScheme().black50,
+                    activeColor: AppColorScheme().black0,
+                    onTabChange: (index) {
+                      setState(() {
+                        _selectedIndex = index;
+                      });
+                    },
+                    tabs: [
+                      GButton(
+                        icon: _selectedIndex == 0
+                            ? Icons.event_note
+                            : Icons.event_note_outlined,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8)),
+                      ),
+                      GButton(
+                        icon: _selectedIndex == 1
+                            ? Icons.drafts
+                            : Icons.drafts_outlined,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8)),
+                      ),
+                      // GButton(
+                      //   icon: _selectedIndex == 2
+                      //       ? Icons.account_balance_wallet
+                      //       : Icons.account_balance_wallet_outlined,
+                      //   borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      // ),
+                      GButton(
+                        icon: _selectedIndex == 2
+                            ? Icons.description
+                            : Icons.description_outlined,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8)),
+                      ),
+                      GButton(
+                        icon: _selectedIndex == 3
+                            ? Icons.person
+                            : Icons.person_outlined,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8)),
+                      )
+                    ]),
               ),
-              color: AppColorScheme().black0,
-              boxShadow: [
-                BoxShadow(
-                    color: AppColorScheme().black8,
-                    offset: const Offset(0, -1)),
-              ],
-            ),
-            child: GNav(
-                tabBackgroundColor: HexColor('#A018F8'),
-                // padding: EdgeInsets.symmetric(
-                //     vertical: smallDevice ? 12 : 9,
-                //     horizontal: smallDevice ? 20 : 17),
-                // iconSize: smallDevice ? 24 : 21,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                iconSize: 24,
-                selectedIndex: _selectedIndex,
-                hoverColor: HexColor('#A018F8'),
-                curve: Curves.fastOutSlowIn,
-                color: AppColorScheme().black50,
-                activeColor: AppColorScheme().black0,
-                onTabChange: (index) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                },
-                tabs: [
-                  GButton(
-                    icon: _selectedIndex == 0
-                        ? Icons.event_note
-                        : Icons.event_note_outlined,
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  ),
-                  GButton(
-                    icon: _selectedIndex == 1
-                        ? Icons.drafts
-                        : Icons.drafts_outlined,
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  ),
-                  // GButton(
-                  //   icon: _selectedIndex == 2
-                  //       ? Icons.account_balance_wallet
-                  //       : Icons.account_balance_wallet_outlined,
-                  //   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  // ),
-                  GButton(
-                    icon: _selectedIndex == 2
-                        ? Icons.description
-                        : Icons.description_outlined,
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  ),
-                  GButton(
-                    icon: _selectedIndex == 3
-                        ? Icons.person
-                        : Icons.person_outlined,
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  )
-                ]),
-          ),
-        ));
+            )));
   }
 }

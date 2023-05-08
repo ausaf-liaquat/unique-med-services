@@ -78,32 +78,42 @@ class _DirectDepositScreenState extends State<DirectDepositScreen> {
                           fieldsError: fieldsErrors),
                       const SizedBox(height: 48),
                       ElevatedButton(
-                        onPressed: loading ? null: () {
-                          if (_formKey.currentState?.validate() ?? false) {
-                            print('aaaaaaaa');
-                            setState(() {
-                              loading = true;
-                            });
-                            var http = HttpRequest();
-                            var body = {..._formKey.currentState?.value ?? {}};
-                            var formatBody = body.map<String, String>((key, value) => MapEntry(key, value.toString()));
-                            http.depositForm(formatBody).then((value){
-                              setState(() {
-                                loading = false;
-                              });
-                              if( value.success == true ){
-                                SnackBarMessage
-                                    .successSnackbar(context, "Direct Deposit save successfully");
-                                Navigator.pop(context);
-                              }else{
-                                SnackBarMessage
-                                    .errorSnackbar(
-                                    context, value.message);
-                              }
-                            });
-                          }
-                        },
-                        child: const Text('Finish'),
+                        onPressed: loading
+                            ? () {}
+                            : () {
+                                if (_formKey.currentState?.validate() ??
+                                    false) {
+                                  print('aaaaaaaa');
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                  var http = HttpRequest();
+                                  var body = {
+                                    ..._formKey.currentState?.value ?? {}
+                                  };
+                                  var formatBody = body.map<String, String>(
+                                      (key, value) =>
+                                          MapEntry(key, value.toString()));
+                                  http.depositForm(formatBody).then((value) {
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                    if (value.success == true) {
+                                      SnackBarMessage.successSnackbar(context,
+                                          "Direct Deposit save successfully");
+                                      Navigator.pop(context);
+                                    } else {
+                                      SnackBarMessage.errorSnackbar(
+                                          context, value.message);
+                                    }
+                                  });
+                                }
+                              },
+                        child: loading
+                            ? CircularProgressIndicator(
+                                color: AppColorScheme().black0,
+                              )
+                            : const Text('Finish'),
                       ),
                     ],
                   ))),

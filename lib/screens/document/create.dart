@@ -24,8 +24,8 @@ class CreateDocumentScreen extends StatefulWidget {
 class DocType {
   late int id;
   late String name;
-  DocType({required this.id, required this.name });
-  static Iterable<DocType> getList(List<dynamic> data){
+  DocType({required this.id, required this.name});
+  static Iterable<DocType> getList(List<dynamic> data) {
     return data.map((e) => DocType(id: e['id'], name: e['name']));
   }
 }
@@ -34,7 +34,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   File? _image;
   bool loading = false;
-  Iterable<DocType>  docTypeList = [];
+  Iterable<DocType> docTypeList = [];
   void changeSelectValue(String name, String value) {
     _formKey.currentState!.fields[name]!.didChange(value);
   }
@@ -50,17 +50,16 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
       setState(() {
         loading = false;
       });
-    if (!value.success) {
-        SnackBarMessage.errorSnackbar(
-        context, value.message);
-    } else {
-      var docType =value.data['data']['document_types'];
-      if( docType != null ){
-        setState(() {
-          docTypeList = DocType.getList(docType);
-        });
+      if (!value.success) {
+        SnackBarMessage.errorSnackbar(context, value.message);
+      } else {
+        var docType = value.data['data']['document_types'];
+        if (docType != null) {
+          setState(() {
+            docTypeList = DocType.getList(docType);
+          });
+        }
       }
-    }
     });
   }
 
@@ -116,8 +115,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                     child: Column(
                       children: [
                         AppSelectField(
-                          error: _formKey
-                              .currentState?.fields['document_type_id']?.errorText,
+                          error: _formKey.currentState
+                              ?.fields['document_type_id']?.errorText,
                           title: 'What is your document type?',
                           bottom: 20,
                           onSelect: changeSelectValue,
@@ -125,19 +124,29 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                           name: 'document_type_id',
                           label: 'Document Type',
                         ),
-                        AppTextField(name: 'title', label: "Title",
+                        AppTextField(
+                          name: 'title',
+                          label: "Title",
                           bottom: 20,
-                          error: _formKey
-                              .currentState?.fields['title']?.errorText,
-                            validator: FormBuilderValidators.compose([
+                          error:
+                              _formKey.currentState?.fields['title']?.errorText,
+                          validator: FormBuilderValidators.compose([
                             FormBuilderValidators.required(
-                            errorText: 'Title is required')]),
+                                errorText: 'Title is required')
+                          ]),
                         ),
-                        const AppTextField(name: 'notes', label: "Notes", bottom: 20,),
+                        const AppTextField(
+                          name: 'notes',
+                          label: "Notes",
+                          bottom: 20,
+                        ),
                         _image == null
-                            ? Image.asset(
-                                'assets/images/select-image.png',
-                                width: 300,
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 24),
+                                child: Image.asset(
+                                  'assets/images/select-image.png',
+                                  width: 300,
+                                ),
                               )
                             : Image.file(
                                 _image!,
@@ -146,7 +155,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                       ],
                     ),
                   )),
-              const SizedBox(height: 40),
+              const SizedBox(height: 24),
               Container(
                   padding: const EdgeInsets.symmetric(horizontal: 26),
                   child: Column(children: [
@@ -166,37 +175,49 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                     _image == null
                         ? const SizedBox()
                         : ElevatedButton.icon(
-                            onPressed: loading ? null: () {
-                              if (_formKey.currentState?.validate() ??
-                                  false) {
-                                var body = {..._formKey.currentState?.value ?? {}};
-                                var formatBody = body.map<String, String>((key, value) {
-                                  if( key == 'document_type' ){
-                                    var dt = docTypeList.firstWhere((element) => element.name == value);
-                                    return MapEntry(key, dt.id.toString());
-                                  }
-                                  return MapEntry(key, value.toString());
-                                });
-                                if(_image != null){
-                                  formatBody['file'] = (_image as File).path;
-                                }
-                                var http = HttpRequest();
-                                setState(() {
-                                  loading = true;
-                                });
-                                http.uploadDoc(formatBody).then((value) {
-                                  setState(() {
-                                    loading = false ;
-                                  });
-                                  if( value.success == true ){
-                                    SnackBarMessage.successSnackbar(context, "File Upload SuccessFully");
-                                    Navigator.pop(context);
-                                  }else{
-                                    SnackBarMessage.errorSnackbar(context, value.message);
-                                  }
-                                });
-                              }
-                            },
+                            onPressed: loading
+                                ? null
+                                : () {
+                                    if (_formKey.currentState?.validate() ??
+                                        false) {
+                                      var body = {
+                                        ..._formKey.currentState?.value ?? {}
+                                      };
+                                      var formatBody = body
+                                          .map<String, String>((key, value) {
+                                        if (key == 'document_type') {
+                                          var dt = docTypeList.firstWhere(
+                                              (element) =>
+                                                  element.name == value);
+                                          return MapEntry(
+                                              key, dt.id.toString());
+                                        }
+                                        return MapEntry(key, value.toString());
+                                      });
+                                      if (_image != null) {
+                                        formatBody['file'] =
+                                            (_image as File).path;
+                                      }
+                                      var http = HttpRequest();
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      http.uploadDoc(formatBody).then((value) {
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                        if (value.success == true) {
+                                          SnackBarMessage.successSnackbar(
+                                              context,
+                                              "File Upload SuccessFully");
+                                          Navigator.pop(context);
+                                        } else {
+                                          SnackBarMessage.errorSnackbar(
+                                              context, value.message);
+                                        }
+                                      });
+                                    }
+                                  },
                             icon: const Icon(Icons.cloud_upload_outlined),
                             label: const Text('UPLOAD DOCUMENT')),
                   ])),
