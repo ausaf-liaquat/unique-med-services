@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:ums_staff/widgets/card/card.dart';
 
 import '../../screens/profile/model.dart';
@@ -46,8 +48,16 @@ class ProfileCard extends StatelessWidget {
                       child: Container(
                         color: AppColorScheme().black6,
                         child: profile?.imageUrl != null
-                            ? Image.network(profile?.imageUrl ?? '',
-                                fit: BoxFit.cover)
+                            ? CachedNetworkImage(
+                                placeholder: (context, url) => const SkeletonAvatar(
+                                  style: SkeletonAvatarStyle(
+                                      width: 88,
+                                      height: 142,
+                                      borderRadius: BorderRadius.zero),
+                                ),
+                                fit: BoxFit.cover,
+                                imageUrl: profile?.imageUrl ?? '',
+                              )
                             : Image.asset(
                                 'assets/images/default-profile.jpg',
                                 fit: BoxFit.cover,

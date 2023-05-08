@@ -62,7 +62,11 @@ class _LandingScreenState extends State<LandingScreen> {
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 splashColor: Colors.transparent,
-                onTap: () {},
+                onTap: () {
+                  setState(() {
+                    _selectedIndex = 0;
+                  });
+                },
                 child: Image.asset('assets/images/app-bar-text-logo.png',
                     width: 107),
               )),

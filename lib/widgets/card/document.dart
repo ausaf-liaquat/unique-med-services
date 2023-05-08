@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:ums_staff/screens/document/models.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/card/card.dart';
@@ -22,12 +24,20 @@ class DocumentCard extends StatelessWidget {
                   topLeft: Radius.circular(12),
                   bottomLeft: Radius.circular(12)),
               child: Container(
-                color: AppColorScheme().black6,
+                  color: AppColorScheme().black6,
                   width: 75,
                   height: 75,
-                  child: Image.network(
-                    doc.documentUrl,
+                  child: CachedNetworkImage(
+                    placeholder: (context, url) => const SkeletonAvatar(
+                        style: SkeletonAvatarStyle(
+                            width: 75,
+                            height: 75,
+                            borderRadius: BorderRadius.zero)),
                     fit: BoxFit.cover,
+                    imageUrl: doc.documentUrl ?? '',
+                    errorWidget: (context, url, error) => Image.asset(
+                        'assets/images/document-not-found.png',
+                        fit: BoxFit.cover),
                   )),
             ),
             const SizedBox(width: 24),
@@ -48,7 +58,8 @@ class DocumentCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 RowItem(
                   icon: Icons.auto_delete_outlined,
-                  text: DateFormat('MMM dd, yyyy').format(DateTime.parse(doc.createdAt)),
+                  text: DateFormat('MMM dd, yyyy')
+                      .format(DateTime.parse(doc.createdAt)),
                   textColor: AppColorScheme().black60,
                   iconColor: Theme.of(context).colorScheme.error,
                 )
