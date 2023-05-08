@@ -8,11 +8,12 @@ class AppLink extends StatelessWidget {
       required this.child,
       this.path,
       this.params,
-      this.pop = false});
+      this.pop = false, this.onTap});
 
   final Widget child;
   final String? path;
   final bool pop;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class AppLink extends StatelessWidget {
       highlightColor: Colors.transparent,
       splashColor: Colors.transparent,
       onTap: path == null
-          ? null
+          ? onTap
           : () {
               pop ? Navigator.pop(context) : null;
               Navigator.pushNamed(context, path ?? '', arguments: params ?? {});

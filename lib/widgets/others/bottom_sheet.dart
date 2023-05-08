@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ums_staff/shared/utils/web_redirect.dart';
 import 'package:ums_staff/widgets/others/link.dart';
 import 'package:ums_staff/widgets/dataDisplay/row_item.dart';
 
@@ -9,9 +10,14 @@ import '../../screens/other/support.dart';
 import '../../screens/other/w9_form/w9_form.dart';
 import '../../shared/theme/color.dart';
 
-class ProfileBottomSheet extends StatelessWidget {
-  const ProfileBottomSheet({super.key});
+class ProfileBottomSheet extends StatefulWidget {
+  const ProfileBottomSheet({Key? key}) : super(key: key);
 
+  @override
+  State<ProfileBottomSheet> createState() => _ProfileBottomSheetState();
+}
+
+class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -71,16 +77,30 @@ class ProfileBottomSheet extends StatelessWidget {
                             bottom: 32,
                             icon: Icons.support_agent_outlined,
                             text: 'Help')),
-                    const RowItem(
-                        large: true,
-                        bottom: 30,
-                        icon: Icons.article_outlined,
-                        text: 'Privacy Policy'),
-                    const RowItem(
-                        large: true,
-                        bottom: 30,
-                        icon: Icons.gavel_outlined,
-                        text: 'Terms & Conditions')
+                    AppLink(
+                        onTap: () {
+                          setState(() {
+                            WebRedirect().privacyPolicy();
+                            Navigator.pop(context);
+                          });
+                        },
+                        child: const RowItem(
+                            large: true,
+                            bottom: 30,
+                            icon: Icons.article_outlined,
+                            text: 'Privacy Policy')),
+                    AppLink(
+                        onTap: () {
+                          setState(() {
+                            WebRedirect().termsAndConditions();
+                            Navigator.pop(context);
+                          });
+                        },
+                        child: const RowItem(
+                            large: true,
+                            bottom: 30,
+                            icon: Icons.gavel_outlined,
+                            text: 'Terms & Conditions'))
                   ],
                 ),
               );

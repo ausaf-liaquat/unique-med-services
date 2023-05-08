@@ -82,7 +82,7 @@ class _LandingScreenState extends State<LandingScreen> {
             color: AppColorScheme().black0,
             child: SafeArea(
               child: Container(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 14),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(16.0),

@@ -1,9 +1,12 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:ums_staff/core/http.dart';
 import 'package:ums_staff/shared/theme/color.dart';
+import 'package:ums_staff/shared/utils/web_redirect.dart';
 import 'package:ums_staff/widgets/inputs/text_field.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../widgets/dataDisplay/typography.dart';
 import '../../widgets/messages/snack_bar.dart';
@@ -23,15 +26,26 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool loading = false;
+
   @override
   void initState() {
     super.initState();
     var http = HttpRequest();
     var token = http.checkToken();
-    if(token != null && token != ''){
+    if (token != null && token != '') {
       Navigator.pushNamed(context, LandingScreen.route);
     }
   }
+
+  Future<void> launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Some thing went Wrong!');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,12 +181,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 1.5),
                 children: <TextSpan>[
                   TextSpan(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          setState(() {
+                            WebRedirect().privacyPolicy();
+                          });
+                        },
                       text: 'Privacy policy',
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
                           color: Theme.of(context).colorScheme.primary)),
                   const TextSpan(text: ' and '),
                   TextSpan(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          setState(() {
+                            WebRedirect().termsAndConditions();
+                          });
+                        },
                       text: 'Terms of Service.',
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
