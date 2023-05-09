@@ -22,7 +22,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   dynamic resume;
   bool loading = false;
-  int _currentStep = 1;
+  int _currentStep = 0;
 
   void changeSelectValue(String name, dynamic value) {
     _formKey.currentState!.fields[name]!.didChange(value);
