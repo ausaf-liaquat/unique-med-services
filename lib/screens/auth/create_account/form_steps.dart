@@ -241,7 +241,7 @@ class _Step2State extends State<Step2> {
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
                       setState(() {
-                        WebRedirect().privacyPolicy();
+                        WebRedirect().privacyPolicy(context);
                       });
                     },
                   text: 'Terms of Service',
@@ -253,7 +253,7 @@ class _Step2State extends State<Step2> {
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
                       setState(() {
-                        WebRedirect().privacyPolicy();
+                        WebRedirect().privacyPolicy(context);
                       });
                     },
                   text: 'Privacy Policy',
@@ -265,7 +265,7 @@ class _Step2State extends State<Step2> {
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
                       setState(() {
-                        WebRedirect().termsAndConditions();
+                        WebRedirect().termsAndConditions(context);
                       });
                     },
                   text: 'SMS Terms of Service',

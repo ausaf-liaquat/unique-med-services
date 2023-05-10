@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:ums_staff/widgets/others/link.dart';
 
 import '../../shared/theme/color.dart';
+import '../../shared/utils/web_redirect.dart';
 import '../card/card.dart';
 import '../dataDisplay/typography.dart';
 
-class ContactAccordion extends StatelessWidget {
-  const ContactAccordion({super.key});
+class ContactAccordion extends StatefulWidget {
+  const ContactAccordion({Key? key}) : super(key: key);
 
+  @override
+  State<ContactAccordion> createState() => _ContactAccordionState();
+}
+
+class _ContactAccordionState extends State<ContactAccordion> {
   @override
   Widget build(BuildContext context) {
     return AppCard(
@@ -26,26 +33,39 @@ class ContactAccordion extends StatelessWidget {
               ), //header title
               children: [
                 const SizedBox(height: 12),
-                const ContactItem(
-                  imagePath: 'assets/images/message.png',
-                  topLine: 'Chat With Support',
-                  bottomLine: 'For most quick answers and help',
+                AppLink(
+                  onTap: () {
+                    setState(() {
+                      WebRedirect().supportPhoneCall(context);
+                    });
+                  },
+                  child: const ContactItem(
+                    imagePath: 'assets/images/call.png',
+                    topLine: 'Call Support',
+                    bottomLine: '6 AM to 10 PM MST',
+                  ),
                 ),
                 Container(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: const Divider()),
-                const ContactItem(
-                  imagePath: 'assets/images/mail.png',
-                  topLine: 'Email Support',
-                  bottomLine: 'At your convenience',
-                ),
+                AppLink(
+                    onTap: () {
+                      setState(() {
+                        WebRedirect().supportEmail(context);
+                      });
+                    },
+                    child: const ContactItem(
+                      imagePath: 'assets/images/mail.png',
+                      topLine: 'Email Support',
+                      bottomLine: 'At your convenience',
+                    )),
                 Container(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: const Divider()),
                 const ContactItem(
-                  imagePath: 'assets/images/call.png',
-                  topLine: 'Call Support',
-                  bottomLine: '6 AM to 10 PM MST',
+                  imagePath: 'assets/images/office-address.png',
+                  topLine: 'Office Address',
+                  bottomLine: 'P.O. Box 3421 Riverview, FL 33568',
                 ),
               ]),
         ));

@@ -42,10 +42,12 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         skipDisabled: true,
                         child: Column(
                           children: [
-                            Center(
-                              heightFactor: 2,
-                              child: Image.asset('assets/images/logo.png',
-                                  width: 150),
+                            SizedBox(
+                              height: 300,
+                              child: Center(
+                                child: Image.asset('assets/images/logo.png',
+                                    width: 150),
+                              ),
                             ),
                             AppTextField(
                               error: _formKey

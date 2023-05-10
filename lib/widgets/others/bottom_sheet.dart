@@ -80,7 +80,7 @@ class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
                     AppLink(
                         onTap: () {
                           setState(() {
-                            WebRedirect().privacyPolicy();
+                            WebRedirect().privacyPolicy(context);
                             Navigator.pop(context);
                           });
                         },
@@ -92,7 +92,7 @@ class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
                     AppLink(
                         onTap: () {
                           setState(() {
-                            WebRedirect().termsAndConditions();
+                            WebRedirect().termsAndConditions(context);
                             Navigator.pop(context);
                           });
                         },

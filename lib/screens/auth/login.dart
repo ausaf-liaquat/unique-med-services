@@ -184,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           setState(() {
-                            WebRedirect().privacyPolicy();
+                            WebRedirect().privacyPolicy(context);
                           });
                         },
                       text: 'Privacy policy',
@@ -196,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           setState(() {
-                            WebRedirect().termsAndConditions();
+                            WebRedirect().termsAndConditions(context);
                           });
                         },
                       text: 'Terms of Service.',

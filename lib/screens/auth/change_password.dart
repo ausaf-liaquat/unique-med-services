@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -5,6 +6,7 @@ import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/inputs/text_field.dart';
 
 import '../../core/http.dart';
+import '../../shared/utils/web_redirect.dart';
 import '../../widgets/messages/snack_bar.dart';
 import 'login.dart';
 
@@ -44,10 +46,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         skipDisabled: true,
                         child: Column(
                           children: [
-                            Center(
-                              heightFactor: 1.9,
-                              child: Image.asset('assets/images/logo.png',
-                                  width: 150),
+                            SizedBox(
+                              height: 300,
+                              child: Center(
+                                child: Image.asset('assets/images/logo.png',
+                                    width: 150),
+                              ),
                             ),
                             AppTextField(
                               error: _formKey
@@ -145,12 +149,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     height: 1.5),
                 children: <TextSpan>[
                   TextSpan(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          setState(() {
+                            WebRedirect().privacyPolicy(context);
+                          });
+                        },
                       text: 'Privacy policy',
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
                           color: Theme.of(context).colorScheme.primary)),
                   const TextSpan(text: ' and '),
                   TextSpan(
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          setState(() {
+                            WebRedirect().termsAndConditions(context);
+                          });
+                        },
                       text: 'Terms of Service.',
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
