@@ -127,6 +127,36 @@ class Step1 extends StatelessWidget {
                 errorText: 'Qualification type is required'),
           ]),
         ),
+        InkWell(
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          onTap: resumePick,
+          child: resume == null
+              ? Container(
+            height: 150,
+            decoration: BoxDecoration(
+                color: AppColorScheme().black0,
+                borderRadius: const BorderRadius.all(Radius.circular(16)),
+                border: Border.all(
+                  width: 2,
+                  color: Theme.of(context).colorScheme.secondary,
+                )),
+            child: Center(
+                child: SizedBox(
+                  width: 140,
+                  child: AppTypography(
+                    align: TextAlign.center,
+                    text: 'Upload Your Resume',
+                    size: 16,
+                    height: 1.4,
+                    color: AppColorScheme().black60,
+                  ),
+                )),
+          )
+              : UploadFileCard(file: resume),
+        ),
       ],
     );
   }
@@ -189,36 +219,6 @@ class Step2 extends StatelessWidget {
             ]),
             options: const ['0 - 3 months', '4 - 6 months', '6+ months']),
         const SizedBox(height: 40),
-        InkWell(
-          focusColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          onTap: resumePick,
-          child: resume == null
-              ? Container(
-                  height: 150,
-                  decoration: BoxDecoration(
-                      color: AppColorScheme().black0,
-                      borderRadius: const BorderRadius.all(Radius.circular(16)),
-                      border: Border.all(
-                        width: 2,
-                        color: Theme.of(context).colorScheme.secondary,
-                      )),
-                  child: Center(
-                      child: SizedBox(
-                    width: 140,
-                    child: AppTypography(
-                      align: TextAlign.center,
-                      text: 'Upload Your Resume',
-                      size: 16,
-                      height: 1.4,
-                      color: AppColorScheme().black60,
-                    ),
-                  )),
-                )
-              : UploadFileCard(file: resume),
-        ),
         const SizedBox(height: 40),
       ],
     );
