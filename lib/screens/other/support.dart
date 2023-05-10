@@ -26,7 +26,7 @@ class SupportScreen extends StatelessWidget {
           ),
           Image.asset(
             'assets/images/support.png',
-            fit: BoxFit.fitWidth,
+            width: 300,
           ),
           Container(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),

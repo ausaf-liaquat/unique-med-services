@@ -99,6 +99,7 @@ class Step1 extends StatelessWidget {
           label: 'Email',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'Email is required'),
+            FormBuilderValidators.email(errorText: 'Invalid email address')
           ]),
         ),
         AppTextField(
@@ -426,10 +427,7 @@ class _Step5State extends State<Step5> {
 }
 
 class Step6 extends StatefulWidget {
-  Step6(
-      {super.key,
-      required this.onSelect,
-      required this.fieldsError});
+  Step6({super.key, required this.onSelect, required this.fieldsError});
   final void Function(String, String) onSelect;
   final String? Function(String) fieldsError;
 
@@ -447,7 +445,7 @@ class _Step6State extends State<Step6> {
             text: 'Name the specific court that adjudicated the admitted hit.',
             listNumber: ' 3. '),
         const SizedBox(height: 8),
-            Column(
+        Column(
           children: [
             AppTextField(
               error: widget.fieldsError('court_name'),
@@ -473,7 +471,7 @@ class _Step6State extends State<Step6> {
         ),
         AppTypography(
             text:
-            "I certify that the information contained herein is true and understand that any falsification will result in the rejection of my application or termination of my employment. I also understand that the requested information is for the sole purpose of conducting a background investigation which may include a check of my identity, work history, education history, credit history, driving records, any criminal history which may be in the files of any federal, state or local criminal agency, and a post offer search of workers’ compensation claim history. Information regarding age, sex, or race will not be used as part of any employment decision. I agree that a facsimile (“fax”), electronic or photographic copy of this Authorization shall be as valid as the original.",
+                "I certify that the information contained herein is true and understand that any falsification will result in the rejection of my application or termination of my employment. I also understand that the requested information is for the sole purpose of conducting a background investigation which may include a check of my identity, work history, education history, credit history, driving records, any criminal history which may be in the files of any federal, state or local criminal agency, and a post offer search of workers’ compensation claim history. Information regarding age, sex, or race will not be used as part of any employment decision. I agree that a facsimile (“fax”), electronic or photographic copy of this Authorization shall be as valid as the original.",
             size: 14,
             color: AppColorScheme().black60),
         AppCheckBox(
@@ -493,6 +491,7 @@ class _Step6State extends State<Step6> {
           label: 'Print Name',
         ),
       ],
-    );;
+    );
+    ;
   }
 }

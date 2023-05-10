@@ -72,7 +72,8 @@ class ContactItem extends StatelessWidget {
           child: Image.asset(imagePath, fit: BoxFit.cover),
         ),
         const SizedBox(width: 24),
-        Column(
+        Expanded(
+            child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppTypography(text: topLine, size: 18, weight: FontWeight.w500),
@@ -83,7 +84,7 @@ class ContactItem extends StatelessWidget {
               color: AppColorScheme().black60,
             ),
           ],
-        )
+        )),
       ],
     );
   }

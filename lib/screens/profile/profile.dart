@@ -52,10 +52,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     bool smallDevice = MediaQuery.of(context).size.width >= 375;
     void logout(){
       var http = HttpRequest();
-      http.logout().then((value){
-        http.clearToken();
-        Navigator.pushReplacementNamed(context, LoginScreen.route);
-      });
+      http.clearToken();
+      Navigator.pushReplacementNamed(context, LoginScreen.route);
     }
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

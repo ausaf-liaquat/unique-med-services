@@ -279,6 +279,7 @@ class Step4 extends StatelessWidget {
         ),
         AppTextField(
           error: fieldsError('city'),
+          type: TextInputType.streetAddress,
           bottom: 16,
           name: 'city',
           label: 'City',
@@ -288,6 +289,7 @@ class Step4 extends StatelessWidget {
         ),
         AppTextField(
           error: fieldsError('state'),
+          type: TextInputType.streetAddress,
           bottom: 16,
           name: 'state',
           label: 'State',

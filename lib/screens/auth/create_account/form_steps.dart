@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../../shared/theme/color.dart';
+import '../../../shared/utils/web_redirect.dart';
 import '../../../widgets/card/upload_file.dart';
+import '../../../widgets/inputs/check_box.dart';
 import '../../../widgets/inputs/group_check_box.dart';
 import '../../../widgets/inputs/group_radio_box.dart';
 import '../../../widgets/inputs/select_field.dart';
@@ -12,9 +15,23 @@ import '../../../widgets/inputs/text_field.dart';
 import '../../../widgets/dataDisplay/typography.dart';
 
 class Step1 extends StatelessWidget {
-  const Step1({super.key, required this.onSelect, required this.fieldsError});
+  const Step1(
+      {super.key,
+      required this.onSelect,
+      required this.fieldsError,
+      required this.updateResume,
+      this.resume});
   final void Function(String, dynamic) onSelect;
+  final void Function(dynamic) updateResume;
   final String? Function(String) fieldsError;
+  final File? resume;
+
+  void resumePick() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      updateResume(File(result.files[0].path ?? ''));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +74,7 @@ class Step1 extends StatelessWidget {
           bottom: 16,
           type: TextInputType.phone,
           name: 'phone',
-          label: 'Phone Number',
+          label: 'Mobile Number',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(
                 errorText: 'Phone number is required'),
@@ -80,7 +97,10 @@ class Step1 extends StatelessWidget {
           name: 'email',
           label: 'Email',
           validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: 'Email is required'),
+            FormBuilderValidators.required(
+                errorText: 'Email is required'),
+            FormBuilderValidators.email(
+                errorText: 'Invalid email address')
           ]),
         ),
         AppTextField(
@@ -95,18 +115,68 @@ class Step1 extends StatelessWidget {
         ),
         AppTextField(
           error: fieldsError('reffered_by'),
-          bottom: 16,
+          bottom: 24,
           type: TextInputType.name,
           name: 'reffered_by',
-          label: 'Referred',
+          label: 'Referred By',
           helpText:
               'Both will get \$100 bonus after they complete first shift!',
         ),
+        InkWell(
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          onTap: resumePick,
+          child: resume == null
+              ? Container(
+                  height: 150,
+                  decoration: BoxDecoration(
+                      color: AppColorScheme().black0,
+                      borderRadius: const BorderRadius.all(Radius.circular(16)),
+                      border: Border.all(
+                        width: 2,
+                        color: Theme.of(context).colorScheme.secondary,
+                      )),
+                  child: Center(
+                      child: SizedBox(
+                    width: 140,
+                    child: AppTypography(
+                      align: TextAlign.center,
+                      text: 'Upload Your Resume',
+                      size: 16,
+                      height: 1.4,
+                      color: AppColorScheme().black60,
+                    ),
+                  )),
+                )
+              : UploadFileCard(file: resume),
+        ),
+      ],
+    );
+  }
+}
+
+class Step2 extends StatefulWidget {
+  const Step2({super.key, required this.onSelect, required this.fieldsError});
+  final void Function(String, dynamic) onSelect;
+  final String? Function(String) fieldsError;
+
+  @override
+  State<Step2> createState() => _Step2State();
+}
+
+class _Step2State extends State<Step2> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         AppSelectField(
-          error: fieldsError('qualification_type'),
+          error: widget.fieldsError('qualification_type'),
           title: 'Select the qualification type?',
-          bottom: 16,
-          onSelect: onSelect,
+          bottom: 24,
+          onSelect: widget.onSelect,
           option: const [
             'RN',
             'MT',
@@ -127,64 +197,6 @@ class Step1 extends StatelessWidget {
                 errorText: 'Qualification type is required'),
           ]),
         ),
-        InkWell(
-          focusColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          onTap: resumePick,
-          child: resume == null
-              ? Container(
-            height: 150,
-            decoration: BoxDecoration(
-                color: AppColorScheme().black0,
-                borderRadius: const BorderRadius.all(Radius.circular(16)),
-                border: Border.all(
-                  width: 2,
-                  color: Theme.of(context).colorScheme.secondary,
-                )),
-            child: Center(
-                child: SizedBox(
-                  width: 140,
-                  child: AppTypography(
-                    align: TextAlign.center,
-                    text: 'Upload Your Resume',
-                    size: 16,
-                    height: 1.4,
-                    color: AppColorScheme().black60,
-                  ),
-                )),
-          )
-              : UploadFileCard(file: resume),
-        ),
-      ],
-    );
-  }
-}
-
-class Step2 extends StatelessWidget {
-  const Step2(
-      {super.key,
-      required this.onSelect,
-      required this.fieldsError,
-      required this.updateResume,
-      this.resume});
-  final void Function(String, dynamic) onSelect;
-  final void Function(dynamic) updateResume;
-  final String? Function(String) fieldsError;
-  final File? resume;
-  void resumePick() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result != null) {
-      updateResume(File(result.files[0].path ?? ''));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
         AppTypography(
           text: 'What types of shifts are you interested in?',
           size: 20,
@@ -219,7 +231,61 @@ class Step2 extends StatelessWidget {
             ]),
             options: const ['0 - 3 months', '4 - 6 months', '6+ months']),
         const SizedBox(height: 40),
-        const SizedBox(height: 40),
+        RichText(
+          textAlign: TextAlign.start,
+          text: TextSpan(
+            text: 'Please review and agree to our ',
+            style: TextStyle(color: AppColorScheme().black60, fontSize: 14),
+            children: <TextSpan>[
+              TextSpan(
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      setState(() {
+                        WebRedirect().privacyPolicy();
+                      });
+                    },
+                  text: 'Terms of Service',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.primary)),
+              const TextSpan(text: ' , '),
+              TextSpan(
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      setState(() {
+                        WebRedirect().privacyPolicy();
+                      });
+                    },
+                  text: 'Privacy Policy',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.primary)),
+              const TextSpan(text: ' and '),
+              TextSpan(
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      setState(() {
+                        WebRedirect().termsAndConditions();
+                      });
+                    },
+                  text: 'SMS Terms of Service',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.primary)),
+            ],
+          ),
+        ),
+        Transform.translate(
+          offset: const Offset(0, -3),
+          child: AppCheckBox(
+            validator: FormBuilderValidators.equal(
+              true,
+              errorText: 'You must accept to continue',
+            ),
+            label: 'I agree to this top info.',
+            name: 'agree',
+          ),
+        ),
       ],
     );
   }

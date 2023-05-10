@@ -109,7 +109,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                     initialValue: const {
                       'document_type_id': '',
                       'title': "",
-                      "notes": '',
+                      "notes": 'Enter notes...',
                     },
                     skipDisabled: true,
                     child: Column(
@@ -125,6 +125,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                           label: 'Document Type',
                         ),
                         AppTextField(
+                          type: TextInputType.text,
                           name: 'title',
                           label: "Title",
                           bottom: 20,
@@ -136,6 +137,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                           ]),
                         ),
                         const AppTextField(
+                          type: TextInputType.multiline,
                           name: 'notes',
                           label: "Notes",
                           bottom: 20,

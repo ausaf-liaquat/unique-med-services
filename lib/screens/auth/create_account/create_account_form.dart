@@ -46,12 +46,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   Widget build(BuildContext context) {
     bool smallDevice = MediaQuery.of(context).size.width >= 365;
     final List<Widget> steps = <Widget>[
-      Step1(onSelect: changeSelectValue, fieldsError: fieldsErrors),
-      Step2(
+      Step1(
           resume: resume,
           onSelect: changeSelectValue,
           fieldsError: fieldsErrors,
           updateResume: updateResume),
+      Step2(onSelect: changeSelectValue, fieldsError: fieldsErrors),
     ];
     return BackLayout(
         totalTabs: 2,
@@ -75,7 +75,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     'password': '',
                     'reffered_by': '',
                     'qualification_type': '',
-                    'resume': ''
+                    'resume': '',
+                    'agree': false
                   },
                   skipDisabled: true,
                   child: Column(
@@ -121,9 +122,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                         }
                                       });
                                     } else {
-                                      setState(() {
-                                        _currentStep = _currentStep + 1;
-                                      });
+                                      if(resume == null){
+                                        SnackBarMessage.errorSnackbar(
+                                            context, 'please upload resume to continue');
+                                      } else {
+                                        setState(() {
+                                          _currentStep = _currentStep + 1;
+                                        });
+                                      }
                                     }
                                   } else {
                                     setState(() {});

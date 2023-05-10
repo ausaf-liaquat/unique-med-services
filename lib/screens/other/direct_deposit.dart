@@ -164,6 +164,7 @@ class DepositForm extends StatelessWidget {
         ),
         AppTextField(
           error: fieldsError('city'),
+          type: TextInputType.streetAddress,
           bottom: 16,
           name: 'city',
           label: 'City',
@@ -173,6 +174,7 @@ class DepositForm extends StatelessWidget {
         ),
         AppTextField(
           error: fieldsError('state'),
+          type: TextInputType.streetAddress,
           bottom: 16,
           name: 'state',
           label: 'State',
@@ -230,19 +232,6 @@ class DepositForm extends StatelessWidget {
           bottom: 24,
           name: 'date',
           label: 'Date',
-        ),
-        AppTypography(
-            text:
-                "In signing this form authorize my payment to be sent to the financial institution name above to be deposited to the designated.",
-            size: 14,
-            color: AppColorScheme().black60),
-        AppCheckBox(
-          validator: FormBuilderValidators.equal(
-            true,
-            errorText: 'You must accept to continue',
-          ),
-          label: 'I agree to this top info.',
-          name: 'agree',
         ),
       ],
     );

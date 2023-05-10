@@ -59,6 +59,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               validator: FormBuilderValidators.compose([
                                 FormBuilderValidators.required(
                                     errorText: 'Email is required'),
+                                FormBuilderValidators.email(
+                                    errorText: 'Invalid email address')
                               ]),
                             ),
                             ElevatedButton(

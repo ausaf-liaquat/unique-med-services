@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../shared/theme/color.dart';
+
 class MapView extends StatelessWidget {
   var lat;
   var long;
@@ -9,7 +11,8 @@ class MapView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const mkid = MarkerId('aa');
-    return SizedBox(
+    return Container(
+      color: AppColorScheme().black6,
       height: 340,
       child: GoogleMap(
           mapType: MapType.hybrid,

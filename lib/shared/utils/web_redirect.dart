@@ -28,4 +28,18 @@ class WebRedirect {
       throw Exception('Some thing went Wrong!');
     }
   }
+
+  Future<void> smsTermsAndConditions() async {
+    final Uri url = Uri(
+        scheme: 'https',
+        host: 'www.uniquemedsvcs.com',
+        path: 'SMS%20TERMS.pdf');
+
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Some thing went Wrong!');
+    }
+  }
 }

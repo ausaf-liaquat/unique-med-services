@@ -67,16 +67,18 @@ class _ShiftScreenState extends State<ShiftScreen> {
                           child: const Divider()),
                 )
               : listShift.isEmpty
-                  ? Column(
-                      children: [
-                        const SizedBox(height: 32),
-                        Image.asset(
-                          'assets/images/no-shift.png',
-                          width: 280,
-                        ),
-                        const SizedBox(height: 20),
-                        const AppTypography(text: 'No Shift Found!', size: 18)
-                      ],
+                  ? Center(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 24),
+                          Image.asset(
+                            'assets/images/no-shift.png',
+                            width: 280,
+                          ),
+                          const SizedBox(height: 20),
+                          const AppTypography(text: 'No Shift Found!', size: 18)
+                        ],
+                      ),
                     )
                   : ListView.separated(
                       itemCount: listShift.length,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ums_staff/core/http.dart';
+import 'package:ums_staff/screens/auth/login.dart';
 import 'package:ums_staff/screens/document/documents.dart';
 import 'package:ums_staff/screens/other/notification.dart';
 import 'package:ums_staff/screens/profile/profile.dart';
@@ -30,6 +32,13 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var http = HttpRequest();
+    http.getToken().then((value) => {
+    if( value == '' ){
+        Navigator.pushReplacementNamed(context, LoginScreen.route)
+    }
+    });
+
     final List<Widget> icons = <Widget>[
       IconButton(
           onPressed: () {
