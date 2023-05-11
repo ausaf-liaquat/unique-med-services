@@ -77,7 +77,7 @@ class Step1 extends StatelessWidget {
           label: 'Mobile Number',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(
-                errorText: 'Phone number is required'),
+                errorText: 'Phone number is required')
           ]),
         ),
         AppTextField(

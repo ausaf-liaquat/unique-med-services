@@ -26,11 +26,13 @@ class SnackBarMessage {
             const SizedBox(
               width: 16,
             ),
-            AppTypography(
-              text: message,
-              size: 14,
-              weight: FontWeight.w500,
-              color: AppColorScheme().black80,
+            Flexible(
+              child: AppTypography(
+                text: message,
+                size: 14,
+                weight: FontWeight.w500,
+                color: AppColorScheme().black80,
+              ),
             )
           ],
         ),

@@ -20,10 +20,6 @@ class SupportScreen extends StatelessWidget {
       page: SingleChildScrollView(
           child: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
-            child: const SearchField(),
-          ),
           Image.asset(
             'assets/images/support.png',
             width: 300,

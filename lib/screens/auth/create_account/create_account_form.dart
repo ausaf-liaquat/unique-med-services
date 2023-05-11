@@ -122,9 +122,16 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                         }
                                       });
                                     } else {
+                                      var number = _formKey.currentState?.value['phone'];
+                                      RegExp exp = RegExp(r'^\+1[0-9]+$');
+                                      print(number);
+                                      print(exp.hasMatch(number));
                                       if(resume == null){
                                         SnackBarMessage.errorSnackbar(
                                             context, 'please upload resume to continue');
+                                      } if(!exp.hasMatch(number)){
+                                        SnackBarMessage.errorSnackbar(
+                                            context, 'please enter Phone Number start with +1');
                                       } else {
                                         setState(() {
                                           _currentStep = _currentStep + 1;

@@ -61,10 +61,10 @@ class WebRedirect {
   Future<void> supportEmail(dynamic context) async {
     final Uri url = Uri(
         scheme: 'mailto',
-        path: 'myOwnEmailAddress@gmail.com',
+        path: 'support@ums.com',
         queryParameters: {
-          'subject': 'Default Subject',
-          'body': 'Default body'
+          'subject': '',
+          'body': ''
         });
 
     if (!await launchUrl(

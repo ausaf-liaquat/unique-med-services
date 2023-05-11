@@ -83,8 +83,9 @@ class _VerificationScreenState extends State<VerificationScreen> {
                                                 MapEntry(
                                                     key, value.toString()));
                                         if (register) {
+                                          print(formatBody);
                                           http
-                                              .verify(formatBody ?? {})
+                                              .regVerify(formatBody)
                                               .then((value) {
                                             setState(() {
                                               loading = false;

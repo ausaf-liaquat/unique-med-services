@@ -7,6 +7,22 @@ import 'package:http/http.dart' as http;
   Future<ResponseBody> login(dynamic body){
     return post('api/v1/auth/login', body, body, true);
   }
+  Future<ResponseBody> unreadNotification(){
+    return post('api/v1/get/unread/notifications', {"": ""},null, false);
+  }
+  Future<ResponseBody> readNotification(){
+    return post('api/v1/get/read/notifications', {"": ""},null, false);
+  }
+  Future<ResponseBody> markReadNotifications(String id) async {
+    var url = Uri.https(Constants.baseUrl, 'api/v1/mark/notification/read');
+    var token = await getToken();
+    var request = http.MultipartRequest('POST', url);
+    Map<String, String>  header = { "Authorization": 'Bearer ${token ?? ''}'};
+    request.headers.addAll(header);
+    request.fields.addAll({"id": id});
+    var res = await request.send();
+    return await parseResponseForm(res);
+  }
   Future<ResponseBody> getShift(dynamic body){
     return get('api/v1/shifts', body);
   }
@@ -22,6 +38,16 @@ import 'package:http/http.dart' as http;
   }
   Future<ResponseBody> docs(){
     return post('api/v1/user/documents', {"": ""}, null, false);
+  }
+  Future<ResponseBody> regVerify(data)async {
+    var url = Uri.https(Constants.baseUrl, 'api/v1/auth/verify');
+    var token = await getToken();
+    var request = http.MultipartRequest('POST', url);
+    Map<String, String>  header = { "Authorization": 'Bearer ${token ?? ''}'};
+    request.headers.addAll(header);
+    request.fields.addAll(data);
+    var res = await request.send();
+    return await parseResponseForm(res);
   }
   Future<ResponseBody> shifts(){
     return post('api/v1/shifts', {"": ""}, null, false);
