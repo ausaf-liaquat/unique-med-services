@@ -124,8 +124,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                     } else {
                                       var number = _formKey.currentState?.value['phone'];
                                       RegExp exp = RegExp(r'^\+1[0-9]+$');
-                                      print(number);
-                                      print(exp.hasMatch(number));
                                       if(resume == null){
                                         SnackBarMessage.errorSnackbar(
                                             context, 'please upload resume to continue');
