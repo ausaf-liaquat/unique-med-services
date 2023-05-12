@@ -6,9 +6,14 @@ import '../dataDisplay/typography.dart';
 
 class AppCheckBox extends StatefulWidget {
   const AppCheckBox(
-      {super.key, required this.name, required this.label, this.validator});
+      {super.key,
+      required this.name,
+      this.label,
+      this.validator,
+      this.text});
   final String name;
-  final String label;
+  final Widget? text;
+  final String? label;
   final String? Function(bool?)? validator;
 
   @override
@@ -35,12 +40,13 @@ class _AppCheckBoxState extends State<AppCheckBox> {
                 const EdgeInsets.symmetric(vertical: 8, horizontal: 0)),
         title: Transform.translate(
           offset: const Offset(-6, -1),
-          child: AppTypography(
-            text: widget.label,
-            size: 16,
-            weight: FontWeight.w500,
-            color: AppColorScheme().black70,
-          ),
+          child: widget.text ??
+              AppTypography(
+                text: widget.label ?? '',
+                size: 16,
+                weight: FontWeight.w500,
+                color: AppColorScheme().black70,
+              ),
         ),
         validator: widget.validator);
   }

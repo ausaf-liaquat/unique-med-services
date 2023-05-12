@@ -97,10 +97,8 @@ class Step1 extends StatelessWidget {
           name: 'email',
           label: 'Email',
           validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(
-                errorText: 'Email is required'),
-            FormBuilderValidators.email(
-                errorText: 'Invalid email address')
+            FormBuilderValidators.required(errorText: 'Email is required'),
+            FormBuilderValidators.email(errorText: 'Invalid email address')
           ]),
         ),
         AppTextField(
@@ -231,60 +229,56 @@ class _Step2State extends State<Step2> {
             ]),
             options: const ['0 - 3 months', '4 - 6 months', '6+ months']),
         const SizedBox(height: 40),
-        RichText(
-          textAlign: TextAlign.start,
-          text: TextSpan(
-            text: 'Please review and agree to our ',
-            style: TextStyle(color: AppColorScheme().black60, fontSize: 14),
-            children: <TextSpan>[
-              TextSpan(
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      setState(() {
-                        WebRedirect().privacyPolicy(context);
-                      });
-                    },
-                  text: 'Terms of Service',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.primary)),
-              const TextSpan(text: ' , '),
-              TextSpan(
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      setState(() {
-                        WebRedirect().privacyPolicy(context);
-                      });
-                    },
-                  text: 'Privacy Policy',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.primary)),
-              const TextSpan(text: ' and '),
-              TextSpan(
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      setState(() {
-                        WebRedirect().termsAndConditions(context);
-                      });
-                    },
-                  text: 'SMS Terms of Service',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.primary)),
-            ],
+        AppCheckBox(
+          validator: FormBuilderValidators.equal(
+            true,
+            errorText: 'You must accept to continue',
           ),
-        ),
-        Transform.translate(
-          offset: const Offset(0, -3),
-          child: AppCheckBox(
-            validator: FormBuilderValidators.equal(
-              true,
-              errorText: 'You must accept to continue',
+          text: RichText(
+            textAlign: TextAlign.start,
+            text: TextSpan(
+              text: 'Please review and agree to our ',
+              style: TextStyle(color: AppColorScheme().black60, fontSize: 14),
+              children: <TextSpan>[
+                TextSpan(
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        setState(() {
+                          WebRedirect().privacyPolicy(context);
+                        });
+                      },
+                    text: 'Terms of Service',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.primary)),
+                const TextSpan(text: ' , '),
+                TextSpan(
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        setState(() {
+                          WebRedirect().privacyPolicy(context);
+                        });
+                      },
+                    text: 'Privacy Policy',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.primary)),
+                const TextSpan(text: ' and '),
+                TextSpan(
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        setState(() {
+                          WebRedirect().termsAndConditions(context);
+                        });
+                      },
+                    text: 'SMS Terms of Service',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.primary)),
+              ],
             ),
-            label: 'I agree to this top info.',
-            name: 'agree',
           ),
+          name: 'agree',
         ),
       ],
     );
