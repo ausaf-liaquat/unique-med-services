@@ -237,7 +237,7 @@ class _Step2State extends State<Step2> {
           text: RichText(
             textAlign: TextAlign.start,
             text: TextSpan(
-              text: 'Please review and agree to our ',
+              text: 'I have read and agree to Unique Med Services ',
               style: TextStyle(color: AppColorScheme().black60, fontSize: 14),
               children: <TextSpan>[
                 TextSpan(
