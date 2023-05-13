@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:ums_staff/screens/Auth/forget_password.dart';
 
-import '../../screens/Auth/forget_password.dart';
-import '../../screens/auth/change_password.dart';
-import '../../screens/auth/create_account/create_account_form.dart';
-import '../../screens/auth/verification.dart';
-import '../../screens/other/BCA_form/emplotment_bca_form.dart';
-import '../../screens/other/notification.dart';
-import '../../screens/other/w9_form/w9_form.dart';
-import '../../screens/auth/login.dart';
-import '../../screens/landing.dart';
-import '../../screens/other/support.dart';
-import '../../screens/profile/edit.dart';
-import '../../screens/schedule/details.dart';
-import '../../screens/shift/details.dart';
-import '../../screens/shift/edit.dart';
-import '../../screens/other/direct_deposit.dart';
-import '../../screens/wallet/payout_avtivity.dart';
-import '../../screens/document/create.dart';
-import '../../screens/wallet/payout_detail.dart';
+import 'package:ums_staff/screens/auth/change_password.dart';
+import 'package:ums_staff/screens/auth/create_account/create_account_form.dart';
+import 'package:ums_staff/screens/auth/verification.dart';
+import 'package:ums_staff/screens/other/BCA_form/emplotment_bca_form.dart';
+import 'package:ums_staff/screens/other/notification.dart';
+import 'package:ums_staff/screens/other/w9_form/w9_form.dart';
+import 'package:ums_staff/screens/auth/login.dart';
+import 'package:ums_staff/screens/landing.dart';
+import 'package:ums_staff/screens/other/support.dart';
+import 'package:ums_staff/screens/profile/edit.dart';
+import 'package:ums_staff/screens/schedule/details.dart';
+import 'package:ums_staff/screens/shift/details.dart';
+import 'package:ums_staff/screens/shift/edit.dart';
+import 'package:ums_staff/screens/other/direct_deposit.dart';
+import 'package:ums_staff/screens/wallet/payout_avtivity.dart';
+import 'package:ums_staff/screens/document/create.dart';
+import 'package:ums_staff/screens/wallet/payout_detail.dart';
 
 var appRoutes = <String, WidgetBuilder>{
   LandingScreen.route: (context) => const LandingScreen(),
