@@ -48,167 +48,172 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-                child: Container(
-                    margin: const EdgeInsets.only(
-                        left: 20.0, right: 20.0, bottom: 20.0),
-                    child: FormBuilder(
-                        key: _formKey,
-                        onChanged: () {
-                          _formKey.currentState!.save();
-                        },
-                        autovalidateMode: AutovalidateMode.disabled,
-                        initialValue: const {
-                          'email': '',
-                          'password': '',
-                        },
-                        skipDisabled: true,
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 25),
-                            SizedBox(
-                              height: 300,
-                              child: Center(
-                                child: Image.asset('assets/images/logo.png',
-                                    width: 150),
-                              ),
-                            ),
-                            AppTextField(
-                              error: _formKey
-                                  .currentState?.fields['email']!.errorText,
-                              bottom: 16,
-                              type: TextInputType.emailAddress,
-                              name: 'email',
-                              label: 'Username or Email',
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(
-                                    errorText: 'Email is required'),
-                                FormBuilderValidators.email(
-                                    errorText: 'Invalid email address')
-                              ]),
-                            ),
-                            AppTextField(
-                              error: _formKey
-                                  .currentState?.fields['password']!.errorText,
-                              bottom: 40,
-                              type: TextInputType.visiblePassword,
-                              name: 'password',
-                              label: 'Password',
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(
-                                    errorText: 'Password is required'),
-                              ]),
-                            ),
-                            ElevatedButton(
-                              onPressed: loading
-                                  ? () {}
-                                  : () {
-                                      if (_formKey.currentState?.validate() ??
-                                          false) {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        var api = HttpRequest();
-                                        api
-                                            .login(_formKey.currentState?.value)
-                                            .then((value) {
-                                          setState(() {
-                                            loading = false;
-                                          });
-                                          if (!value.success) {
-                                            SnackBarMessage.errorSnackbar(
-                                                context, value.message);
-                                          } else {
-                                            Navigator.pushNamed(
-                                                context, LandingScreen.route);
-                                          }
-                                        });
-                                      } else {
-                                        setState(() {});
-                                      }
-                                    },
-                              child: loading
-                                  ? CircularProgressIndicator(
-                                      color: AppColorScheme().black0,
-                                    )
-                                  : const Text('LOGIN'),
-                            ),
-                            const SizedBox(height: 24),
-                            Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  AppLink(
-                                    path: ForgetPasswordScreen.route,
-                                    child: AppTypography(
-                                      text: 'Forget Password?',
-                                      size: 14,
-                                      spacing: 0.1,
-                                      color: AppColorScheme().black90,
-                                    ),
+    return WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          key: _scaffoldKey,
+          body: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                    child: Container(
+                        margin: const EdgeInsets.only(
+                            left: 20.0, right: 20.0, bottom: 20.0),
+                        child: FormBuilder(
+                            key: _formKey,
+                            onChanged: () {
+                              _formKey.currentState!.save();
+                            },
+                            autovalidateMode: AutovalidateMode.disabled,
+                            initialValue: const {
+                              'email': '',
+                              'password': '',
+                            },
+                            skipDisabled: true,
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 25),
+                                SizedBox(
+                                  height: 300,
+                                  child: Center(
+                                    child: Image.asset('assets/images/logo.png',
+                                        width: 150),
                                   ),
-                                  AppLink(
-                                      path: CreateAccountScreen.route,
-                                      child: AppTypography(
-                                        text: 'Apply',
-                                        size: 14,
-                                        spacing: 0.1,
-                                        color:
-                                            Theme.of(context).colorScheme.error,
-                                      ))
-                                ])
-                          ],
-                        )))),
-          ),
-          Container(
-            width: 260,
-            margin: const EdgeInsets.only(
-                left: 20.0, right: 20.0, bottom: 24.0, top: 16.0),
-            child: RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                text: 'By using the app, you agree to our ',
-                style: TextStyle(
-                    color: AppColorScheme().black90,
-                    fontSize: 13,
-                    letterSpacing: 0.5,
-                    height: 1.5),
-                children: <TextSpan>[
-                  TextSpan(
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          setState(() {
-                            WebRedirect().privacyPolicy(context);
-                          });
-                        },
-                      text: 'Privacy policy',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: Theme.of(context).colorScheme.primary)),
-                  const TextSpan(text: ' and '),
-                  TextSpan(
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          setState(() {
-                            WebRedirect().termsAndConditions(context);
-                          });
-                        },
-                      text: 'Terms of Service.',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          color: Theme.of(context).colorScheme.primary)),
-                ],
+                                ),
+                                AppTextField(
+                                  error: _formKey
+                                      .currentState?.fields['email']!.errorText,
+                                  bottom: 16,
+                                  type: TextInputType.emailAddress,
+                                  name: 'email',
+                                  label: 'Username or Email',
+                                  validator: FormBuilderValidators.compose([
+                                    FormBuilderValidators.required(
+                                        errorText: 'Email is required'),
+                                    FormBuilderValidators.email(
+                                        errorText: 'Invalid email address')
+                                  ]),
+                                ),
+                                AppTextField(
+                                  error: _formKey.currentState
+                                      ?.fields['password']!.errorText,
+                                  bottom: 40,
+                                  type: TextInputType.visiblePassword,
+                                  name: 'password',
+                                  label: 'Password',
+                                  validator: FormBuilderValidators.compose([
+                                    FormBuilderValidators.required(
+                                        errorText: 'Password is required'),
+                                  ]),
+                                ),
+                                ElevatedButton(
+                                  onPressed: loading
+                                      ? () {}
+                                      : () {
+                                          if (_formKey.currentState
+                                                  ?.validate() ??
+                                              false) {
+                                            setState(() {
+                                              loading = true;
+                                            });
+                                            var api = HttpRequest();
+                                            api
+                                                .login(_formKey
+                                                    .currentState?.value)
+                                                .then((value) {
+                                              setState(() {
+                                                loading = false;
+                                              });
+                                              if (!value.success) {
+                                                SnackBarMessage.errorSnackbar(
+                                                    context, value.message);
+                                              } else {
+                                                Navigator.pushNamed(context,
+                                                    LandingScreen.route);
+                                              }
+                                            });
+                                          } else {
+                                            setState(() {});
+                                          }
+                                        },
+                                  child: loading
+                                      ? CircularProgressIndicator(
+                                          color: AppColorScheme().black0,
+                                        )
+                                      : const Text('LOGIN'),
+                                ),
+                                const SizedBox(height: 24),
+                                Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      AppLink(
+                                        path: ForgetPasswordScreen.route,
+                                        child: AppTypography(
+                                          text: 'Forget Password?',
+                                          size: 14,
+                                          spacing: 0.1,
+                                          color: AppColorScheme().black90,
+                                        ),
+                                      ),
+                                      AppLink(
+                                          path: CreateAccountScreen.route,
+                                          child: AppTypography(
+                                            text: 'Apply',
+                                            size: 14,
+                                            spacing: 0.1,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .error,
+                                          ))
+                                    ])
+                              ],
+                            )))),
               ),
-            ),
-          )
-        ],
-      ),
-    );
+              Container(
+                width: 260,
+                margin: const EdgeInsets.only(
+                    left: 20.0, right: 20.0, bottom: 24.0, top: 16.0),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    text: 'By using the app, you agree to our ',
+                    style: TextStyle(
+                        color: AppColorScheme().black90,
+                        fontSize: 13,
+                        letterSpacing: 0.5,
+                        height: 1.5),
+                    children: <TextSpan>[
+                      TextSpan(
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              setState(() {
+                                WebRedirect().privacyPolicy(context);
+                              });
+                            },
+                          text: 'Privacy policy',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).colorScheme.primary)),
+                      const TextSpan(text: ' and '),
+                      TextSpan(
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              setState(() {
+                                WebRedirect().termsAndConditions(context);
+                              });
+                            },
+                          text: 'Terms of Service.',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).colorScheme.primary)),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }

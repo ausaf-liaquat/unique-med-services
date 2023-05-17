@@ -3,6 +3,7 @@ import 'package:ums_staff/screens/Auth/forget_password.dart';
 
 import 'package:ums_staff/screens/auth/change_password.dart';
 import 'package:ums_staff/screens/auth/create_account/create_account_form.dart';
+import 'package:ums_staff/screens/auth/register.dart';
 import 'package:ums_staff/screens/auth/verification.dart';
 import 'package:ums_staff/screens/other/BCA_form/emplotment_bca_form.dart';
 import 'package:ums_staff/screens/other/notification.dart';
@@ -38,4 +39,5 @@ var appRoutes = <String, WidgetBuilder>{
   ForgetPasswordScreen.route: (context) => const ForgetPasswordScreen(),
   ChangePasswordScreen.route: (context) => const ChangePasswordScreen(),
   NotificationScreen.route: (context) => const NotificationScreen(),
+  RegisterScreen.route: (context) => const RegisterScreen()
 };
