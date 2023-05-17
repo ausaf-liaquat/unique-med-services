@@ -33,7 +33,6 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: AppThemeData().lightTheme,
       themeMode: ThemeMode.light,
-      darkTheme: AppThemeData().lightTheme,
       initialRoute: LoginScreen.route,
       routes: appRoutes,
     );
