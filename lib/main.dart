@@ -32,6 +32,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Unique Med Service',
       debugShowCheckedModeBanner: false,
       theme: AppThemeData().lightTheme,
+      themeMode: ThemeMode.light,
       darkTheme: AppThemeData().lightTheme,
       initialRoute: LoginScreen.route,
       routes: appRoutes,
