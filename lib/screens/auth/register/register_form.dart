@@ -1,0 +1,117 @@
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:ums_staff/screens/auth/register/form_steps.dart';
+import 'package:ums_staff/shared/theme/color.dart';
+import 'package:ums_staff/shared/utils/web_redirect.dart';
+import 'package:ums_staff/widgets/dataDisplay/typography.dart';
+import 'package:ums_staff/widgets/inputs/check_box.dart';
+import 'package:ums_staff/widgets/inputs/text_field.dart';
+import 'package:ums_staff/widgets/others/back_layout.dart';
+
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
+  static const route = '/register';
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final _formKey = GlobalKey<FormBuilderState>();
+  int _currentStep = 1;
+
+  String? fieldsErrors(String name) {
+    if (_formKey.currentState!.fields[name] == null) {
+      return null;
+    } else {
+      return _formKey.currentState!.fields[name]!.errorText;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    bool smallDevice = MediaQuery.of(context).size.width >= 365;
+    bool loading = false;
+    final List<Widget> steps = <Widget>[
+      Step1(
+        fieldsError: fieldsErrors,
+      ),
+      Step2(fieldsError: fieldsErrors),
+    ];
+
+    return BackLayout(
+      totalTabs: 2,
+      currentTabs: _currentStep,
+      text: 'Register',
+      page: SingleChildScrollView(
+          child: Container(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+              child: FormBuilder(
+                  key: _formKey,
+                  onChanged: () {
+                    _formKey.currentState!.save();
+                  },
+                  autovalidateMode: AutovalidateMode.disabled,
+                  initialValue: {
+                    'first_name': '',
+                    'last_name': '',
+                    'phone': '',
+                    'email': '',
+                    'ssn_last_4': '',
+                    'dob': DateTime.now(),
+                    'bank_routing_number': '',
+                    'bank_account_number': '',
+                    'industry': '',
+                    'business_url': '',
+                    'agree': false,
+                  },
+                  skipDisabled: true,
+                  child: Column(
+                    children: [
+                      steps[_currentStep],
+                      const SizedBox(height: 40),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: smallDevice ? 40 : 0),
+                        child: ElevatedButton(
+                          onPressed: _currentStep == 3 && loading
+                              ? () {}
+                              : () {
+                                  if (_formKey.currentState?.validate() ??
+                                      false) {
+                                    setState(() {
+                                      _currentStep = _currentStep + 1;
+                                    });
+                                  } else {
+                                    setState(() {});
+                                  }
+                                },
+                          child: loading
+                              ? CircularProgressIndicator(
+                                  color: AppColorScheme().black0,
+                                )
+                              : Text(_currentStep == 5 ? 'Finish' : 'Next'),
+                        ),
+                      ),
+                      SizedBox(height: _currentStep == 0 ? 0 : 24),
+                      _currentStep == 0
+                          ? const SizedBox()
+                          : Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: smallDevice ? 40 : 0),
+                              child: TextButton(
+                                child: const Text('Back'),
+                                onPressed: () {
+                                  setState(() {
+                                    _currentStep = _currentStep - 1;
+                                  });
+                                },
+                              ),
+                            )
+                    ],
+                  )))),
+    );
+  }
+}
