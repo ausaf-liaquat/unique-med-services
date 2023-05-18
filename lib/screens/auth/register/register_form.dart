@@ -20,7 +20,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-  int _currentStep = 1;
+  int _currentStep = 0;
 
   String? fieldsErrors(String name) {
     if (_formKey.currentState!.fields[name] == null) {
