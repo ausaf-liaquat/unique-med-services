@@ -85,7 +85,7 @@ class Step1 extends StatelessWidget {
           name: 'ssn_last_4',
           label: 'SSN',
           validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: 'Email is required'),
+            FormBuilderValidators.required(errorText: 'SSN is required'),
           ]),
         ),
         AppDateField(

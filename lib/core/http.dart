@@ -88,6 +88,16 @@ import 'package:http/http.dart' as http;
     var res = await request.send();
     return await parseResponseForm(res);
   }
+  Future<ResponseBody> stripRegister(dynamic body) async {
+    var url = Uri.https(Constants.baseUrl, 'api/v1/stripe/register/connect/account');
+    var token = await getToken();
+    var request = http.MultipartRequest('POST', url);
+    Map<String, String>  header = { "Authorization": 'Bearer ${token ?? ''}'};
+    request.headers.addAll(header);
+    request.fields.addAll(body);
+    var res = await request.send();
+    return await parseResponseForm(res);
+  }
   Future<ResponseBody> depositForm(dynamic body) async {
     var url = Uri.https(Constants.baseUrl, 'api/v1/deposit/form');
     var token = await getToken();
@@ -117,7 +127,6 @@ import 'package:http/http.dart' as http;
     var request = http.MultipartRequest('POST', url);
     var token = await getToken();
     Map<String, String>  header = { "Authorization": 'Bearer ${token ?? ''}'};
-    print(token);
     request.headers.addAll(header);
     request.fields.addAll(body);
     if( body['pic'] != null){
@@ -246,7 +255,10 @@ class BaseHttpRequest {
  }
  Future<ResponseBody> parseResponseForm(dynamic response ) async {
    var result = await response.stream.bytesToString();
-   var responseBody = jsonDecode(result) as Map;
+   print(response.statusCode);
+   print(result.runtimeType);
+   print('object');
+   var responseBody = jsonDecode(result != "" ? result : '{}') as Map;
    if( response.statusCode == 401 ){
      clearToken();
      return ResponseBody(success: false, message: responseBody["message"]);

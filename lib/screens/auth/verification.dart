@@ -46,6 +46,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         skipDisabled: true,
                         child: Column(
                           children: [
+                            const SizedBox(height: 25),
                             SizedBox(
                               height: 300,
                               child: Center(
@@ -58,7 +59,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                                   .currentState?.fields['otp']!.errorText,
                               bottom: 48,
                               helpText:
-                                  'Enter 4 digit code which has been send to email',
+                                  'Enter 6 digit code which has been send to email',
                               type: TextInputType.number,
                               name: 'otp',
                               label: 'Verification Code',
@@ -141,13 +142,13 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         )))),
           ),
           Container(
-            width: 240,
+            width: 250,
             margin: const EdgeInsets.only(
                 left: 20.0, right: 20.0, bottom: 24.0, top: 16.0),
             child: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                text: 'Did you receive verification code',
+                text: 'Did you receive verification code ',
                 style: TextStyle(
                     color: AppColorScheme().black90,
                     fontSize: 13,

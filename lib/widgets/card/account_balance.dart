@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ums_staff/screens/auth/register/register_form.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 
@@ -100,16 +101,13 @@ class _AccountBalanceState extends State<AccountBalance> {
               Expanded(
                   child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, W9FormScreen.route);
+                        Navigator.pushNamed(context, RegisterScreen.route);
                       },
-                      child: Text(smallDevice ? 'W-9 form' : 'W-9'))),
+                      child: const Text('Register'))),
               SizedBox(width: smallDevice ? 16 : 8),
               Expanded(
                   child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, DirectDepositScreen.route);
-                      },
-                      child: const Text('Deposit')))
+                      onPressed: () {}, child: const Text('Stripe')))
             ],
           )
         ],

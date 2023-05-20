@@ -5,9 +5,9 @@ import 'package:ums_staff/screens/document/documents.dart';
 import 'package:ums_staff/screens/other/notification.dart';
 import 'package:ums_staff/screens/profile/profile.dart';
 import 'package:ums_staff/screens/schedule/schedule.dart';
-import 'package:ums_staff/screens/shift/edit.dart';
 import 'package:ums_staff/screens/shift/shifts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:ums_staff/screens/wallet/wallet.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 
 import '../widgets/others/bottom_sheet.dart';
@@ -25,9 +25,9 @@ class _LandingScreenState extends State<LandingScreen> {
   static const List<Widget> _tabs = <Widget>[
     ScheduleScreen(),
     ShiftScreen(),
+    WalletScreen(),
     DocumentScreen(),
     ProfileScreen(),
-    // WalletScreen(),
   ];
 
   @override
@@ -50,12 +50,14 @@ class _LandingScreenState extends State<LandingScreen> {
       //       Navigator.pushNamed(context, PayoutActivtyScreen.route);
       //     },
       //     icon: const Icon(Icons.schedule)),
+
+      Container(),
       IconButton(
           onPressed: () {
             Navigator.pushNamed(context, CreateDocumentScreen.route);
           },
           icon: const Icon(Icons.cloud_upload_outlined)),
-      const ProfileBottomSheet()
+      const ProfileBottomSheet(),
     ];
 
     // bool smallDevice = MediaQuery.of(context).size.width >= 375;
@@ -108,13 +110,10 @@ class _LandingScreenState extends State<LandingScreen> {
                     ),
                     child: GNav(
                         tabBackgroundColor: HexColor('#A018F8'),
-                        // padding: EdgeInsets.symmetric(
-                        //     vertical: smallDevice ? 12 : 9,
-                        //     horizontal: smallDevice ? 20 : 17),
-                        // iconSize: smallDevice ? 24 : 21,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 20),
-                        iconSize: 24,
+                        padding: EdgeInsets.symmetric(
+                            vertical:  9,
+                            horizontal: 17),
+                        iconSize:  21,
                         selectedIndex: _selectedIndex,
                         hoverColor: HexColor('#A018F8'),
                         curve: Curves.fastOutSlowIn,
@@ -140,21 +139,21 @@ class _LandingScreenState extends State<LandingScreen> {
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(8)),
                           ),
-                          // GButton(
-                          //   icon: _selectedIndex == 2
-                          //       ? Icons.account_balance_wallet
-                          //       : Icons.account_balance_wallet_outlined,
-                          //   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                          // ),
                           GButton(
                             icon: _selectedIndex == 2
+                                ? Icons.account_balance_wallet
+                                : Icons.account_balance_wallet_outlined,
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                          ),
+                          GButton(
+                            icon: _selectedIndex == 3
                                 ? Icons.description
                                 : Icons.description_outlined,
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(8)),
                           ),
                           GButton(
-                            icon: _selectedIndex == 3
+                            icon: _selectedIndex == 4
                                 ? Icons.person
                                 : Icons.person_outlined,
                             borderRadius:

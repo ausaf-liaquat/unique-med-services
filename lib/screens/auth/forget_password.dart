@@ -42,6 +42,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         skipDisabled: true,
                         child: Column(
                           children: [
+                            const SizedBox(height: 25),
                             SizedBox(
                               height: 300,
                               child: Center(

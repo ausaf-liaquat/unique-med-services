@@ -10,6 +10,9 @@ import 'package:ums_staff/widgets/inputs/check_box.dart';
 import 'package:ums_staff/widgets/inputs/text_field.dart';
 import 'package:ums_staff/widgets/others/back_layout.dart';
 
+import '../../../core/http.dart';
+import '../../../widgets/messages/snack_bar.dart';
+
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
   static const route = '/register';
@@ -76,14 +79,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         padding: EdgeInsets.symmetric(
                             horizontal: smallDevice ? 40 : 0),
                         child: ElevatedButton(
-                          onPressed: _currentStep == 3 && loading
+                          onPressed: _currentStep == 1 && loading
                               ? () {}
                               : () {
                                   if (_formKey.currentState?.validate() ??
                                       false) {
-                                    setState(() {
-                                      _currentStep = _currentStep + 1;
-                                    });
+                                    if( _currentStep == 0 ){
+                                      setState(() {
+                                        _currentStep = _currentStep + 1;
+                                      });
+                                    }else{
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      var http = HttpRequest();
+                                      var body = {
+                                        ..._formKey.currentState?.value ?? {}
+                                      };
+                                      var formatBody = body.map<String, String>(
+                                              (key, value) =>
+                                              MapEntry(key, value.toString()));
+                                      formatBody['dob_day'] = (_formKey.currentState?.value['dob'] as DateTime).day.toString();
+                                      formatBody['dob_month'] = (_formKey.currentState?.value['dob'] as DateTime).month.toString();
+                                      formatBody['dob_year'] = (_formKey.currentState?.value['dob'] as DateTime).year.toString();
+                                      http.stripRegister(formatBody).then((value){
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                        if (value.success == true) {
+                                          SnackBarMessage.successSnackbar(
+                                              context, "Strip Account Register successfully");
+                                          Navigator.pop(
+                                              context);
+                                        } else {
+                                          SnackBarMessage.errorSnackbar(
+                                              context, value.message);
+                                        }
+                                      });
+                                    }
                                   } else {
                                     setState(() {});
                                   }
@@ -92,7 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ? CircularProgressIndicator(
                                   color: AppColorScheme().black0,
                                 )
-                              : Text(_currentStep == 5 ? 'Finish' : 'Next'),
+                              : Text(_currentStep == 1 ? 'Finish' : 'Next'),
                         ),
                       ),
                       SizedBox(height: _currentStep == 0 ? 0 : 24),
