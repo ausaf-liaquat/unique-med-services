@@ -1,13 +1,7 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:ums_staff/screens/auth/register/form_steps.dart';
 import 'package:ums_staff/shared/theme/color.dart';
-import 'package:ums_staff/shared/utils/web_redirect.dart';
-import 'package:ums_staff/widgets/dataDisplay/typography.dart';
-import 'package:ums_staff/widgets/inputs/check_box.dart';
-import 'package:ums_staff/widgets/inputs/text_field.dart';
 import 'package:ums_staff/widgets/others/back_layout.dart';
 
 import '../../../core/http.dart';
@@ -142,7 +136,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   });
                                 },
                               ),
-                            )
+                      )
                     ],
                   )))),
     );

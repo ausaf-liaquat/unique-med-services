@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:ums_staff/core/http.dart';
 import 'package:ums_staff/screens/auth/register/register_form.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 
 import '../../screens/other/w9_form/w9_form.dart';
 import '../../screens/other/direct_deposit.dart';
+import '../messages/snack_bar.dart';
 
 class AccountBalance extends StatefulWidget {
   const AccountBalance({super.key});
@@ -40,62 +42,62 @@ class _AccountBalanceState extends State<AccountBalance> {
           )),
       child: Column(
         children: [
-          Row(
-            children: [
-              AppTypography(
-                text: 'My Account',
-                size: 15,
-                spacing: 0.44,
-                color: AppColorScheme().black40,
-              ),
-              const SizedBox(width: 6),
-              Chip(
-                backgroundColor: AppColorScheme().black6,
-                label: AppTypography(
-                  text: '0112345678',
-                  size: 13,
-                  spacing: 0.51,
-                  color: AppColorScheme().black50,
-                ),
-              )
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                  child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _balanceVisible = !_balanceVisible;
-                  });
-                },
-                child: AppTypography(
-                  overflow: TextOverflow.ellipsis,
-                  text: "\$54,292.79",
-                  size: 36,
-                  spacing: 0.39,
-                  weight: FontWeight.w500,
-                  color: AppColorScheme().black90,
-                ),
-              )),
-              const SizedBox(width: 6),
-              _balanceVisible
-                  ? const SizedBox()
-                  : Chip(
-                      backgroundColor: HexColor('#3CA442'),
-                      label: AppTypography(
-                        text: '+5.21%',
-                        size: 15,
-                        weight: FontWeight.w600,
-                        spacing: 0.44,
-                        color: AppColorScheme().black0,
-                      ),
-                    )
-            ],
-          ),
-          const SizedBox(height: 20),
+          // Row(
+          //   children: [
+          //     AppTypography(
+          //       text: 'My Account',
+          //       size: 15,
+          //       spacing: 0.44,
+          //       color: AppColorScheme().black40,
+          //     ),
+          //     const SizedBox(width: 6),
+          //     Chip(
+          //       backgroundColor: AppColorScheme().black6,
+          //       label: AppTypography(
+          //         text: '0112345678',
+          //         size: 13,
+          //         spacing: 0.51,
+          //         color: AppColorScheme().black50,
+          //       ),
+          //     )
+          //   ],
+          // ),
+          // const SizedBox(height: 12),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Expanded(
+          //         child: InkWell(
+          //       onTap: () {
+          //         setState(() {
+          //           _balanceVisible = !_balanceVisible;
+          //         });
+          //       },
+          //       child: AppTypography(
+          //         overflow: TextOverflow.ellipsis,
+          //         text: "\$54,292.79",
+          //         size: 36,
+          //         spacing: 0.39,
+          //         weight: FontWeight.w500,
+          //         color: AppColorScheme().black90,
+          //       ),
+          //     )),
+          //     const SizedBox(width: 6),
+          //     _balanceVisible
+          //         ? const SizedBox()
+          //         : Chip(
+          //             backgroundColor: HexColor('#3CA442'),
+          //             label: AppTypography(
+          //               text: '+5.21%',
+          //               size: 15,
+          //               weight: FontWeight.w600,
+          //               spacing: 0.44,
+          //               color: AppColorScheme().black0,
+          //             ),
+          //           )
+          //   ],
+          // ),
+          // const SizedBox(height: 20),
           Row(
             children: [
               Expanded(
@@ -107,7 +109,35 @@ class _AccountBalanceState extends State<AccountBalance> {
               SizedBox(width: smallDevice ? 16 : 8),
               Expanded(
                   child: ElevatedButton(
-                      onPressed: () {}, child: const Text('Stripe')))
+                      onPressed: () {
+                        showDialog(context: context, builder: (BuildContext context){
+                          return AlertDialog(
+                          content: Container(
+                            height: 230,
+                            child: Column(
+                              children: [
+                                Image.asset('assets/images/stripe.png'),
+                                const Text("Please wait try to login to strip account"),
+                                const SizedBox(height: 15,),
+                                const CircularProgressIndicator(),
+                              ],
+                            ),
+                          ),
+                          );
+                        });
+                        var http = HttpRequest();
+                        http.getStripLogin().then((value) {
+                        if (value.success == true) {
+                        Navigator.pop(
+                            context);
+                      } else {
+                          Navigator.pop(
+                              context);
+                        SnackBarMessage.errorSnackbar(
+                        context, value.message);
+                        }
+                        });
+                      }, child: const Text('Stripe')))
             ],
           )
         ],

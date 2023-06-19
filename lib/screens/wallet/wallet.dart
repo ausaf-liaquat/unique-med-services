@@ -21,44 +21,44 @@ class WalletScreen extends StatelessWidget {
       child: Column(
         children: [
           const AccountBalance(),
-          const SizedBox(height: 32),
-          AppCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const AppTypography(
-                    text: 'Payout Activity',
-                    size: 24,
-                    spacing: 0.34,
-                    weight: FontWeight.w600),
-                const SizedBox(height: 28),
-                ListView.separated(
-                  itemCount: data.length,
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (BuildContext context, int index) {
-                    return AppLink(
-                      path: PayoutDetailScreen.route,
-                      child: Payout(),
-                    );
-                    // for dinamic usage: data[index].value
-                  },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      Container(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          child: const Divider()),
-                ),
-                const SizedBox(height: 20),
-                Center(
-                  child: TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, PayoutActivtyScreen.route);
-                      },
-                      child: const Text('SEE ALL ')),
-                )
-              ],
-            ),
-          )
+          // const SizedBox(height: 32),
+          // AppCard(
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       const AppTypography(
+          //           text: 'Payout Activity',
+          //           size: 24,
+          //           spacing: 0.34,
+          //           weight: FontWeight.w600),
+          //       const SizedBox(height: 28),
+          //       ListView.separated(
+          //         itemCount: data.length,
+          //         physics: const NeverScrollableScrollPhysics(),
+          //         shrinkWrap: true,
+          //         itemBuilder: (BuildContext context, int index) {
+          //           return AppLink(
+          //             path: PayoutDetailScreen.route,
+          //             child: Payout(),
+          //           );
+          //           // for dinamic usage: data[index].value
+          //         },
+          //         separatorBuilder: (BuildContext context, int index) =>
+          //             Container(
+          //                 padding: const EdgeInsets.symmetric(vertical: 12),
+          //                 child: const Divider()),
+          //       ),
+          //       const SizedBox(height: 20),
+          //       Center(
+          //         child: TextButton(
+          //             onPressed: () {
+          //               Navigator.pushNamed(context, PayoutActivtyScreen.route);
+          //             },
+          //             child: const Text('SEE ALL ')),
+          //       )
+          //     ],
+          //   ),
+          // )
         ],
       ),
     ));

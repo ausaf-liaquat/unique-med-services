@@ -52,6 +52,9 @@ import 'package:http/http.dart' as http;
   Future<ResponseBody> shifts(){
     return post('api/v1/shifts', {"": ""}, null, false);
   }
+  Future<ResponseBody> getStripLogin(){
+    return post('api/v1/stripe/login/connect', {"": ""}, null, false);
+  }
   Future<ResponseBody> shiftsAccept(String id){
     return post('api/v1/shift/$id/accept', {"": ""}, null, false);
   }
@@ -92,7 +95,7 @@ import 'package:http/http.dart' as http;
     var url = Uri.https(Constants.baseUrl, 'api/v1/stripe/register/connect/account');
     var token = await getToken();
     var request = http.MultipartRequest('POST', url);
-    Map<String, String>  header = { "Authorization": 'Bearer ${token ?? ''}'};
+    Map<String, String>  header = { "Authorization": 'Bearer ${token ?? ''}', 'Accept': "application/json"};
     request.headers.addAll(header);
     request.fields.addAll(body);
     var res = await request.send();
@@ -197,8 +200,10 @@ class BaseHttpRequest {
      newBody = jsonEncode(body);
    }
    var response = await http.post(url, body: newBody, headers: {
-     "Authorization": 'Bearer ${token ?? ''}'
+     "Authorization": 'Bearer ${token ?? ''}',
+     'Accept': 'application/json'
    });
+   print(response.body);
    return parseResponse(response, saveT);
  }
  Future<ResponseBody> get(String urlPath, dynamic qp) async {
@@ -223,11 +228,13 @@ class BaseHttpRequest {
    return parseResponse(response, saveT);
  }
  Future<ResponseBody> parseResponse(dynamic response, bool saveT) async {
+   print(response.body);
    var responseBody = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+   print(response.bodyBytes);
    if( response.statusCode == 401 ){
      clearToken();
      return ResponseBody(success: false, message: responseBody["message"]);
-   }else  if( response.statusCode == 400 || response.statusCode == 422 ||  response.statusCode == 403 ){
+   }else  if( response.statusCode == 400 || response.statusCode == 422 ||  response.statusCode == 403 || response.statusCode == 500  ){
      return ResponseBody(success: false, message: responseBody["message"]);
    }else {
      if(saveT){
@@ -255,14 +262,11 @@ class BaseHttpRequest {
  }
  Future<ResponseBody> parseResponseForm(dynamic response ) async {
    var result = await response.stream.bytesToString();
-   print(response.statusCode);
-   print(result.runtimeType);
-   print('object');
    var responseBody = jsonDecode(result != "" ? result : '{}') as Map;
    if( response.statusCode == 401 ){
      clearToken();
      return ResponseBody(success: false, message: responseBody["message"]);
-   }else  if( response.statusCode == 400 || response.statusCode == 422 ||  response.statusCode == 403 ){
+   }else  if( response.statusCode == 400 || response.statusCode == 422 ||  response.statusCode == 403 || response.statusCode == 500 ){
      return ResponseBody(success: false, message: responseBody["message"]);
    }else {
      return ResponseBody(success: true, message: '', data: responseBody );
