@@ -14,7 +14,7 @@ class ShiftModel {
   late String? updatedAt;
   ShiftModel({ required this.id, required this.title,required this.createdAt,required this.additionalComments, required this.clinicianType, required this.date, required this.ratePerHour, required this.shiftHour, required this.shiftLocation, required this.shiftNote, required this.totalAmount, required this.updatedAt, required this.userId});
   static Iterable<ShiftModel> listShiftModels(Iterable<dynamic> data) {
-    return data.map((e) =>ShiftModel(id: e['id'], userId: e['user_id'],
+    return data.map((e) =>ShiftModel(id: e['id'], userId: e['user_id'].toString(),
         shiftLocation: e['shift_location'] ?? '', clinicianType: e['clinician_type'] ?? '',
       title: e['title'] ?? '', date: e['date'], shiftHour: e['shift_hour'] ?? '', ratePerHour: e['rate_per_hour'] ?? '',
         totalAmount: e['total_amount'] ?? '', shiftNote: e['shift_note'] ?? '', additionalComments: e['additional_comments'] ?? '',

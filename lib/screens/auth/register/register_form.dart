@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:ums_staff/screens/auth/register/form_steps.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/others/back_layout.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/http.dart';
 import '../../../widgets/messages/snack_bar.dart';
@@ -75,7 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: ElevatedButton(
                           onPressed: _currentStep == 1 && loading
                               ? () {}
-                              : () {
+                              :  () {
                                   if (_formKey.currentState?.validate() ??
                                       false) {
                                     if( _currentStep == 0 ){
@@ -96,15 +97,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       formatBody['dob_day'] = (_formKey.currentState?.value['dob'] as DateTime).day.toString();
                                       formatBody['dob_month'] = (_formKey.currentState?.value['dob'] as DateTime).month.toString();
                                       formatBody['dob_year'] = (_formKey.currentState?.value['dob'] as DateTime).year.toString();
-                                      http.stripRegister(formatBody).then((value){
+                                      http.stripRegister(formatBody).then(  (value) async{
                                         setState(() {
                                           loading = false;
                                         });
                                         if (value.success == true) {
                                           SnackBarMessage.successSnackbar(
                                               context, "Strip Account Register successfully");
-                                          Navigator.pop(
-                                              context);
+                                          !await launchUrl( Uri.parse(value.data['data']['onboardingLink']) );
+                                          Navigator.pop(context);
                                         } else {
                                           SnackBarMessage.errorSnackbar(
                                               context, value.message);

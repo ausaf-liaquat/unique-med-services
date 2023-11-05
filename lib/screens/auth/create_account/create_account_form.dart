@@ -73,7 +73,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     'zip_code': '',
                     'email': '',
                     'password': '',
-                    'reffered_by': '',
                     'qualification_type': '',
                     'resume': '',
                     'agree': false

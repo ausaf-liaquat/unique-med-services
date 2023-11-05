@@ -53,7 +53,7 @@ import 'package:http/http.dart' as http;
     return post('api/v1/shifts', {"": ""}, null, false);
   }
   Future<ResponseBody> getStripLogin(){
-    return post('api/v1/stripe/login/connect', {"": ""}, null, false);
+    return post('api/v1/stripe/login/connect/account', {"": ""}, null, false);
   }
   Future<ResponseBody> shiftsAccept(String id){
     return post('api/v1/shift/$id/accept', {"": ""}, null, false);
@@ -246,6 +246,7 @@ class BaseHttpRequest {
  }
  Future<ResponseBody> parseResponseFormRegister(dynamic response, bool saveAuthToken ) async {
    var result = await response.stream.bytesToString();
+   print(result.toString());
    var responseBody = jsonDecode(result) as Map;
    if( response.statusCode == 401 ){
      clearToken();

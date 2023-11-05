@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:ums_staff/core/http.dart';
 import 'package:ums_staff/screens/auth/register/register_form.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../screens/other/w9_form/w9_form.dart';
 import '../../screens/other/direct_deposit.dart';
@@ -16,8 +18,6 @@ class AccountBalance extends StatefulWidget {
 }
 
 class _AccountBalanceState extends State<AccountBalance> {
-  bool _balanceVisible = false;
-
   @override
   Widget build(BuildContext context) {
     bool smallDevice = MediaQuery.of(context).size.width >= 350;
@@ -126,9 +126,10 @@ class _AccountBalanceState extends State<AccountBalance> {
                           );
                         });
                         var http = HttpRequest();
-                        http.getStripLogin().then((value) {
+                        http.getStripLogin().then((value) async {
                         if (value.success == true) {
-                        Navigator.pop(
+                          await launchUrl( Uri.parse(value.data['data']['onboardingLink']) );
+                          Navigator.pop(
                             context);
                       } else {
                           Navigator.pop(

@@ -111,15 +111,7 @@ class Step1 extends StatelessWidget {
             FormBuilderValidators.required(errorText: 'Password is required'),
           ]),
         ),
-        AppTextField(
-          error: fieldsError('reffered_by'),
-          bottom: 24,
-          type: TextInputType.name,
-          name: 'reffered_by',
-          label: 'Referred By',
-          helpText:
-              'Both will get \$100 bonus after they complete first shift!',
-        ),
+
         InkWell(
           focusColor: Colors.transparent,
           hoverColor: Colors.transparent,
