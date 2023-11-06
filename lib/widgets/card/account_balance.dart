@@ -128,7 +128,7 @@ class _AccountBalanceState extends State<AccountBalance> {
                         var http = HttpRequest();
                         http.getStripLogin().then((value) async {
                         if (value.success == true) {
-                          await launchUrl( Uri.parse(value.data['data']['onboardingLink']) );
+                          await launchUrl( Uri.parse(value.data['data']['login_link']['url']) );
                           Navigator.pop(
                             context);
                       } else {
