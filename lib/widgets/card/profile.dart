@@ -46,23 +46,29 @@ class ProfileCard extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: Container(
-                        color: AppColorScheme().black6,
-                        child: profile?.imageUrl != null
-                            ? CachedNetworkImage(
-                                placeholder: (context, url) => const SkeletonAvatar(
-                                  style: SkeletonAvatarStyle(
-                                      width: 88,
-                                      height: 142,
-                                      borderRadius: BorderRadius.zero),
-                                ),
-                                fit: BoxFit.cover,
-                                imageUrl: profile?.imageUrl ?? '',
-                              )
-                            : Image.asset(
-                                'assets/images/default-profile.jpg',
-                                fit: BoxFit.cover,
-                              ),
-                      ),
+                          color: AppColorScheme().black6,
+                          child: Image.asset(
+                            'assets/images/defult-profile.jpg',
+                            fit: BoxFit.cover,
+                          )
+                          // profile?.imageUrl != null
+                          //     ? CachedNetworkImage(
+                          //         placeholder: (context, url) =>
+                          //             const SkeletonAvatar(
+                          //           style: SkeletonAvatarStyle(
+                          //               width: 88,
+                          //               height: 142,
+                          //               borderRadius: BorderRadius.zero),
+                          //         ),
+                          //         fit: BoxFit.cover,
+                          //         imageUrl: profile?.imageUrl ?? '',
+                          //       )
+                          //     :
+                          // Image.asset(
+                          //         'assets/images/default-profile.jpg',
+                          //         fit: BoxFit.cover,
+                          //       ),
+                          ),
                     )),
                 const SizedBox(width: 19),
                 Expanded(
@@ -118,36 +124,36 @@ class ProfileCard extends StatelessWidget {
                 children: [
                   RowItem(
                     icon: Icons.call_outlined,
-                    text: profile?.phoneNumber ?? '',
+                    text: '+123456789',
                     bottom: 16,
                   ),
                   RowItem(
                       icon: Icons.location_on_outlined,
                       bottom: 16,
-                      text: profile?.email ?? 'not found'),
+                      text: '132, My Street, Kingston, New York'),
                   RowItem(
                       icon: Icons.call_outlined,
                       bottom: 16,
-                      text: profile?.address ?? 'not found'),
+                      text: '+123456789'),
                   Row(
                     children: [
                       Expanded(
                           child: RowItem(
                               icon: Icons.apartment_outlined,
                               bottom: 16,
-                              text: profile?.city ?? 'not found')),
+                              text: 'USA')),
                       SizedBox(width: 6),
                       Expanded(
                           child: RowItem(
                         icon: Icons.villa_outlined,
-                        text: profile?.state ?? 'not found',
+                        text: 'New York',
                         bottom: 16,
                       ))
                     ],
                   ),
                   RowItem(
                     icon: Icons.map_outlined,
-                    text: profile?.zipCode ?? 'not found',
+                    text: '12401',
                     bottom: 16,
                   ),
                 ],
