@@ -80,6 +80,37 @@ class Step1 extends StatelessWidget {
                 errorText: 'Phone number is required')
           ]),
         ),
+
+        AppTextField(
+          error: fieldsError('address'),
+          bottom: 16,
+          type: TextInputType.number,
+          name: 'address',
+          label: 'Address',
+          validator: FormBuilderValidators.compose([
+            FormBuilderValidators.required(errorText: 'Address is required'),
+          ]),
+        ),
+        AppTextField(
+          error: fieldsError('state'),
+          bottom: 16,
+          type: TextInputType.number,
+          name: 'state',
+          label: 'State',
+          validator: FormBuilderValidators.compose([
+            FormBuilderValidators.required(errorText: 'State is required'),
+          ]),
+        ),
+        AppTextField(
+          error: fieldsError('city'),
+          bottom: 16,
+          type: TextInputType.number,
+          name: 'city',
+          label: 'City',
+          validator: FormBuilderValidators.compose([
+            FormBuilderValidators.required(errorText: 'City is required'),
+          ]),
+        ),
         AppTextField(
           error: fieldsError('zip_code'),
           bottom: 16,

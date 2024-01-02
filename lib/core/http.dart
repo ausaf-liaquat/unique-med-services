@@ -244,10 +244,11 @@ class BaseHttpRequest {
      return ResponseBody(success: true, message: '', data: responseBody );
    }
  }
- Future<ResponseBody> parseResponseFormRegister(dynamic response, bool saveAuthToken ) async {
+ Future<ResponseBody> parseResponseFormRegister(http.StreamedResponse response, bool saveAuthToken ) async {
    var result = await response.stream.bytesToString();
    print(result.toString());
-   var responseBody = jsonDecode(result) as Map;
+
+   var responseBody =   jsonDecode(result) as Map;
    if( response.statusCode == 401 ){
      clearToken();
      return ResponseBody(success: false, message: responseBody["message"]);

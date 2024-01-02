@@ -73,6 +73,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     'zip_code': '',
                     'email': '',
                     'password': '',
+                    'city': '',
+                    'address': '',
+                    'state': '',
                     'qualification_type': '',
                     'resume': '',
                     'agree': false
@@ -126,10 +129,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                       if(resume == null){
                                         SnackBarMessage.errorSnackbar(
                                             context, 'please upload resume to continue');
-                                      } if(!exp.hasMatch(number)){
-                                        SnackBarMessage.errorSnackbar(
-                                            context, 'please enter Phone Number start with +1');
-                                      } else {
+                                      }
+                                      // if(!exp.hasMatch(number)){
+                                      //   SnackBarMessage.errorSnackbar(
+                                      //       context, 'please enter Phone Number start with 1');
+                                      // }
+                                      else {
                                         setState(() {
                                           _currentStep = _currentStep + 1;
                                         });
