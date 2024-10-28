@@ -15,12 +15,7 @@ import '../../../widgets/inputs/text_field.dart';
 import '../../../widgets/dataDisplay/typography.dart';
 
 class Step1 extends StatelessWidget {
-  const Step1(
-      {super.key,
-      required this.onSelect,
-      required this.fieldsError,
-      required this.updateResume,
-      this.resume});
+  const Step1({super.key, required this.onSelect, required this.fieldsError, required this.updateResume, this.resume});
   final void Function(String, dynamic) onSelect;
   final void Function(dynamic) updateResume;
   final String? Function(String) fieldsError;
@@ -44,10 +39,7 @@ class Step1 extends StatelessWidget {
           weight: FontWeight.w500,
         ),
         const SizedBox(height: 12),
-        AppTypography(
-            text: "First, we just need some basic information.",
-            size: 14,
-            color: AppColorScheme().black60),
+        AppTypography(text: "First, we just need some basic information.", size: 14, color: AppColorScheme().black60),
         const SizedBox(height: 16),
         AppTextField(
           error: fieldsError('first_name'),
@@ -75,16 +67,12 @@ class Step1 extends StatelessWidget {
           type: TextInputType.phone,
           name: 'phone',
           label: 'Mobile Number',
-          validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(
-                errorText: 'Phone number is required')
-          ]),
+          validator: FormBuilderValidators.compose([FormBuilderValidators.required(errorText: 'Phone number is required')]),
         ),
-
         AppTextField(
           error: fieldsError('address'),
           bottom: 16,
-          type: TextInputType.number,
+          type: TextInputType.streetAddress,
           name: 'address',
           label: 'Address',
           validator: FormBuilderValidators.compose([
@@ -94,7 +82,7 @@ class Step1 extends StatelessWidget {
         AppTextField(
           error: fieldsError('state'),
           bottom: 16,
-          type: TextInputType.number,
+          type: TextInputType.streetAddress,
           name: 'state',
           label: 'State',
           validator: FormBuilderValidators.compose([
@@ -104,7 +92,7 @@ class Step1 extends StatelessWidget {
         AppTextField(
           error: fieldsError('city'),
           bottom: 16,
-          type: TextInputType.number,
+          type: TextInputType.streetAddress,
           name: 'city',
           label: 'City',
           validator: FormBuilderValidators.compose([
@@ -127,10 +115,8 @@ class Step1 extends StatelessWidget {
           type: TextInputType.emailAddress,
           name: 'email',
           label: 'Email',
-          validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: 'Email is required'),
-            FormBuilderValidators.email(errorText: 'Invalid email address')
-          ]),
+          validator:
+              FormBuilderValidators.compose([FormBuilderValidators.required(errorText: 'Email is required'), FormBuilderValidators.email(errorText: 'Invalid email address')]),
         ),
         AppTextField(
           error: fieldsError('password'),
@@ -142,7 +128,6 @@ class Step1 extends StatelessWidget {
             FormBuilderValidators.required(errorText: 'Password is required'),
           ]),
         ),
-
         InkWell(
           focusColor: Colors.transparent,
           hoverColor: Colors.transparent,
@@ -198,24 +183,11 @@ class _Step2State extends State<Step2> {
           title: 'Select the qualification type?',
           bottom: 24,
           onSelect: widget.onSelect,
-          option: const [
-            'RN',
-            'MT',
-            'PST',
-            'PCT',
-            'PT',
-            'OT',
-            'RT',
-            'EKG',
-            'LPN / LVN',
-            'CNA / SRNA / GNA / LNA / STNA / NAC',
-            'CMA / QMAP / MAPS / LMA / CMT / RMA / UAP / AMAP'
-          ],
+          option: const ['RN', 'MT', 'PST', 'PCT', 'PT', 'OT', 'RT', 'EKG', 'LPN / LVN', 'CNA / SRNA / GNA / LNA / STNA / NAC', 'CMA / QMAP / MAPS / LMA / CMT / RMA / UAP / AMAP'],
           name: 'qualification_type',
           label: 'Qualification Type',
           validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(
-                errorText: 'Qualification type is required'),
+            FormBuilderValidators.required(errorText: 'Qualification type is required'),
           ]),
         ),
         AppTypography(
@@ -227,16 +199,9 @@ class _Step2State extends State<Step2> {
         AppGroupCheckBox(
             name: 'shift',
             validator: FormBuilderValidators.compose([
-              FormBuilderValidators.minLength(1,
-                  errorText: 'At least select one option'),
+              FormBuilderValidators.minLength(1, errorText: 'At least select one option'),
             ]),
-            options: const [
-              'Day Shifts',
-              'Evening Shifts',
-              'Overnight Shifts',
-              'Weekend Shifts',
-              'Weekday Shifts'
-            ]),
+            options: const ['Day Shifts', 'Evening Shifts', 'Overnight Shifts', 'Weekend Shifts', 'Weekday Shifts']),
         const SizedBox(height: 32),
         AppTypography(
           text: 'Please select your amount of licensed work experience below.',
@@ -247,8 +212,7 @@ class _Step2State extends State<Step2> {
         AppGroupRadioBox(
             name: 'experience',
             validator: FormBuilderValidators.compose([
-              FormBuilderValidators.minLength(1,
-                  errorText: 'At least select one option'),
+              FormBuilderValidators.minLength(1, errorText: 'At least select one option'),
             ]),
             options: const ['0 - 3 months', '4 - 6 months', '6+ months']),
         const SizedBox(height: 40),
@@ -271,9 +235,7 @@ class _Step2State extends State<Step2> {
                         });
                       },
                     text: 'Terms of Service',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.primary)),
+                    style: TextStyle(fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.primary)),
                 const TextSpan(text: ' , '),
                 TextSpan(
                     recognizer: TapGestureRecognizer()
@@ -283,9 +245,7 @@ class _Step2State extends State<Step2> {
                         });
                       },
                     text: 'Privacy Policy',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.primary)),
+                    style: TextStyle(fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.primary)),
                 const TextSpan(text: ' and '),
                 TextSpan(
                     recognizer: TapGestureRecognizer()
@@ -295,9 +255,7 @@ class _Step2State extends State<Step2> {
                         });
                       },
                     text: 'SMS Terms of Service',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.primary)),
+                    style: TextStyle(fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.primary)),
               ],
             ),
           ),

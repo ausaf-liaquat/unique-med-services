@@ -4,10 +4,7 @@ import '../../widgets/messages/snack_bar.dart';
 
 class WebRedirect {
   Future<void> privacyPolicy(dynamic context) async {
-    final Uri url = Uri(
-        scheme: 'https',
-        host: 'www.uniquemedsvcs.com',
-        path: 'PRIVACY%20POLICIES.pdf');
+    final Uri url = Uri(scheme: 'https', host: 'www.uniquemedsvcs.com', path: 'PRIVACY%20POLICIES.pdf');
 
     if (!await launchUrl(
       url,
@@ -18,10 +15,7 @@ class WebRedirect {
   }
 
   Future<void> physicalForm(dynamic context) async {
-    final Uri url = Uri(
-        scheme: 'https',
-        host: 'www.uniquemedsvcs.com',
-        path: 'Physical%20Form.pdf');
+    final Uri url = Uri(scheme: 'https', host: 'www.uniquemedsvcs.com', path: 'Physical%20Form.pdf');
 
     if (!await launchUrl(
       url,
@@ -32,10 +26,7 @@ class WebRedirect {
   }
 
   Future<void> annualForm(dynamic context) async {
-    final Uri url = Uri(
-        scheme: 'https',
-        host: 'www.uniquemedsvcs.com',
-        path: 'Annual%20Physical%20Form.pdf');
+    final Uri url = Uri(scheme: 'https', host: 'www.uniquemedsvcs.com', path: 'Annual%20Physical%20Form.pdf');
 
     if (!await launchUrl(
       url,
@@ -46,10 +37,7 @@ class WebRedirect {
   }
 
   Future<void> testForm(dynamic context) async {
-    final Uri url = Uri(
-        scheme: 'https',
-        host: 'www.uniquemedsvcs.com',
-        path: 'TB%20Test%20Results%20form.pdf');
+    final Uri url = Uri(scheme: 'https', host: 'www.uniquemedsvcs.com', path: 'TB%20Test%20Results%20form.pdf');
 
     if (!await launchUrl(
       url,
@@ -60,10 +48,7 @@ class WebRedirect {
   }
 
   Future<void> timeSlip(dynamic context) async {
-    final Uri url = Uri(
-        scheme: 'https',
-        host: 'www.uniquemedsvcs.com',
-        path: 'UMS_Staffing_Timeslip.pdf');
+    final Uri url = Uri(scheme: 'https', host: 'www.uniquemedsvcs.com', path: 'UMS_Staffing_Timeslip.pdf');
 
     if (!await launchUrl(
       url,
@@ -73,12 +58,8 @@ class WebRedirect {
     }
   }
 
-
   Future<void> termsAndConditions(dynamic context) async {
-    final Uri url = Uri(
-        scheme: 'https',
-        host: 'www.uniquemedsvcs.com',
-        path: 'TERMS%20OF%20AGREEMENT.pdf');
+    final Uri url = Uri(scheme: 'https', host: 'www.uniquemedsvcs.com', path: 'TERMS%20OF%20AGREEMENT.pdf');
 
     if (!await launchUrl(
       url,
@@ -89,8 +70,7 @@ class WebRedirect {
   }
 
   Future<void> smsTermsAndConditions(dynamic context) async {
-    final Uri url =
-        Uri(scheme: 'https', host: 'www.gmail.com', path: 'SMS%20TERMS.pdf');
+    final Uri url = Uri(scheme: 'https', host: 'www.gmail.com', path: 'SMS%20TERMS.pdf');
 
     if (!await launchUrl(
       url,
@@ -103,7 +83,7 @@ class WebRedirect {
   Future<void> supportPhoneCall(dynamic context) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
-      path: '8566813887',
+      path: '9415291867',
     );
 
     canLaunchUrl(launchUri).then((bool result) async {
@@ -116,13 +96,7 @@ class WebRedirect {
   }
 
   Future<void> supportEmail(dynamic context) async {
-    final Uri url = Uri(
-        scheme: 'mailto',
-        path: 'support@ums.com',
-        queryParameters: {
-          'subject': '',
-          'body': ''
-        });
+    final Uri url = Uri(scheme: 'mailto', path: 'info@uniquemedsvcs.com', queryParameters: {'subject': '', 'body': ''});
 
     if (!await launchUrl(
       url,

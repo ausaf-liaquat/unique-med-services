@@ -5,260 +5,177 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:ums_staff/core/http.dart';
 import 'package:ums_staff/screens/profile/model.dart';
-import 'package:ums_staff/widgets/card/card.dart';
+import 'package:ums_staff/shared/theme/color.dart';
+import 'package:ums_staff/shared/utils/image_picker.dart';
 import 'package:ums_staff/widgets/card/upload_file.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
-import '../../shared/theme/color.dart';
-import '../../shared/utils/image_picker.dart';
-import '../../widgets/messages/snack_bar.dart';
-import '../../widgets/others/back_layout.dart';
-import '../../widgets/inputs/select_field.dart';
-import '../../widgets/inputs/text_field.dart';
+import 'package:ums_staff/widgets/inputs/text_field.dart';
+import 'package:ums_staff/widgets/messages/snack_bar.dart';
+import 'package:ums_staff/widgets/others/back_layout.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({super.key});
-  static const route = '/profile/edit/123';
+  const EditProfileScreen({Key? key}) : super(key: key);
+  static const route = '/edit-profile';
 
   @override
-  State<EditProfileScreen> createState() => _EditProfileScreenState();
+  _EditProfileScreenState createState() => _EditProfileScreenState();
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   File? _profileImage;
   bool loading = false;
-  void changeSelectValue(String name, String value) {
-    _formKey.currentState!.fields[name]!.didChange(value);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
-    final arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
+    final arguments = (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{}) as Map;
     Profile? profile = arguments['profile'];
+
     return BackLayout(
-        text: 'Edit Profile',
-        page: SingleChildScrollView(
-          child: Container(
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 44),
-              child: FormBuilder(
-                  key: _formKey,
-                  onChanged: () {
-                    _formKey.currentState!.save();
-                  },
-                  autovalidateMode: AutovalidateMode.disabled,
-                  initialValue: {
-                    'first_name': profile?.firstName ?? '',
-                    'last_name': profile?.lastName ?? '',
-                    'qualification_type': profile?.qualificationType ?? '',
-                    'email': profile?.email ?? '',
-                    'phone': profile?.phoneNumber ?? '',
-                    'address': profile?.address ?? '',
-                    'city': profile?.city ?? '',
-                    'state': profile?.state ?? '',
-                    'zip_code': profile?.zipCode ?? ''
-                  },
-                  skipDisabled: true,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const AppTypography(
-                        text: 'Personal',
-                        size: 24,
-                        weight: FontWeight.w500,
-                      ),
-                      const SizedBox(height: 16),
-                      AppTextField(
-                        error: _formKey
-                            .currentState?.fields['first_name']!.errorText,
-                        bottom: 16,
-                        type: TextInputType.name,
-                        name: 'first_name',
-                        label: 'First Name',
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(
-                              errorText: 'First Name is required'),
-                        ]),
-                      ),
-                      AppTextField(
-                        error: _formKey
-                            .currentState?.fields['last_name']!.errorText,
-                        bottom: 16,
-                        type: TextInputType.name,
-                        name: 'last_name',
-                        label: 'Last Name',
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(
-                              errorText: 'Last Name is required'),
-                        ]),
-                      ),
-                      AppTextField(
-                        error:
-                            _formKey.currentState?.fields['email']!.errorText,
-                        bottom: 16,
-                        type: TextInputType.emailAddress,
-                        name: 'email',
-                        label: 'Email',
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(
-                              errorText: 'Email is required'),
-                        ]),
-                      ),
-                      AppTextField(
-                        error:
-                            _formKey.currentState?.fields['phone']!.errorText,
-                        bottom: 28,
-                        type: TextInputType.phone,
-                        name: 'phone',
-                        label: 'Phone Number',
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(
-                              errorText: 'Phone number is required'),
-                        ]),
-                      ),
-                      const AppTypography(
-                        text: 'Location',
-                        size: 24,
-                        weight: FontWeight.w500,
-                      ),
-                      const SizedBox(height: 16),
-                      AppTextField(
-                        error:
-                            _formKey.currentState?.fields['address']!.errorText,
-                        bottom: 16,
-                        type: TextInputType.streetAddress,
-                        name: 'address',
-                        label: 'Address',
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(
-                              errorText: 'Address is required'),
-                        ]),
-                      ),
-                      AppTextField(
-                        error: _formKey.currentState?.fields['city']!.errorText,
-                        bottom: 16,
-                        name: 'city',
-                        label: 'City',
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(
-                              errorText: 'City is required'),
-                        ]),
-                      ),
-                      AppTextField(
-                        error:
-                            _formKey.currentState?.fields['state']!.errorText,
-                        bottom: 16,
-                        name: 'state',
-                        label: 'State',
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(errorText: 'State'),
-                        ]),
-                      ),
-                      AppTextField(
-                        error: _formKey
-                            .currentState?.fields['zip_code']!.errorText,
-                        bottom: 28,
-                        type: TextInputType.number,
-                        name: 'zip_code',
-                        label: 'Zip Code',
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(
-                              errorText: 'Zip code is required'),
-                        ]),
-                      ),
-                      const AppTypography(
-                        text: 'Picture',
-                        size: 24,
-                        weight: FontWeight.w500,
-                      ),
-                      const SizedBox(height: 16),
-                      InkWell(
-                          focusColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          splashColor: Colors.transparent,
-                          onTap: () {
-                            ImagePick.pickerImage(context, (File image) {
-                              setState(() {
-                                _profileImage = image;
-                              });
-                            });
-                          },
-                          child: _profileImage == null
-                              ? Container(
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                      color: AppColorScheme().black0,
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(16)),
-                                      border: Border.all(
-                                        width: 2,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                      )),
-                                  child: Center(
-                                      child: SizedBox(
-                                    width: 140,
-                                    child: AppTypography(
-                                      align: TextAlign.center,
-                                      text: 'Upload Profile Picture',
-                                      size: 16,
-                                      height: 1.4,
-                                      color: AppColorScheme().black60,
-                                    ),
-                                  )),
-                                )
-                              : UploadFileCard(
-                                  file: _profileImage, useImage: true)),
-                      const SizedBox(height: 45),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 26),
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              setState(() {
-                                loading = true;
-                              });
-                              var http = HttpRequest();
-                              var body = {
-                                ..._formKey.currentState?.value ?? {}
-                              };
-                              var formatBody = body.map<String, String>(
-                                  (key, value) =>
-                                      MapEntry(key, value.toString()));
-                              if (_profileImage != null) {
-                                formatBody['pic'] =
-                                    (_profileImage as File).path;
-                              }
-                              http.updateProfile(formatBody).then((value) {
-                                setState(() {
-                                  loading = false;
-                                });
-                                if (value.success == true) {
-                                  SnackBarMessage.successSnackbar(
-                                      context, "Profile updated");
-                                  Navigator.pop(context);
-                                } else {
-                                  SnackBarMessage.errorSnackbar(
-                                      context, value.message);
-                                }
-                              });
-                            } else {
-                              setState(() {});
-                            }
-                          },
-                          icon: const Icon(Icons.save_outlined),
-                          label: const Text('Save Changes'),
-                        ),
-                      )
-                    ],
-                  ))),
-        ));
+      text: 'Edit Profile',
+      page: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(20, 24, 20, 44),
+          child: FormBuilder(
+            key: _formKey,
+            autovalidateMode: AutovalidateMode.disabled,
+            initialValue: {
+              'first_name': profile?.firstName ?? '',
+              'last_name': profile?.lastName ?? '',
+              'qualification_type': profile?.qualificationType ?? '',
+              'email': profile?.email ?? '',
+              'phone': profile?.phoneNumber ?? '',
+              'address': profile?.address ?? '',
+              'city': profile?.city ?? '',
+              'state': profile?.state ?? '',
+              'zip_code': profile?.zipCode ?? ''
+            },
+            skipDisabled: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const AppTypography(
+                  text: 'Personal',
+                  size: 24,
+                  weight: FontWeight.w500,
+                ),
+                const SizedBox(height: 16),
+                buildTextField('first_name', 'First Name', TextInputType.name, 'First Name is required'),
+                buildTextField('last_name', 'Last Name', TextInputType.name, 'Last Name is required'),
+                buildTextField('email', 'Email', TextInputType.emailAddress, 'Email is required'),
+                buildTextField('phone', 'Phone Number', TextInputType.phone, 'Phone number is required'),
+                const AppTypography(
+                  text: 'Location',
+                  size: 24,
+                  weight: FontWeight.w500,
+                ),
+                const SizedBox(height: 16),
+                buildTextField('address', 'Address', TextInputType.streetAddress, 'Address is required'),
+                buildTextField('city', 'City', TextInputType.text, 'City is required'),
+                buildTextField('state', 'State', TextInputType.text, 'State is required'),
+                buildTextField('zip_code', 'Zip Code', TextInputType.number, 'Zip code is required'),
+                const AppTypography(
+                  text: 'Picture',
+                  size: 24,
+                  weight: FontWeight.w500,
+                ),
+                const SizedBox(height: 16),
+                buildProfileImagePicker(),
+                const SizedBox(height: 45),
+                buildSaveButton()
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildTextField(String name, String label, TextInputType type, String errorText) {
+    return AppTextField(
+      error: _formKey.currentState?.fields[name]?.errorText,
+      bottom: 16,
+      type: type,
+      name: name,
+      label: label,
+      validator: FormBuilderValidators.compose([
+        FormBuilderValidators.required(errorText: errorText),
+      ]),
+    );
+  }
+
+  Widget buildProfileImagePicker() {
+    return InkWell(
+      onTap: () {
+        ImagePick.pickerImage(context, (File image) {
+          setState(() {
+            _profileImage = image;
+          });
+        });
+      },
+      child: _profileImage == null
+          ? Container(
+              height: 150,
+              decoration: BoxDecoration(
+                  color: AppColorScheme().black0,
+                  borderRadius: BorderRadius.all(Radius.circular(16)),
+                  border: Border.all(
+                    width: 2,
+                    color: Theme.of(context).colorScheme.secondary,
+                  )),
+              child: Center(
+                  child: SizedBox(
+                width: 140,
+                child: AppTypography(
+                  align: TextAlign.center,
+                  text: 'Upload Profile Picture',
+                  size: 16,
+                  height: 1.4,
+                  color: AppColorScheme().black60,
+                ),
+              )),
+            )
+          : UploadFileCard(file: _profileImage, useImage: true),
+    );
+  }
+
+  Widget buildSaveButton() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 26),
+      child: ElevatedButton.icon(
+        onPressed: () {
+          // Ensure form data is saved to include all fields
+          _formKey.currentState?.save();
+
+          if (_formKey.currentState?.validate() ?? false) {
+            setState(() {
+              loading = true;
+            });
+            var http = HttpRequest();
+            var body = _formKey.currentState?.value ?? {};
+
+            // Convert values to strings and include image path if present
+            var formatBody = body.map<String, String>((key, value) => MapEntry(key, value.toString()));
+            if (_profileImage != null) {
+              formatBody['image'] = (_profileImage as File).path;
+            }
+
+            http.updateProfile(formatBody).then((response) {
+              setState(() {
+                loading = false;
+              });
+              if (response.success) {
+                SnackBarMessage.successSnackbar(context, "Profile updated");
+                Navigator.pop(context);
+              } else {
+                SnackBarMessage.errorSnackbar(context, response.message);
+              }
+            });
+          }
+        },
+        icon: const Icon(Icons.save_outlined),
+        label: const Text('Save Changes'),
+      ),
+    );
   }
 }

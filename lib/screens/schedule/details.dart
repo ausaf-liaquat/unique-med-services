@@ -38,11 +38,9 @@ class _ScheduleDetailScreenState extends State<ScheduleDetailScreen> {
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
     }
-    return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 
   @override
@@ -57,8 +55,7 @@ class _ScheduleDetailScreenState extends State<ScheduleDetailScreen> {
       print(value.toString());
     }).catchError((e) {
       print(e);
-      SnackBarMessage.errorSnackbar(
-          context, "Please allow location to able to clocking");
+      SnackBarMessage.errorSnackbar(context, "Please allow location to able to clocking");
     });
   }
 
@@ -66,8 +63,7 @@ class _ScheduleDetailScreenState extends State<ScheduleDetailScreen> {
   Widget build(BuildContext context) {
     bool midiumDevice = MediaQuery.of(context).size.width >= 350;
     final formKey = GlobalKey<FormBuilderState>();
-    final arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
+    final arguments = (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{}) as Map;
     var register = arguments['shiftModel'] ??
         ShiftModel(
             id: 1,
@@ -97,23 +93,12 @@ class _ScheduleDetailScreenState extends State<ScheduleDetailScreen> {
                 : const SizedBox(),
             Container(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppTypography(
-                        text: register?.title ?? '',
-                        size: 24,
-                        weight: FontWeight.w500),
-                    const SizedBox(height: 24),
-                    SubTitle(
-                        title: 'Location',
-                        subTitle: register.shiftLocation ?? '',
-                        bottom: 40),
-                    SubTitle(
-                        title: 'Timing',
-                        subTitle: register.shiftHour ?? '',
-                        bottom: 40),
-                  ]),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                AppTypography(text: register?.title ?? '', size: 24, weight: FontWeight.w500),
+                const SizedBox(height: 24),
+                SubTitle(title: 'Location', subTitle: register.shiftLocation ?? '', bottom: 40),
+                SubTitle(title: 'Timing', subTitle: register.shiftHour ?? '', bottom: 40),
+              ]),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -128,21 +113,16 @@ class _ScheduleDetailScreenState extends State<ScheduleDetailScreen> {
                               setState(() {
                                 loading = true;
                               });
-                              http.clockin({
-                                'lat': lat.toString(),
-                                'lon': long.toString(),
-                                'location_name':
-                                    register.shiftLocation.toString()
-                              }, register.id).then((value) {
+
+                              http.clockin({'lat': lat.toString(), 'lon': long.toString(), 'location_name': register.shiftLocation.toString()}, register.id).then((value) {
+                                print(register.id);
                                 setState(() {
                                   loading = false;
                                 });
                                 if (!value.success) {
-                                  SnackBarMessage.errorSnackbar(
-                                      context, value.message);
+                                  SnackBarMessage.errorSnackbar(context, value.message);
                                 } else {
-                                  SnackBarMessage.successSnackbar(
-                                      context, "CheckIn is SuccessFull");
+                                  SnackBarMessage.successSnackbar(context, "CheckIn is SuccessFull");
                                 }
                               });
                             },
@@ -165,17 +145,13 @@ class _ScheduleDetailScreenState extends State<ScheduleDetailScreen> {
                                   loading = false;
                                 });
                                 if (!value.success) {
-                                  SnackBarMessage.errorSnackbar(
-                                      context, value.message);
+                                  SnackBarMessage.errorSnackbar(context, value.message);
                                 } else {
-                                  SnackBarMessage.successSnackbar(
-                                      context, "Checkout is SuccessFull");
+                                  SnackBarMessage.successSnackbar(context, "Checkout is SuccessFull");
                                 }
                               });
                             },
-                      child: loading
-                          ? CircularProgressIndicator()
-                          : const Text('clock out'))
+                      child: loading ? CircularProgressIndicator() : const Text('clock out'))
                 ],
               ),
             )

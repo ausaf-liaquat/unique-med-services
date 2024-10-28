@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:ums_staff/core/http.dart';
+import 'package:ums_staff/screens/document/models.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/inputs/text_field.dart';
 import 'package:ums_staff/widgets/messages/snack_bar.dart';
@@ -73,11 +74,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
             child: Column(children: [
               RichText(
                 text: TextSpan(
-                  style: TextStyle(
-                      fontSize: 14,
-                      height: 1.4,
-                      color: AppColorScheme().black90,
-                      letterSpacing: 0.1),
+                  style: TextStyle(fontSize: 14, height: 1.4, color: AppColorScheme().black90, letterSpacing: 0.1),
                   children: [
                     WidgetSpan(
                         child: Padding(
@@ -88,18 +85,13 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                         size: 19,
                       ),
                     )),
-                    const TextSpan(
-                        text: 'Note: ',
-                        style: TextStyle(fontWeight: FontWeight.w600)),
-                    const TextSpan(
-                        text:
-                            'Uploaded documents will be verified by  staff member before they are visible to both nurses and facilities'),
+                    const TextSpan(text: 'Note: ', style: TextStyle(fontWeight: FontWeight.w600)),
+                    const TextSpan(text: 'Uploaded documents will be verified by  staff member before they are visible to both nurses and facilities'),
                   ],
                 ),
               ),
               Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 40),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 40),
                   child: FormBuilder(
                     key: _formKey,
                     onChanged: () {
@@ -115,8 +107,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                     child: Column(
                       children: [
                         AppSelectField(
-                          error: _formKey.currentState
-                              ?.fields['document_type_id']?.errorText,
+                          error: _formKey.currentState?.fields['document_type_id']?.errorText,
                           title: 'What is your document type?',
                           bottom: 20,
                           onSelect: changeSelectValue,
@@ -129,12 +120,8 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                           name: 'title',
                           label: "Title",
                           bottom: 20,
-                          error:
-                              _formKey.currentState?.fields['title']?.errorText,
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(
-                                errorText: 'Title is required')
-                          ]),
+                          error: _formKey.currentState?.fields['title']?.errorText,
+                          validator: FormBuilderValidators.compose([FormBuilderValidators.required(errorText: 'Title is required')]),
                         ),
                         const AppTextField(
                           type: TextInputType.multiline,
@@ -170,9 +157,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                           });
                         },
                         icon: const Icon(Icons.wallpaper_outlined),
-                        label: Text(_image == null
-                            ? 'SELECT DOCUMENT'
-                            : 'RESELECT DOCUMENT')),
+                        label: Text(_image == null ? 'SELECT DOCUMENT' : 'RESELECT DOCUMENT')),
                     const SizedBox(height: 24),
                     _image == null
                         ? const SizedBox()
@@ -180,25 +165,17 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                             onPressed: loading
                                 ? null
                                 : () {
-                                    if (_formKey.currentState?.validate() ??
-                                        false) {
-                                      var body = {
-                                        ..._formKey.currentState?.value ?? {}
-                                      };
-                                      var formatBody = body
-                                          .map<String, String>((key, value) {
-                                        if (key == 'document_type') {
-                                          var dt = docTypeList.firstWhere(
-                                              (element) =>
-                                                  element.name == value);
-                                          return MapEntry(
-                                              key, dt.id.toString());
+                                    if (_formKey.currentState?.validate() ?? false) {
+                                      var body = {..._formKey.currentState?.value ?? {}};
+                                      var formatBody = body.map<String, String>((key, value) {
+                                        if (key == 'document_type_id') {
+                                          var dt = docTypeList.firstWhere((element) => element.name == value);
+                                          return MapEntry(key, dt.id.toString());
                                         }
                                         return MapEntry(key, value.toString());
                                       });
                                       if (_image != null) {
-                                        formatBody['file'] =
-                                            (_image as File).path;
+                                        formatBody['file'] = (_image as File).path;
                                       }
                                       var http = HttpRequest();
                                       setState(() {
@@ -209,13 +186,23 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                                           loading = false;
                                         });
                                         if (value.success == true) {
-                                          SnackBarMessage.successSnackbar(
-                                              context,
-                                              "File Upload SuccessFully");
+                                          SnackBarMessage.successSnackbar(context, "File Upload SuccessFully");
+
                                           Navigator.pop(context);
+                                          http.docs().then((value) {
+                                            if (!value.success) {
+                                              SnackBarMessage.errorSnackbar(context, value.message);
+                                            } else {
+                                              var docType = value.data['data']['documents'];
+                                              if (docType != null) {
+                                                setState(() {
+                                                  docTypeList = DocType.getList(docType);
+                                                });
+                                              }
+                                            }
+                                          });
                                         } else {
-                                          SnackBarMessage.errorSnackbar(
-                                              context, value.message);
+                                          SnackBarMessage.errorSnackbar(context, value.message);
                                         }
                                       });
                                     }

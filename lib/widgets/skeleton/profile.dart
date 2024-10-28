@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:skeletons/skeletons.dart';
+import 'package:flutter_skeleton_plus/flutter_skeleton_plus.dart';
 import 'package:ums_staff/widgets/skeleton/row_item.dart';
 
 import '../../shared/theme/color.dart';
@@ -22,27 +22,20 @@ class ProfileSkeleton extends StatelessWidget {
                     padding: const EdgeInsets.all(4),
                     height: 150,
                     width: 96,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: AppColorScheme().black0,
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.02),
-                            blurRadius: 6,
-                          ),
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ]),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: AppColorScheme().black0, boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.02),
+                        blurRadius: 6,
+                      ),
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.08),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ]),
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: const SkeletonAvatar(
-                            style: SkeletonAvatarStyle(
-                                width: 88,
-                                height: 142,
-                                borderRadius: BorderRadius.zero)))),
+                        child: const SkeletonAvatar(style: SkeletonAvatarStyle(width: 88, height: 142, borderRadius: BorderRadius.zero)))),
                 const SizedBox(width: 19),
                 Expanded(
                     child: Column(
@@ -58,11 +51,7 @@ class ProfileSkeleton extends StatelessWidget {
                           style: SkeletonParagraphStyle(
                             padding: EdgeInsets.zero,
                             lines: 1,
-                            lineStyle: SkeletonLineStyle(
-                                randomLength: true,
-                                width: MediaQuery.of(context).size.width / 3,
-                                height: 15,
-                                borderRadius: BorderRadius.circular(6)),
+                            lineStyle: SkeletonLineStyle(randomLength: true, width: MediaQuery.of(context).size.width / 3, height: 15, borderRadius: BorderRadius.circular(6)),
                           ),
                         ),
                       ],
@@ -73,26 +62,11 @@ class ProfileSkeleton extends StatelessWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
-                          SkeletonAvatar(
-                              style: SkeletonAvatarStyle(
-                                  width: 90,
-                                  height: 95,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(22)))),
+                          SkeletonAvatar(style: SkeletonAvatarStyle(width: 90, height: 95, borderRadius: BorderRadius.all(Radius.circular(22)))),
                           SizedBox(width: 13),
-                          SkeletonAvatar(
-                              style: SkeletonAvatarStyle(
-                                  width: 90,
-                                  height: 95,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(22)))),
+                          SkeletonAvatar(style: SkeletonAvatarStyle(width: 90, height: 95, borderRadius: BorderRadius.all(Radius.circular(22)))),
                           SizedBox(width: 13),
-                          SkeletonAvatar(
-                              style: SkeletonAvatarStyle(
-                                  width: 90,
-                                  height: 95,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(22)))),
+                          SkeletonAvatar(style: SkeletonAvatarStyle(width: 90, height: 95, borderRadius: BorderRadius.all(Radius.circular(22)))),
                         ],
                       ),
                     )

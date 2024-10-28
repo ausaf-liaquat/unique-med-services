@@ -58,10 +58,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     return const DocumentSkeleton();
                   },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      Container(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: const Divider()),
+                  separatorBuilder: (BuildContext context, int index) => Container(padding: const EdgeInsets.symmetric(vertical: 16), child: const Divider()),
                 )
               : listDoc.isEmpty
                   ? Center(
@@ -72,8 +69,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
                             width: 280,
                           ),
                           const SizedBox(height: 28),
-                          const AppTypography(
-                              text: 'Document not uploaded yet!', size: 18)
+                          const AppTypography(text: 'Document not uploaded yet!', size: 18)
                         ],
                       ),
                     )
@@ -86,10 +82,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
                           doc: listDoc.elementAt(index),
                         );
                       },
-                      separatorBuilder: (BuildContext context, int index) =>
-                          Container(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              child: const Divider()),
+                      separatorBuilder: (BuildContext context, int index) => Container(padding: const EdgeInsets.symmetric(vertical: 16), child: const Divider()),
                     )
         ],
       ),

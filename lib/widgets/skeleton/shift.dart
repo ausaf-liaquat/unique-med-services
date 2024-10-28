@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:skeletons/skeletons.dart';
+import 'package:flutter_skeleton_plus/flutter_skeleton_plus.dart';
 import 'package:ums_staff/widgets/skeleton/row_item.dart';
 
 class ShiftSkeleton extends StatelessWidget {
@@ -14,10 +14,7 @@ class ShiftSkeleton extends StatelessWidget {
           style: SkeletonParagraphStyle(
             padding: EdgeInsets.zero,
             lines: 1,
-            lineStyle: SkeletonLineStyle(
-                width: MediaQuery.of(context).size.width / 1.6,
-                height: 16,
-                borderRadius: BorderRadius.circular(6)),
+            lineStyle: SkeletonLineStyle(width: MediaQuery.of(context).size.width / 1.6, height: 16, borderRadius: BorderRadius.circular(6)),
           ),
         ),
         const SizedBox(height: 10),
@@ -26,11 +23,7 @@ class ShiftSkeleton extends StatelessWidget {
             padding: EdgeInsets.zero,
             spacing: 6,
             lines: 2,
-            lineStyle: SkeletonLineStyle(
-                randomLength: true,
-                minLength: MediaQuery.of(context).size.width / 1.5,
-                height: 12,
-                borderRadius: BorderRadius.circular(6)),
+            lineStyle: SkeletonLineStyle(randomLength: true, minLength: MediaQuery.of(context).size.width / 1.5, height: 12, borderRadius: BorderRadius.circular(6)),
           ),
         ),
         const SizedBox(height: 24),

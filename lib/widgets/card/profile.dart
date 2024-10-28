@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:skeletons/skeletons.dart';
+import 'package:flutter_skeleton_plus/flutter_skeleton_plus.dart';
 import 'package:ums_staff/widgets/card/card.dart';
 
 import '../../screens/profile/model.dart';
@@ -30,6 +30,12 @@ class ProfileCard extends StatelessWidget {
                     height: 150,
                     width: 96,
                     decoration: BoxDecoration(
+                        image: profile?.imageUrl != null
+                            ? DecorationImage(
+                                image: CachedNetworkImageProvider(profile?.imageUrl ?? ''),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
                         borderRadius: BorderRadius.circular(100),
                         color: AppColorScheme().black0,
                         boxShadow: <BoxShadow>[
@@ -43,33 +49,35 @@ class ProfileCard extends StatelessWidget {
                             offset: const Offset(0, 2),
                           ),
                         ]),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Container(
-                          color: AppColorScheme().black6,
-                          child: Image.asset(
-                            'assets/images/defult-profile.jpg',
-                            fit: BoxFit.cover,
-                          )
-                          // profile?.imageUrl != null
-                          //     ? CachedNetworkImage(
-                          //         placeholder: (context, url) =>
-                          //             const SkeletonAvatar(
-                          //           style: SkeletonAvatarStyle(
-                          //               width: 88,
-                          //               height: 142,
-                          //               borderRadius: BorderRadius.zero),
-                          //         ),
-                          //         fit: BoxFit.cover,
-                          //         imageUrl: profile?.imageUrl ?? '',
-                          //       )
-                          //     :
-                          // Image.asset(
-                          //         'assets/images/default-profile.jpg',
-                          //         fit: BoxFit.cover,
-                          //       ),
-                          ),
-                    )),
+                    child: profile?.imageUrl != null
+                        ? null
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Container(
+                                color: AppColorScheme().black6,
+                                child: Image.asset(
+                                  'assets/images/defult-profile.jpg',
+                                  fit: BoxFit.cover,
+                                )
+                                // profile?.imageUrl != null
+                                //     ? CachedNetworkImage(
+                                //         placeholder: (context, url) =>
+                                //             const SkeletonAvatar(
+                                //           style: SkeletonAvatarStyle(
+                                //               width: 88,
+                                //               height: 142,
+                                //               borderRadius: BorderRadius.zero),
+                                //         ),
+                                //         fit: BoxFit.cover,
+                                //         imageUrl: profile?.imageUrl ?? '',
+                                //       )
+                                //     :
+                                // Image.asset(
+                                //         'assets/images/default-profile.jpg',
+                                //         fit: BoxFit.cover,
+                                //       ),
+                                ),
+                          )),
                 const SizedBox(width: 19),
                 Expanded(
                     child: Column(
@@ -83,8 +91,7 @@ class ProfileCard extends StatelessWidget {
                         const SizedBox(height: 8),
                         AppTypography(
                           overflow: TextOverflow.ellipsis,
-                          text:
-                              '${profile?.firstName ?? ''} ${profile?.lastName ?? ''}',
+                          text: '${profile?.firstName ?? ''} ${profile?.lastName ?? ''}',
                           size: 20,
                           weight: FontWeight.w500,
                         ),
@@ -96,21 +103,11 @@ class ProfileCard extends StatelessWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ProfileShiftData(
-                              quentity: ((profile?.completedShifts ?? 0) +
-                                      (profile?.unCompletedShifts ?? 0))
-                                  .toString(),
-                              title: 'Assigned Shifts'),
+                          ProfileShiftData(quentity: ((profile?.completedShifts ?? 0) + (profile?.unCompletedShifts ?? 0)).toString(), title: 'Assigned Shifts'),
                           const SizedBox(width: 13),
-                          ProfileShiftData(
-                              quentity:
-                                  (profile?.completedShifts ?? 0).toString(),
-                              title: 'Complete Shifts'),
+                          ProfileShiftData(quentity: (profile?.completedShifts ?? 0).toString(), title: 'Complete Shifts'),
                           const SizedBox(width: 13),
-                          ProfileShiftData(
-                              quentity:
-                                  (profile?.unCompletedShifts ?? 0).toString(),
-                              title: 'UnComplete Shifts'),
+                          ProfileShiftData(quentity: (profile?.unCompletedShifts ?? 0).toString(), title: 'UnComplete Shifts'),
                         ],
                       ),
                     )
@@ -124,36 +121,26 @@ class ProfileCard extends StatelessWidget {
                 children: [
                   RowItem(
                     icon: Icons.call_outlined,
-                    text: '+123456789',
+                    text: "+${profile!.phoneNumber}",
                     bottom: 16,
                   ),
-                  RowItem(
-                      icon: Icons.location_on_outlined,
-                      bottom: 16,
-                      text: '132, My Street, Kingston, New York'),
-                  RowItem(
-                      icon: Icons.call_outlined,
-                      bottom: 16,
-                      text: '+123456789'),
+                  profile!.address != null ? RowItem(icon: Icons.location_on_outlined, bottom: 16, text: profile!.address ?? '') : Container(),
+                  RowItem(icon: Icons.call_outlined, bottom: 16, text: '+${profile!.phoneNumber}'),
                   Row(
                     children: [
-                      Expanded(
-                          child: RowItem(
-                              icon: Icons.apartment_outlined,
-                              bottom: 16,
-                              text: 'USA')),
+                      Expanded(child: RowItem(icon: Icons.apartment_outlined, bottom: 16, text: profile!.state ?? '')),
                       SizedBox(width: 6),
                       Expanded(
                           child: RowItem(
                         icon: Icons.villa_outlined,
-                        text: 'New York',
+                        text: profile!.city ?? '',
                         bottom: 16,
                       ))
                     ],
                   ),
                   RowItem(
                     icon: Icons.map_outlined,
-                    text: '12401',
+                    text: profile!.zipCode ?? '',
                     bottom: 16,
                   ),
                 ],
@@ -165,8 +152,7 @@ class ProfileCard extends StatelessWidget {
 }
 
 class ProfileShiftData extends StatelessWidget {
-  const ProfileShiftData(
-      {super.key, required this.title, required this.quentity});
+  const ProfileShiftData({super.key, required this.title, required this.quentity});
   final String title;
   final String quentity;
 
@@ -183,11 +169,7 @@ class ProfileShiftData extends StatelessWidget {
         children: [
           AppTypography(text: quentity, size: 18, weight: FontWeight.w500),
           const SizedBox(height: 4),
-          AppTypography(
-              align: TextAlign.center,
-              text: title,
-              size: 14,
-              weight: FontWeight.w500)
+          AppTypography(align: TextAlign.center, text: title, size: 14, weight: FontWeight.w500)
         ],
       ),
     );

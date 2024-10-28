@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:skeletons/skeletons.dart';
+import 'package:flutter_skeleton_plus/flutter_skeleton_plus.dart';
 
 class RowItemSkeleton extends StatelessWidget {
   const RowItemSkeleton({Key? key, this.minLength, this.maxLength}) : super(key: key);
@@ -17,12 +17,7 @@ class RowItemSkeleton extends StatelessWidget {
             style: SkeletonParagraphStyle(
               padding: EdgeInsets.zero,
               lines: 1,
-              lineStyle: SkeletonLineStyle(
-                  randomLength: true,
-                  minLength: minLength,
-                  maxLength: maxLength,
-                  height: 12,
-                  borderRadius: BorderRadius.circular(6)),
+              lineStyle: SkeletonLineStyle(randomLength: true, minLength: minLength, maxLength: maxLength, height: 12, borderRadius: BorderRadius.circular(6)),
             ),
           ),
         ),

@@ -45,9 +45,7 @@ class _ContactAccordionState extends State<ContactAccordion> {
                     bottomLine: '6 AM to 10 PM MST',
                   ),
                 ),
-                Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: const Divider()),
+                Container(padding: const EdgeInsets.symmetric(vertical: 10), child: const Divider()),
                 AppLink(
                     onTap: () {
                       setState(() {
@@ -59,13 +57,11 @@ class _ContactAccordionState extends State<ContactAccordion> {
                       topLine: 'Email Support',
                       bottomLine: 'At your convenience',
                     )),
-                Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: const Divider()),
+                Container(padding: const EdgeInsets.symmetric(vertical: 10), child: const Divider()),
                 const ContactItem(
                   imagePath: 'assets/images/office-address.png',
                   topLine: 'Office Address',
-                  bottomLine: 'P.O. Box 3421 Riverview, FL 33568',
+                  bottomLine: '514 Americas Way PMB 22605 Box Elder, SD 57719',
                 ),
               ]),
         ));
@@ -73,11 +69,7 @@ class _ContactAccordionState extends State<ContactAccordion> {
 }
 
 class ContactItem extends StatelessWidget {
-  const ContactItem(
-      {super.key,
-      required this.imagePath,
-      required this.topLine,
-      required this.bottomLine});
+  const ContactItem({super.key, required this.imagePath, required this.topLine, required this.bottomLine});
   final String imagePath;
   final String topLine;
   final String bottomLine;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:skeletons/skeletons.dart';
+import 'package:flutter_skeleton_plus/flutter_skeleton_plus.dart';
 import 'package:ums_staff/widgets/skeleton/row_item.dart';
 
 import '../card/card.dart';
@@ -15,14 +15,8 @@ class DocumentSkeleton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const ClipRRect(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    bottomLeft: Radius.circular(12)),
-                child: SkeletonAvatar(
-                    style: SkeletonAvatarStyle(
-                        width: 75,
-                        height: 75,
-                        borderRadius: BorderRadius.zero))),
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(12), bottomLeft: Radius.circular(12)),
+                child: SkeletonAvatar(style: SkeletonAvatarStyle(width: 75, height: 75, borderRadius: BorderRadius.zero))),
             const SizedBox(width: 24),
             Expanded(
                 child: Column(
@@ -33,11 +27,7 @@ class DocumentSkeleton extends StatelessWidget {
                   style: SkeletonParagraphStyle(
                     padding: EdgeInsets.zero,
                     lines: 1,
-                    lineStyle: SkeletonLineStyle(
-                        randomLength: true,
-                        width: MediaQuery.of(context).size.width / 2,
-                        height: 16,
-                        borderRadius: BorderRadius.circular(6)),
+                    lineStyle: SkeletonLineStyle(randomLength: true, width: MediaQuery.of(context).size.width / 2, height: 16, borderRadius: BorderRadius.circular(6)),
                   ),
                 ),
                 const SizedBox(height: 8),

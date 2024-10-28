@@ -22,8 +22,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(seconds: 0))
-        .then((value) => {FlutterNativeSplash.remove()});
+    Future.delayed(const Duration(seconds: 0)).then((value) => {FlutterNativeSplash.remove()});
   }
 
   @override
