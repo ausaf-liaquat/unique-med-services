@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:localstorage/localstorage.dart';
 import 'package:ums_staff/core/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:ums_staff/screens/shift/clinicianTypesModel.dart';
 
 class HttpRequest extends BaseHttpRequest {
   Future<ResponseBody> login(dynamic body) {
@@ -65,42 +66,38 @@ class HttpRequest extends BaseHttpRequest {
 
   // shift filters
 
-  shiftFilters({
-    String? date,
-    String? type,
-    String? shift_hour,
-  }) async {
-    // var token = await getToken();
-    // var headers = {'Accept': 'application/json', 'Authorization': 'Bearer $token'};
-    // var url = Uri.https(Constants.baseUrl, 'api/v1/shifts/filter');
-    // var request = http.MultipartRequest('POST', url);
+  shiftFilters({String? date, String? type, String? shift_hour, String? location}) async {
+    var token = await getToken();
+    var headers = {'Accept': 'application/json', 'Authorization': 'Bearer $token'};
+    var url = Uri.https(Constants.baseUrl, 'api/v1/shifts/filter');
+    var request = http.MultipartRequest('POST', url);
 
-    // request.fields.addAll({
-    //   if (date != null) 'date': date,
-    //   if (type != null) 'type': type,
-    //   if (shift_hour != null) 'shift_hour': shift_hour,
-    // });
+    request.fields.addAll({
+      if (date != null) 'date': date,
+      if (type != null) 'type': type,
+      if (shift_hour != null) 'shift_hour': shift_hour,
+    });
 
-    // request.headers.addAll(headers);
+    request.headers.addAll(headers);
 
-    // http.StreamedResponse response = await request.send();
+    http.StreamedResponse response = await request.send();
 
-    // if (response.statusCode == 200) {
-    //   print(await response.stream.bytesToString());
-    // } else {
-    //   print(response.reasonPhrase);
-    // }
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+    }
 
-    print("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY ${date != null ? "date: $date" : ""} ${type != null ? "type: $type" : ""} ${shift_hour != null ? "shift_hour: $shift_hour" : ""}");
-    return post(
-        'api/v1/shifts/filter',
-        {
-          if (date != null) 'date': date,
-          if (type != null) 'type': type,
-          if (shift_hour != null) 'shift_hour': shift_hour,
-        },
-        null,
-        false);
+    // return post(
+    //     'api/v1/shifts/filter',
+    //     {
+    //       if (date != null) 'date': date,
+    //       if (type != null) 'type': type,
+    //       if (shift_hour != null) 'shift_hour': shift_hour,
+    //       if (location != null) 'location': location,
+    //     },
+    //     null,
+    //     false);
   }
 
   Future<ResponseBody> getStripLogin() {
@@ -112,7 +109,8 @@ class HttpRequest extends BaseHttpRequest {
   }
 
   Future<ResponseBody> shiftsDecline(String id) {
-    return post('api/v1/shift/$id/accept', {"": ""}, null, false);
+    print("^^^^^^^^^^^^^^^^^^^^^^ $id");
+    return post('api/v1/shift/$id/decline', {"": ""}, null, false);
   }
 
   Future<ResponseBody> verify(dynamic body) async {

@@ -66,19 +66,20 @@ class _ScheduleDetailScreenState extends State<ScheduleDetailScreen> {
     final arguments = (ModalRoute.of(context)?.settings.arguments ?? <String, dynamic>{}) as Map;
     var register = arguments['shiftModel'] ??
         ShiftModel(
-            id: 1,
-            title: '',
-            createdAt: '',
-            additionalComments: '',
-            clinicianType: '',
-            date: '',
-            ratePerHour: '',
-            shiftHour: '',
-            shiftLocation: '',
-            shiftNote: '',
-            totalAmount: '',
-            updatedAt: '',
-            userId: '');
+          id: 1,
+          title: '',
+          createdAt: '',
+          additionalComments: '',
+          clinicianType: '',
+          date: '',
+          ratePerHour: '',
+          shiftHour: '',
+          shiftLocation: '',
+          shiftNote: '',
+          totalAmount: '',
+          updatedAt: '',
+          userId: '',
+        );
     return BackLayout(
       text: 'SHIFT',
       page: SingleChildScrollView(

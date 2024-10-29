@@ -72,10 +72,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
             child: Column(
               children: [
-                CalendarCard(
-                    focusedDay: todate,
-                    changeDate: changeDate,
-                    timeSet: timeSet),
+                CalendarCard(focusedDay: todate, changeDate: changeDate, timeSet: timeSet),
                 const SizedBox(height: 24),
                 AppCard(
                   child: Column(
@@ -87,10 +84,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         weight: FontWeight.w600,
                         spacing: 0.4,
                       ),
-                      Container(
-                          padding: const EdgeInsets.symmetric(vertical: 24),
-                          child: Divider(
-                              color: Theme.of(context).colorScheme.secondary)),
+                      Container(padding: const EdgeInsets.symmetric(vertical: 24), child: Divider(color: Theme.of(context).colorScheme.secondary)),
                       loading
                           ? ListView.separated(
                               itemCount: 2,
@@ -99,12 +93,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                               itemBuilder: (BuildContext context, int index) {
                                 return const ShiftSkeleton();
                               },
-                              separatorBuilder:
-                                  (BuildContext context, int index) =>
-                                      Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 16),
-                                          child: const Divider()),
+                              separatorBuilder: (BuildContext context, int index) => Container(padding: const EdgeInsets.symmetric(vertical: 16), child: const Divider()),
                             )
                           : listShift.isEmpty
                               ? Column(
@@ -121,25 +110,17 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                   itemCount: listShift.length,
                                   physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
+                                  itemBuilder: (BuildContext context, int index) {
+                                    print("XXXXXXXXXXXXXXXXXXXXXXXXX ${listShift.elementAt(index).userShiftModel.toString()}");
                                     return AppLink(
                                         path: ScheduleDetailScreen.route,
-                                        params: {
-                                          "shiftModel":
-                                              listShift.elementAt(index)
-                                        },
+                                        params: {"shiftModel": listShift.elementAt(index)},
                                         child: JobShift(
                                           accept: true,
                                           shift: listShift.elementAt(index),
                                         ));
                                   },
-                                  separatorBuilder: (BuildContext context,
-                                          int index) =>
-                                      Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 16),
-                                          child: const Divider()),
+                                  separatorBuilder: (BuildContext context, int index) => Container(padding: const EdgeInsets.symmetric(vertical: 16), child: const Divider()),
                                 )
                     ],
                   ),
