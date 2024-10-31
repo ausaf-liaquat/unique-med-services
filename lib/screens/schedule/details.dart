@@ -101,63 +101,65 @@ class _ScheduleDetailScreenState extends State<ScheduleDetailScreen> {
                 SubTitle(title: 'Timing', subTitle: register.shiftHour ?? '', bottom: 40),
               ]),
             ),
-            register.shiftClinicians != null
-                ? Container()
-                : Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                            onPressed: loading
-                                ? () {}
-                                : () {
-                                    var http = HttpRequest();
-                                    setState(() {
-                                      loading = true;
-                                    });
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  register.shiftClinicians?.first.clockin != ''
+                      ? Container()
+                      : ElevatedButton(
+                          onPressed: loading
+                              ? () {}
+                              : () {
+                                  var http = HttpRequest();
+                                  setState(() {
+                                    loading = true;
+                                  });
 
-                                    http.clockin({'lat': lat.toString(), 'lon': long.toString(), 'location_name': register.shiftLocation.toString()}, register.id).then((value) {
-                                      print(register.id);
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                      if (!value.success) {
-                                        SnackBarMessage.errorSnackbar(context, value.message);
-                                      } else {
-                                        SnackBarMessage.successSnackbar(context, "CheckIn is SuccessFull");
-                                      }
-                                    });
-                                  },
-                            child: loading
-                                ? CircularProgressIndicator(
-                                    color: AppColorScheme().black0,
-                                  )
-                                : const Text('clock in')),
-                        SizedBox(height: 24),
-                        OutlinedButton(
-                            onPressed: loading
-                                ? () {}
-                                : () {
-                                    var http = HttpRequest();
+                                  http.clockin({'lat': lat.toString(), 'lon': long.toString(), 'location_name': register.shiftLocation.toString()}, register.id).then((value) {
+                                    print(register.id);
                                     setState(() {
-                                      loading = true;
+                                      loading = false;
                                     });
-                                    http.clockout(register.id).then((value) {
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                      if (!value.success) {
-                                        SnackBarMessage.errorSnackbar(context, value.message);
-                                      } else {
-                                        SnackBarMessage.successSnackbar(context, "Checkout is SuccessFull");
-                                      }
+                                    if (!value.success) {
+                                      SnackBarMessage.errorSnackbar(context, value.message);
+                                    } else {
+                                      SnackBarMessage.successSnackbar(context, "CheckIn is SuccessFull");
+                                    }
+                                  });
+                                },
+                          child: loading
+                              ? CircularProgressIndicator(
+                                  color: AppColorScheme().black0,
+                                )
+                              : const Text('clock in')),
+                  SizedBox(height: 24),
+                  register.shiftClinicians?.first.clockout != ''
+                      ? Container()
+                      : OutlinedButton(
+                          onPressed: loading
+                              ? () {}
+                              : () {
+                                  var http = HttpRequest();
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                  http.clockout(register.id).then((value) {
+                                    setState(() {
+                                      loading = false;
                                     });
-                                  },
-                            child: loading ? CircularProgressIndicator() : const Text('clock out'))
-                      ],
-                    ),
-                  )
+                                    if (!value.success) {
+                                      SnackBarMessage.errorSnackbar(context, value.message);
+                                    } else {
+                                      SnackBarMessage.successSnackbar(context, "Checkout is SuccessFull");
+                                    }
+                                  });
+                                },
+                          child: loading ? CircularProgressIndicator() : const Text('clock out'))
+                ],
+              ),
+            )
           ],
         ),
       ),
