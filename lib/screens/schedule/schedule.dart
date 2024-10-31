@@ -111,7 +111,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                   physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   itemBuilder: (BuildContext context, int index) {
-                                    print("XXXXXXXXXXXXXXXXXXXXXXXXX ${listShift.elementAt(index).userShiftModel.toString()}");
+                                    print("XXXXXXXXXXXXXXXXXXXXXXXXX ${listShift.elementAt(index).shiftClinicians.toString()}");
                                     return AppLink(
                                         path: ScheduleDetailScreen.route,
                                         params: {"shiftModel": listShift.elementAt(index)},
