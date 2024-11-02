@@ -22,22 +22,58 @@ class _ShiftDetailScreenState extends State<ShiftDetailScreen> {
   bool loading = false;
   accept(String id, bool accept, BuildContext context) {
     var http = HttpRequest();
-    setState(() {
-      loading = true;
-    });
-    (accept ? http.shiftsAccept(id) : http.shiftsDecline(id)).then((value) {
+    if (mounted) {
       setState(() {
-        loading = false;
+        loading = true;
       });
+    }
+
+    (accept ? http.shiftsAccept(id) : http.shiftsDecline(id)).then((value) {
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
+
       if (!value.success) {
         SnackBarMessage.errorSnackbar(context, value.message);
       } else {
         if (accept) {
-          SnackBarMessage.successSnackbar(context, 'Shift have been Accepted');
+          SnackBarMessage.successSnackbar(context, 'Shift has been accepted');
         } else {
-          SnackBarMessage.waringSnackbar(context, 'Shift have been Rejected');
+          SnackBarMessage.waringSnackbar(context, 'Shift has been rejected');
         }
-        Navigator.pop(context);
+
+        if (mounted) {
+          setState(() {
+            loading = true;
+          });
+        }
+
+        http.shifts().then((value) {
+          if (mounted) {
+            setState(() {
+              loading = false;
+            });
+          }
+
+          if (!value.success) {
+            SnackBarMessage.errorSnackbar(context, value.message);
+          } else {
+            var docType = value.data['data']['shifts'];
+            print("Shifts: $docType");
+
+            if (docType != null && mounted) {
+              setState(() {
+                ShiftModel.listShiftModels(docType);
+              });
+            }
+          }
+        });
+
+        if (mounted) {
+          Navigator.pop(context);
+        }
       }
     });
   }
@@ -89,7 +125,7 @@ class _ShiftDetailScreenState extends State<ShiftDetailScreen> {
                                   onPressed: loading
                                       ? null
                                       : () {
-                                          accept(register.id.toString(), false, context).then((value) {});
+                                          accept(register.id.toString(), false, context);
                                         },
                                   icon: const Icon(Icons.thumb_down_outlined),
                                   label: loading ? const CircularProgressIndicator() : const Text('Decline'))),

@@ -31,6 +31,9 @@ class _ShiftScreenState extends State<ShiftScreen> {
   List<shiftHours.ClincianTypes> listShiftHours = [];
   TextEditingController searchController = TextEditingController();
   Timer? onStoppedTyping;
+  int? selectedDateIndex;
+  int? selectedTypeIndex;
+  int? selectedHourIndex;
 
   void _onChangeHandler(String value) {
     if (onStoppedTyping?.isActive ?? false) {
@@ -220,7 +223,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
                       child: Column(
                         children: [
                           FilterRow(context),
-                        //  const SizedBox(height: 16),
+                          //  const SizedBox(height: 16),
                           const SizedBox(height: 24),
                           Image.asset(
                             'assets/images/no-shift.png',
@@ -242,7 +245,9 @@ class _ShiftScreenState extends State<ShiftScreen> {
                           itemBuilder: (BuildContext context, int index) {
                             return AppCard(
                               path: ShiftDetailScreen.route,
-                              args: {'shiftModel': listShift.elementAt(index)},
+                              args: {
+                                'shiftModel': listShift.elementAt(index),
+                              },
                               child: JobShift(shift: listShift.elementAt(index)),
                             );
                           },
@@ -274,7 +279,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // search field
+                        // Date Filter
                         const SizedBox(height: 16),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -325,13 +330,13 @@ class _ShiftScreenState extends State<ShiftScreen> {
                             ),
                             onChanged: _onChangeHandler),
                         const SizedBox(height: 16),
-                        const Text("Filter By Date :", style: TextStyle(fontSize: 16)),
+                        const Text("Filter By Date:", style: TextStyle(fontSize: 16)),
                         ListTile(
                           leading: const Icon(Icons.filter_alt_outlined, color: Colors.blue),
                           title: const Text("Select Date"),
+                          selected: selectedDateIndex == 0,
+                          selectedTileColor: Colors.blue[50],
                           onTap: () {
-                            // open date picker
-
                             showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
@@ -339,93 +344,63 @@ class _ShiftScreenState extends State<ShiftScreen> {
                               lastDate: DateTime(2025),
                             ).then((value) {
                               if (value != null) {
-                                shiftFilters(
-                                  date: value.toString().split(" ")[0],
-                                );
-                                // var http = HttpRequest();
-                                // http
-                                //     .shiftFilters(
-                                //   date: value.toString().split(" ")[0],
-                                // )
-                                //     .then((value) {
-                                //   if (!value.success) {
-                                //     SnackBarMessage.errorSnackbar(context, value.message);
-                                //   } else {
-                                //     Navigator.pop(context);
-                                //     var docType = value.data['data'];
-
-                                //     if (docType != null) {
-                                //       setState(() {
-                                //         listShift = ShiftModel.listShiftModels(docType);
-                                //       });
-                                //     }
-                                //   }
-                                // });
+                                setState(() {
+                                  // Clear other selections when date is selected
+                                  selectedDateIndex = 0;
+                                  selectedTypeIndex = null;
+                                  selectedHourIndex = null;
+                                });
+                                shiftFilters(date: value.toString().split(" ")[0]);
                               }
                             });
                           },
                         ),
-                        const SizedBox(height: 16),
-                        const Text("Filter By Type :", style: TextStyle(fontSize: 16)),
-                        ...listClinicianTypes
-                            .map((clinician) => ListTile(
-                                  leading: const Icon(Icons.filter_alt_outlined, color: Colors.blue),
-                                  title: Text(clinician.label ?? ""),
-                                  onTap: () {
-                                    shiftFilters(
-                                      type: clinician.value ?? "",
-                                    );
-                                    // var http = HttpRequest();
-                                    // http.shiftFilters(type: clinician.value ?? "").then((value) {
-                                    //   if (!value.success) {
-                                    //     SnackBarMessage.errorSnackbar(context, value.message);
-                                    //   } else {
-                                    //     Navigator.pop(context);
-                                    //     var docType = value.data['data'];
-                                    //     print("JJJJJJJJJJJJJJJJJJJJJJJ ${value.data['data']}");
 
-                                    //     if (docType != null) {
-                                    //       setState(() {
-                                    //         listShift = ShiftModel.listShiftModels(docType);
-                                    //       });
-                                    //     }
-                                    //   }
-                                    // });
-                                  },
-                                ))
-                            .toList(),
-                        const SizedBox(height: 16),
-                        const Text("Filter By Time :", style: TextStyle(fontSize: 16)),
-                        ...listShiftHours
-                            .map((time) => ListTile(
-                                  leading: const Icon(Icons.filter_alt_outlined, color: Colors.blue),
-                                  title: Text(time.label ?? ""),
-                                  onTap: () {
-                                    shiftFilters(
-                                      shift_hour: time.value ?? "",
-                                    );
-                                    // var http = HttpRequest();
-                                    // http
-                                    //     .shiftFilters(
-                                    //   shift_hour: time.label ?? "",
-                                    // )
-                                    //     .then((value) {
-                                    //   if (!value.success) {
-                                    //     SnackBarMessage.errorSnackbar(context, value.message);
-                                    //   } else {
-                                    //     Navigator.pop(context);
-                                    //     var docType = value.data['data'];
+                        // Type Filter
+                        const Text("Filter By Type:", style: TextStyle(fontSize: 16)),
+                        ...listClinicianTypes.asMap().entries.map((entry) {
+                          int index = entry.key;
+                          ClincianTypes clinician = entry.value;
 
-                                    //     if (docType != null) {
-                                    //       setState(() {
-                                    //         listShift = ShiftModel.listShiftModels(docType);
-                                    //       });
-                                    //     }
-                                    //   }
-                                    // });
-                                  },
-                                ))
-                            .toList(),
+                          return ListTile(
+                            leading: const Icon(Icons.filter_alt_outlined, color: Colors.blue),
+                            title: Text(clinician.label ?? ""),
+                            selected: selectedTypeIndex == index,
+                            selectedTileColor: Colors.blue[50],
+                            onTap: () {
+                              setState(() {
+                                // Clear other selections when type is selected
+                                selectedTypeIndex = index;
+                                selectedDateIndex = null;
+                                selectedHourIndex = null;
+                              });
+                              shiftFilters(type: clinician.value ?? "");
+                            },
+                          );
+                        }).toList(),
+
+                        // Shift Hour Filter
+                        const Text("Filter By Time:", style: TextStyle(fontSize: 16)),
+                        ...listShiftHours.asMap().entries.map((entry) {
+                          int index = entry.key;
+                          shiftHours.ClincianTypes time = entry.value;
+
+                          return ListTile(
+                            leading: const Icon(Icons.filter_alt_outlined, color: Colors.blue),
+                            title: Text(time.label ?? ""),
+                            selected: selectedHourIndex == index,
+                            selectedTileColor: Colors.blue[50],
+                            onTap: () {
+                              setState(() {
+                                // Clear other selections when time is selected
+                                selectedHourIndex = index;
+                                selectedDateIndex = null;
+                                selectedTypeIndex = null;
+                              });
+                              shiftFilters(shift_hour: time.value ?? "");
+                            },
+                          );
+                        }).toList(),
                       ],
                     ),
                   ),

@@ -59,6 +59,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
           setState(() {
             docTypeList = DocType.getList(docType);
           });
+          SnackBarMessage.successSnackbar(context, "Document Type Loaded");
         }
       }
     });
