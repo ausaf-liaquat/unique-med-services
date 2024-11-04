@@ -12,8 +12,6 @@ class DocumentCard extends StatelessWidget {
   late Docs doc;
   DocumentCard({super.key, required this.doc});
 
-  
-
   @override
   Widget build(BuildContext context) {
     return AppCard(
@@ -30,7 +28,7 @@ class DocumentCard extends StatelessWidget {
                   child: CachedNetworkImage(
                     placeholder: (context, url) => const SkeletonAvatar(style: SkeletonAvatarStyle(width: 75, height: 75, borderRadius: BorderRadius.zero)),
                     fit: BoxFit.cover,
-                    imageUrl: doc.documentUrl ?? '',
+                    imageUrl: doc.documentUrl,
                     errorWidget: (context, url, error) => Image.asset('assets/images/document-not-found.png', fit: BoxFit.cover),
                   )),
             ),
@@ -41,6 +39,7 @@ class DocumentCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 8),
+
                 AppTypography(
                   align: TextAlign.start,
                   text: doc.title,

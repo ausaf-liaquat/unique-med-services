@@ -36,6 +36,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
   int? selectedHourIndex;
 
   void _onChangeHandler(String value) {
+    print('Typing: $value');
     if (onStoppedTyping?.isActive ?? false) {
       onStoppedTyping?.cancel();
     }
@@ -45,27 +46,31 @@ class _ShiftScreenState extends State<ShiftScreen> {
   }
 
   void _stopTyping(String value) {
+    print('Stopped typing: $value');
     if (value.isNotEmpty && value.length > 3) {
       var http = HttpRequest();
-      http
-          .shiftFilters(
+      http.shiftFilters(
         location: value,
-      )
-          .then((value) {
-        if (!value.success) {
-          SnackBarMessage.errorSnackbar(context, value.message);
-        } else {
-          var docType = value.data['data'];
-          Navigator.pop(context);
+      );
 
-          if (docType != null) {
-            setState(() {
-              listShift = ShiftModel.listShiftModels(docType);
-            });
-            value = "";
-          }
-        }
-      });
+      //   .then((value) {
+      // if (!value.success) {
+      Navigator.pop(context);
+      searchController.clear();
+      //   SnackBarMessage.errorSnackbar(context, value.message);
+      // } else {
+      //   var docType = value.data['data'];
+      //   Navigator.pop(context);
+
+      //   if (docType != null) {
+      //     setState(() {
+      //       listShift = ShiftModel.listShiftModels(docType);
+      //     });
+      //     value = "";
+      //   }
+      // }
+
+      //});
     } else if (value.isEmpty) {
       var http = HttpRequest();
       http.shifts().then((value) {
@@ -163,6 +168,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
 
   // shift filters
   shiftFilters({String? date, String? type, String? shift_hour, String? location}) async {
+    print("Date: $date, Type: $type, Shift Hour: $shift_hour, Location: $location");
     var token = await HttpRequest().getToken();
     var headers = {'Accept': 'application/json', 'Authorization': 'Bearer $token'};
     var url = Uri.https(Constants.baseUrl, 'api/v1/shifts/filter');
@@ -320,15 +326,38 @@ class _ShiftScreenState extends State<ShiftScreen> {
                         const SizedBox(height: 16),
                         const Text("Search By Location :", style: TextStyle(fontSize: 16)),
                         const SizedBox(height: 8),
-                        TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Search',
-                              prefixIcon: const Icon(Icons.search),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.69,
+                              child: TextField(
+                                controller: searchController,
+                                decoration: InputDecoration(
+                                  hintText: 'Search',
+                                  prefixIcon: const Icon(Icons.search),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
                               ),
                             ),
-                            onChanged: _onChangeHandler),
+                            const SizedBox(width: 8),
+                            GestureDetector(
+                              onTap: () {
+                                _onChangeHandler(searchController.text);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(15),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: const Text("Search", style: TextStyle(color: Colors.white)),
+                              ),
+                            )
+                          ],
+                        ),
+                        // onChanged: _onChangeHandler),
                         const SizedBox(height: 16),
                         const Text("Filter By Date:", style: TextStyle(fontSize: 16)),
                         ListTile(
