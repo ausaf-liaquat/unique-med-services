@@ -14,14 +14,26 @@ import '../widgets/others/bottom_sheet.dart';
 import 'document/create.dart';
 
 class LandingScreen extends StatefulWidget {
-  const LandingScreen({super.key});
+  final int? selectedIndex;
+  const LandingScreen({
+    super.key,
+    this.selectedIndex = 0,
+  });
   static const route = '/';
   @override
   State<LandingScreen> createState() => _LandingScreenState();
 }
 
 class _LandingScreenState extends State<LandingScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = // Change the value of _selectedIndex to the value of selectedIndex
+      0;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.selectedIndex!;
+  }
+
   static const List<Widget> _tabs = <Widget>[
     ScheduleScreen(),
     ShiftScreen(),
@@ -34,8 +46,7 @@ class _LandingScreenState extends State<LandingScreen> {
   Widget build(BuildContext context) {
     var http = HttpRequest();
     http.getToken().then((value) => {
-          if (value == '')
-            {Navigator.pushReplacementNamed(context, LoginScreen.route)}
+          if (value == '') {Navigator.pushReplacementNamed(context, LoginScreen.route)}
         });
 
     final List<Widget> icons = <Widget>[
@@ -79,8 +90,7 @@ class _LandingScreenState extends State<LandingScreen> {
                         _selectedIndex = 0;
                       });
                     },
-                    child: Image.asset('assets/images/app-bar-text-logo.png',
-                        width: 107),
+                    child: Image.asset('assets/images/app-bar-text-logo.png', width: 107),
                   )),
               actions: [
                 Padding(
@@ -94,8 +104,7 @@ class _LandingScreenState extends State<LandingScreen> {
                 color: AppColorScheme().black0,
                 child: SafeArea(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 14),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(16.0),
@@ -103,17 +112,13 @@ class _LandingScreenState extends State<LandingScreen> {
                       ),
                       color: AppColorScheme().black0,
                       boxShadow: [
-                        BoxShadow(
-                            color: AppColorScheme().black8,
-                            offset: const Offset(0, -1)),
+                        BoxShadow(color: AppColorScheme().black8, offset: const Offset(0, -1)),
                       ],
                     ),
                     child: GNav(
                         tabBackgroundColor: HexColor('#A018F8'),
-                        padding: EdgeInsets.symmetric(
-                            vertical:  9,
-                            horizontal: 17),
-                        iconSize:  21,
+                        padding: EdgeInsets.symmetric(vertical: 9, horizontal: 17),
+                        iconSize: 21,
                         selectedIndex: _selectedIndex,
                         hoverColor: HexColor('#A018F8'),
                         curve: Curves.fastOutSlowIn,
@@ -126,38 +131,24 @@ class _LandingScreenState extends State<LandingScreen> {
                         },
                         tabs: [
                           GButton(
-                            icon: _selectedIndex == 0
-                                ? Icons.event_note
-                                : Icons.event_note_outlined,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8)),
-                          ),
-                          GButton(
-                            icon: _selectedIndex == 1
-                                ? Icons.drafts
-                                : Icons.drafts_outlined,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8)),
-                          ),
-                          GButton(
-                            icon: _selectedIndex == 2
-                                ? Icons.account_balance_wallet
-                                : Icons.account_balance_wallet_outlined,
+                            icon: _selectedIndex == 0 ? Icons.event_note : Icons.event_note_outlined,
                             borderRadius: const BorderRadius.all(Radius.circular(8)),
                           ),
                           GButton(
-                            icon: _selectedIndex == 3
-                                ? Icons.description
-                                : Icons.description_outlined,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8)),
+                            icon: _selectedIndex == 1 ? Icons.drafts : Icons.drafts_outlined,
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
                           ),
                           GButton(
-                            icon: _selectedIndex == 4
-                                ? Icons.person
-                                : Icons.person_outlined,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8)),
+                            icon: _selectedIndex == 2 ? Icons.account_balance_wallet : Icons.account_balance_wallet_outlined,
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                          ),
+                          GButton(
+                            icon: _selectedIndex == 3 ? Icons.description : Icons.description_outlined,
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                          ),
+                          GButton(
+                            icon: _selectedIndex == 4 ? Icons.person : Icons.person_outlined,
+                            borderRadius: const BorderRadius.all(Radius.circular(8)),
                           )
                         ]),
                   ),

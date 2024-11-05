@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:ums_staff/screens/landing.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 import 'package:ums_staff/widgets/messages/snack_bar.dart';
@@ -125,6 +126,18 @@ class _ScheduleDetailScreenState extends State<ScheduleDetailScreen> {
                                     if (!value.success) {
                                       SnackBarMessage.errorSnackbar(context, value.message);
                                     } else {
+                                      http.getAcceptShift().then((value) {
+                                        if (!value.success) {
+                                          SnackBarMessage.errorSnackbar(context, value.message);
+                                        } else {
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => const LandingScreen(
+                                                        selectedIndex: 0,
+                                                      )));
+                                        }
+                                      });
                                       SnackBarMessage.successSnackbar(context, "CheckIn is SuccessFull");
                                     }
                                   });
@@ -134,7 +147,7 @@ class _ScheduleDetailScreenState extends State<ScheduleDetailScreen> {
                                   color: AppColorScheme().black0,
                                 )
                               : const Text('clock in')),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   register.shiftClinicians?.first.clockout != ''
                       ? Container()
                       : OutlinedButton(
@@ -152,11 +165,23 @@ class _ScheduleDetailScreenState extends State<ScheduleDetailScreen> {
                                     if (!value.success) {
                                       SnackBarMessage.errorSnackbar(context, value.message);
                                     } else {
+                                      http.getAcceptShift().then((value) {
+                                        if (!value.success) {
+                                          SnackBarMessage.errorSnackbar(context, value.message);
+                                        } else {
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => const LandingScreen(
+                                                        selectedIndex: 0,
+                                                      )));
+                                        }
+                                      });
                                       SnackBarMessage.successSnackbar(context, "Checkout is SuccessFull");
                                     }
                                   });
                                 },
-                          child: loading ? CircularProgressIndicator() : const Text('clock out'))
+                          child: loading ? const CircularProgressIndicator() : const Text('clock out'))
                 ],
               ),
             )

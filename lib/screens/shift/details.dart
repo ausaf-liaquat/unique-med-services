@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:ums_staff/core/http.dart';
+import 'package:ums_staff/screens/landing.dart';
 import 'package:ums_staff/screens/shift/models.dart';
 import 'package:ums_staff/widgets/messages/snack_bar.dart';
 import '../../shared/theme/color.dart';
@@ -72,7 +73,13 @@ class _ShiftDetailScreenState extends State<ShiftDetailScreen> {
         });
 
         if (mounted) {
-          Navigator.pop(context);
+          // hit the api again to get the updated list
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => LandingScreen(
+                        selectedIndex: 1,
+                      )));
         }
       }
     });
