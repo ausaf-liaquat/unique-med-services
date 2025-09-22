@@ -39,7 +39,7 @@ class _AppGroupRadioBoxState extends State<AppGroupRadioBox> {
               color: Theme.of(context).colorScheme.error),
           labelText: widget.label,
           fillColor: AppColorScheme().black2,
-          enabled: false,
+          // enabled: false,
         ),
         orientation: widget.direction,
         options: widget.options.map((Object item) {

@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 import '../../shared/theme/color.dart';
 
 class AppTextField extends StatefulWidget {
-  const AppTextField(
-      {super.key,
-      required this.name,
-      required this.label,
-      this.validator,
-      this.bottom,
-      this.error,
-      this.end,
-      this.helpText = '',
-      this.type = TextInputType.text,
-      this.onTap});
+  const AppTextField({
+    super.key,
+    required this.name,
+    required this.label,
+    this.validator,
+    this.bottom,
+    this.error,
+    this.end,
+    this.helpText = '',
+    this.type = TextInputType.text,
+    this.onTap,
+  });
 
   final String name;
   final void Function()? onTap;
@@ -35,6 +37,13 @@ class _AppTextFieldState extends State<AppTextField> {
 
   @override
   Widget build(BuildContext context) {
+    // ✅ Add input formatter for numbers only
+    List<TextInputFormatter>? formatters;
+    if (widget.type == TextInputType.number ||
+        widget.type == TextInputType.phone) {
+      formatters = [FilteringTextInputFormatter.digitsOnly];
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -65,6 +74,7 @@ class _AppTextFieldState extends State<AppTextField> {
                 ? _passwordVisible
                 : false,
             validator: widget.validator,
+            inputFormatters: formatters, // ✅ applied here
             style: TextStyle(
               color: AppColorScheme().black80,
               fontSize: 16,
@@ -73,21 +83,21 @@ class _AppTextFieldState extends State<AppTextField> {
             decoration: InputDecoration(
               suffixIcon: widget.type == TextInputType.visiblePassword
                   ? Container(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: IconButton(
-                        splashRadius: 20,
-                        icon: Icon(
-                          _passwordVisible
-                              ? Icons.visibility_off_outlined
-                              : Icons.visibility_outlined,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _passwordVisible = !_passwordVisible;
-                          });
-                        },
-                      ),
-                    )
+                padding: const EdgeInsets.only(right: 8),
+                child: IconButton(
+                  splashRadius: 20,
+                  icon: Icon(
+                    _passwordVisible
+                        ? Icons.visibility_off_outlined
+                        : Icons.visibility_outlined,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  },
+                ),
+              )
                   : widget.end,
               errorStyle: const TextStyle(height: 1, fontSize: 0),
               label: AppTypography(
@@ -101,23 +111,25 @@ class _AppTextFieldState extends State<AppTextField> {
         ),
         (widget.helpText + (widget.error ?? '')) != ''
             ? Container(
-                margin: EdgeInsets.only(
-                    left: 20.0,
-                    right: 20.0,
-                    bottom: widget.bottom ?? 0,
-                    top: 4),
-                child: AppTypography(
-                  text: widget.error ?? widget.helpText,
-                  size: 12,
-                  align: TextAlign.start,
-                  color: widget.error != null
-                      ? Theme.of(context).colorScheme.error
-                      : AppColorScheme().black60,
-                  spacing: 0.4,
-                ))
+          margin: EdgeInsets.only(
+            left: 20.0,
+            right: 20.0,
+            bottom: widget.bottom ?? 0,
+            top: 4,
+          ),
+          child: AppTypography(
+            text: widget.error ?? widget.helpText,
+            size: 12,
+            align: TextAlign.start,
+            color: widget.error != null
+                ? Theme.of(context).colorScheme.error
+                : AppColorScheme().black60,
+            spacing: 0.4,
+          ),
+        )
             : SizedBox(
-                height: widget.bottom ?? 0,
-              ),
+          height: widget.bottom ?? 0,
+        ),
       ],
     );
   }

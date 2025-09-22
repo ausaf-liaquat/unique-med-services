@@ -141,19 +141,6 @@ class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
                       AppLink(
                           onTap: () {
                             setState(() {
-                              WebRedirect().privacyPolicy(context);
-                              Navigator.pop(context);
-                            });
-                          },
-                          child: const RowItem(
-                              large: true,
-                              bottom: 30,
-                              icon: Icons.article_outlined,
-                              text: 'Privacy Policy')),
-
-                      AppLink(
-                          onTap: () {
-                            setState(() {
                               WebRedirect().termsAndConditions(context);
                               Navigator.pop(context);
                             });

@@ -42,6 +42,74 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     }
   }
 
+  // Add error handling for the HTTP request
+  Future<void> _submitForm() async {
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return;
+    }
+
+    setState(() {
+      loading = true;
+    });
+
+    try {
+      var http = HttpRequest();
+      var body = {..._formKey.currentState?.value ?? {}};
+      var formatBody = body.map<String, String>(
+              (key, value) => MapEntry(key, value.toString()));
+
+      if (resume != null) {
+        formatBody['resume'] = (resume as File).path;
+      }
+
+      final response = await http.register(formatBody);
+
+      setState(() {
+        loading = false;
+      });
+
+      if (response.success == true) {
+        Navigator.pushNamed(
+            context,
+            VerificationScreen.route,
+            arguments: {'register': true}
+        );
+      } else {
+        SnackBarMessage.errorSnackbar(context, response.message);
+      }
+    } catch (e) {
+      setState(() {
+        loading = false;
+      });
+      SnackBarMessage.errorSnackbar(
+          context,
+          'An error occurred during registration. Please try again.'
+      );
+      print('Registration error: $e');
+    }
+  }
+
+  // Validate step 1 before proceeding
+  bool _validateStep1() {
+    if (resume == null) {
+      SnackBarMessage.errorSnackbar(context, 'Please upload resume to continue');
+      return false;
+    }
+
+    // Optional: Phone number validation
+    final phone = _formKey.currentState?.value['phone']?.toString() ?? '';
+    if (phone.isNotEmpty) {
+      RegExp exp = RegExp(r'^1[0-9]+$');
+      if (!exp.hasMatch(phone)) {
+        SnackBarMessage.errorSnackbar(
+            context, 'Please enter a valid phone number starting with 1');
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     bool smallDevice = MediaQuery.of(context).size.width >= 365;
@@ -53,6 +121,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           updateResume: updateResume),
       Step2(onSelect: changeSelectValue, fieldsError: fieldsErrors),
     ];
+
     return BackLayout(
         totalTabs: 2,
         currentTabs: _currentStep,
@@ -91,63 +160,33 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             horizontal: smallDevice ? 40 : 0),
                         child: ElevatedButton(
                           onPressed: loading
-                              ? () {}
-                              : () {
-                                  if (_formKey.currentState?.validate() ??
-                                      false) {
-                                    if (_currentStep == 1) {
-                                      setState(() {
-                                        loading = true;
-                                      });
-                                      var http = HttpRequest();
-                                      var body = {
-                                        ..._formKey.currentState?.value ?? {}
-                                      };
-                                      var formatBody = body.map<String, String>(
-                                          (key, value) =>
-                                              MapEntry(key, value.toString()));
-                                      if (resume != null) {
-                                        formatBody['resume'] =
-                                            (resume as File).path;
-                                      }
-                                      http.register(formatBody).then((value) {
-                                        setState(() {
-                                          loading = false;
-                                        });
-                                        if (value.success == true) {
-                                          Navigator.pushNamed(
-                                              context, VerificationScreen.route,
-                                              arguments: {'register': true});
-                                        } else {
-                                          SnackBarMessage.errorSnackbar(
-                                              context, value.message);
-                                        }
-                                      });
-                                    } else {
-                                      var number = _formKey.currentState?.value['phone'];
-                                      RegExp exp = RegExp(r'^1[0-9]+$');
-                                      if(resume == null){
-                                        SnackBarMessage.errorSnackbar(
-                                            context, 'please upload resume to continue');
-                                      }
-                                      // if(!exp.hasMatch(number)){
-                                      //   SnackBarMessage.errorSnackbar(
-                                      //       context, 'please enter Phone Number start with 1');
-                                      // }
-                                      else {
-                                        setState(() {
-                                          _currentStep = _currentStep + 1;
-                                        });
-                                      }
-                                    }
-                                  } else {
-                                    setState(() {});
-                                  }
-                                },
+                              ? null // Disable button when loading
+                              : () async {
+                            if (!(_formKey.currentState?.validate() ?? false)) {
+                              setState(() {}); // Trigger validation UI update
+                              return;
+                            }
+
+                            if (_currentStep == 0) {
+                              if (_validateStep1()) {
+                                setState(() {
+                                  _currentStep = 1;
+                                });
+                              }
+                            } else {
+                              // Final submission
+                              await _submitForm();
+                            }
+                          },
                           child: loading
-                              ? CircularProgressIndicator(
-                                  color: AppColorScheme().black0,
-                                )
+                              ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: AppColorScheme().black0,
+                            ),
+                          )
                               : Text(_currentStep == 1 ? 'Finish' : 'Next'),
                         ),
                       ),
@@ -155,17 +194,17 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       _currentStep == 0
                           ? const SizedBox()
                           : Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: smallDevice ? 40 : 0),
-                              child: TextButton(
-                                child: const Text('Back'),
-                                onPressed: () {
-                                  setState(() {
-                                    _currentStep = _currentStep - 1;
-                                  });
-                                },
-                              ),
-                            )
+                        padding: EdgeInsets.symmetric(
+                            horizontal: smallDevice ? 40 : 0),
+                        child: TextButton(
+                          child: const Text('Back'),
+                          onPressed: loading ? null : () {
+                            setState(() {
+                              _currentStep = _currentStep - 1;
+                            });
+                          },
+                        ),
+                      )
                     ],
                   ))),
         ));

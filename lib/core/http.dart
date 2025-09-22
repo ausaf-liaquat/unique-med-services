@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:localstorage/localstorage.dart';
+import 'package:ums_staff/core/api_response.dart';
 import 'package:ums_staff/core/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:ums_staff/screens/shift/clinicianTypesModel.dart';
@@ -49,17 +50,83 @@ class HttpRequest extends BaseHttpRequest {
     return post('api/v1/user/documents', {"": ""}, null, false);
   }
 
-  Future<ResponseBody> regVerify(data) async {
-    var url = Uri.https(Constants.baseUrl, 'api/v1/auth/verify');
-    var token = await getToken();
-    var request = http.MultipartRequest('POST', url);
-    Map<String, String> header = {"Authorization": 'Bearer ${token ?? ''}'};
-    request.headers.addAll(header);
-    request.fields.addAll(data);
-    var res = await request.send();
-    return await parseResponseForm(res);
-  }
+  Future<ApiResponse> regVerify(dynamic data) async {
+    try {
+      var url = Uri.https(Constants.baseUrl, 'api/v1/auth/verify');
+      var token = await getToken();
 
+      // Use http package for JSON request
+      final response = await http.post(
+        url,
+        headers: {
+          "Authorization": 'Bearer ${token ?? ''}',
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: jsonEncode(data), // Encode the data as JSON string
+      );
+
+      // Parse JSON response
+      final responseData = jsonDecode(response.body);
+
+      return ApiResponse(
+        success: responseData['status'] == 'success', // Use 'status' not 'success'
+        data: responseData,
+        message: responseData['message'] ?? '',
+      );
+    } catch (e) {
+      print('regVerify error: $e');
+      return ApiResponse(
+        success: false,
+        message: 'Verification failed: $e',
+      );
+    }
+  }
+  Future<ApiResponse> resendVerificationCode(dynamic data) async {
+    try {
+      var url = Uri.https(Constants.baseUrl, 'api/v1/auth/resend/code');
+      var token = await getToken();
+
+      print('🔄 Calling resendVerificationCode endpoint: ${url.toString()}');
+      print('📦 Request data: $data');
+
+      final response = await http.post(
+        url,
+        headers: {
+          "Authorization": 'Bearer ${token ?? ''}',
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: jsonEncode(data),
+      );
+
+      print('📨 Response status: ${response.statusCode}');
+      print('📨 Response body: ${response.body}');
+
+      // Check if response is HTML before parsing
+      if (response.body.toString().contains('<!DOCTYPE') ||
+          response.body.toString().contains('<html>')) {
+        return ApiResponse(
+          success: false,
+          message: 'Server returned HTML error page',
+        );
+      }
+
+      final responseData = jsonDecode(response.body);
+
+      return ApiResponse(
+        success: responseData['status'] == 'success',
+        data: responseData,
+        message: responseData['message'] ?? '',
+      );
+    } catch (e) {
+      print('resendVerificationCode error: $e');
+      return ApiResponse(
+        success: false,
+        message: 'Failed to resend verification code: $e',
+      );
+    }
+  }
   Future<ResponseBody> shifts() {
     return post('api/v1/shifts', {"": ""}, null, false);
   }
@@ -266,7 +333,7 @@ class BaseHttpRequest {
       newBody = jsonEncode(body);
     }
     var response = await http.post(url, body: newBody, headers: {"Authorization": 'Bearer ${token ?? ''}', 'Accept': 'application/json'});
-    print(response.body);
+    print("dsdasdasda  ${response.body}");
     return parseResponse(response, saveT);
   }
 
@@ -292,7 +359,7 @@ class BaseHttpRequest {
   Future<ResponseBody> parseResponse(dynamic response, bool saveT) async {
     print(response.body);
     var responseBody = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
-    print(response.bodyBytes);
+
     if (response.statusCode == 401) {
       clearToken();
       return ResponseBody(success: false, message: responseBody["message"]);

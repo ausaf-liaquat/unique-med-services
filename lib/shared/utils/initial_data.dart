@@ -58,22 +58,17 @@ class AppInitialData {
           "There are a couple of things to check to make sure you'll get paid including shift reports and wallet setup."
     },
     {
-      "title": 'What else do I need to set up to start work with Nursa?',
+      "title": 'What else do I need to set up to start work with UMS?',
       "text":
           'With a valid license, you can start requesting. Please also complete the rest of the onboarding steps in the link below.'
     },
     {
       "title": 'what credentials do I need to add?',
       "text":
-          'The most important credentials are your healthcare license, BLS/CPR, Drivers license, TB test (within the last year) and a background check which we take care of for you.'
+          'The most important credentials that will need to be added is the ones that states REQUIRED beside it.'
     },
     {
-      "title": 'How do I clock in?',
-      "text":
-          'After you have completed your shift, you will receive a notification to complete a shift report where you will enter in your clock-in and clock- ut times.'
-    },
-    {
-      "title": 'what credentials do I need to add?',
+      "title": 'How to do I clock in and clock out?',
       "text":
           'After you have completed your shift, you will receive a notification to complete a shift report where you will enter in your clock-in and clock- ut times.'
     },

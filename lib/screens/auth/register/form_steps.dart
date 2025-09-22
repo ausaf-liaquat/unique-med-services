@@ -184,45 +184,40 @@ class _Step2State extends State<Step2> {
               style: TextStyle(color: AppColorScheme().black60, fontSize: 14),
               children: <TextSpan>[
                 TextSpan(
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        setState(() {
-                          WebRedirect().privacyPolicy(context);
-                        });
-                      },
-                    text: 'Terms of Service',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.primary)),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => WebRedirect().privacyPolicy(context),
+                  text: 'Terms of Service',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
                 const TextSpan(text: ' , '),
                 TextSpan(
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        setState(() {
-                          WebRedirect().privacyPolicy(context);
-                        });
-                      },
-                    text: 'Privacy Policy',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.primary)),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => WebRedirect().privacyPolicy(context),
+                  text: 'Privacy Policy',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
                 const TextSpan(text: ' and '),
                 TextSpan(
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        setState(() {
-                          WebRedirect().termsAndConditions(context);
-                        });
-                      },
-                    text: 'SMS Terms of Service',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.primary)),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () => WebRedirect().termsAndConditions(context),
+                  text: 'SMS Terms of Service',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
               ],
             ),
           ),
           name: 'agree',
-        ),
+        )
+        ,
       ],
     );
   }

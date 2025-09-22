@@ -126,6 +126,11 @@ class Step1 extends StatelessWidget {
           label: 'Password',
           validator: FormBuilderValidators.compose([
             FormBuilderValidators.required(errorText: 'Password is required'),
+            FormBuilderValidators.minLength(6, errorText: 'Password must be at least 6 characters'),
+            FormBuilderValidators.match(
+              RegExp(r'^(?=.*[a-zA-Z])(?=.*\d).{6,}$'),
+              errorText: 'Password must contain letters and numbers',
+            ),
           ]),
         ),
         InkWell(
@@ -172,9 +177,12 @@ class Step2 extends StatefulWidget {
   State<Step2> createState() => _Step2State();
 }
 
-class _Step2State extends State<Step2> {
+class _Step2State extends State<Step2> with AutomaticKeepAliveClientMixin {
   @override
+  bool get wantKeepAlive => true;
+
   Widget build(BuildContext context) {
+    super.build(context); // important for keep-alive
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

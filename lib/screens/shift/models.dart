@@ -34,15 +34,15 @@ class ShiftModel {
   static Iterable<ShiftModel> listShiftModels(Iterable<dynamic> data) {
     return data.map((e) {
       return ShiftModel(
-        id: e['id'] ?? 0,
+        id: _parseInt(e['id']),
         userId: e['user_id']?.toString() ?? '',
         shiftLocation: e['shift_location'] ?? '',
         clinicianType: e['clinician_type'] ?? '',
         title: e['title'] ?? '',
         date: e['date'] ?? '',
-        shiftHour: e['shift_hour'] ?? '',
-        ratePerHour: e['rate_per_hour'] ?? '',
-        totalAmount: e['total_amount'] ?? '',
+        shiftHour: e['shift_hour']?.toString() ?? '',
+        ratePerHour: e['rate_per_hour']?.toString() ?? '',
+        totalAmount: e['total_amount']?.toString() ?? '',
         shiftNote: e['shift_note'] ?? '',
         additionalComments: e['additional_comments'],
         createdAt: e['created_at'] ?? '',
@@ -50,6 +50,15 @@ class ShiftModel {
         shiftClinicians: (e['shift_clinicians'] as List?)?.map((e) => ShiftClinician.fromMap(e)).toList(),
       );
     });
+  }
+
+  // Helper method to safely parse integers
+  static int _parseInt(dynamic value) {
+    if (value == null) return 0;
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value) ?? 0;
+    if (value is double) return value.toInt();
+    return 0;
   }
 }
 
@@ -88,16 +97,16 @@ class ShiftClinician {
 
   factory ShiftClinician.fromMap(Map<String, dynamic> data) {
     return ShiftClinician(
-      id: data['id'] ?? 0,
-      userId: data['user_id'] ?? 0,
-      shiftId: data['shift_id'] ?? 0,
+      id: _parseInt(data['id']),
+      userId: _parseInt(data['user_id']),
+      shiftId: _parseInt(data['shift_id']),
       locationName: data['location_name'] ?? '',
       clockin: data['clockin'] ?? '',
       clockout: data['clockout'] ?? '',
       lat: data['lat'] ?? '',
       lon: data['lon'] ?? '',
-      shiftStatus: data['shift_status'] ?? 0,
-      status: data['status'] ?? 0,
+      shiftStatus: _parseInt(data['shift_status']),
+      status: _parseInt(data['status']),
       acceptedAt: data['accepted_at'] ?? '',
       rejectedAt: data['rejected_at'],
       createdAt: data['created_at'] ?? '',
@@ -107,5 +116,14 @@ class ShiftClinician {
 
   static Iterable<ShiftClinician> listShiftClinician(Iterable<dynamic> data) {
     return data.map((e) => ShiftClinician.fromMap(e));
+  }
+
+  // Helper method to safely parse integers
+  static int _parseInt(dynamic value) {
+    if (value == null) return 0;
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value) ?? 0;
+    if (value is double) return value.toInt();
+    return 0;
   }
 }

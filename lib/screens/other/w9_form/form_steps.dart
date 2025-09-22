@@ -25,7 +25,7 @@ class Step1 extends StatelessWidget {
         const SizedBox(height: 12),
         AppTypography(
             text:
-                "In order for you to get paid, you must fill out this form. Nursa reports your income to the IRS but does not collect taxes. As an independent contractor, you are responsible for paying your own taxes.",
+                "In order for you to get paid, you must fill out this form. UMS reports your income to the IRS but does not collect taxes. As an independent contractor, you are responsible for paying your own taxes.",
             size: 14,
             color: AppColorScheme().black60),
         const SizedBox(height: 10),

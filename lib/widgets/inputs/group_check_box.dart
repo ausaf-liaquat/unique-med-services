@@ -35,7 +35,7 @@ class _AppGroupCheckBoxState extends State<AppGroupCheckBox> {
               color: Theme.of(context).colorScheme.error),
           labelText: widget.label,
           fillColor: AppColorScheme().black2,
-          enabled: false,
+          // enabled: false,
         ),
         orientation: OptionsOrientation.vertical,
         options: widget.options.map((Object item) {
