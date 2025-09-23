@@ -36,7 +36,6 @@ class _ShiftScreenState extends State<ShiftScreen> {
   int? selectedHourIndex;
 
   void _onChangeHandler(String value) {
-    print('Typing: $value');
     if (onStoppedTyping?.isActive ?? false) {
       onStoppedTyping?.cancel();
     }
@@ -46,31 +45,11 @@ class _ShiftScreenState extends State<ShiftScreen> {
   }
 
   void _stopTyping(String value) {
-    print('Stopped typing: $value');
     if (value.isNotEmpty && value.length > 3) {
       var http = HttpRequest();
-      http.shiftFilters(
-        location: value,
-      );
-
-      //   .then((value) {
-      // if (!value.success) {
+      http.shiftFilters(location: value);
       Navigator.pop(context);
       searchController.clear();
-      //   SnackBarMessage.errorSnackbar(context, value.message);
-      // } else {
-      //   var docType = value.data['data'];
-      //   Navigator.pop(context);
-
-      //   if (docType != null) {
-      //     setState(() {
-      //       listShift = ShiftModel.listShiftModels(docType);
-      //     });
-      //     value = "";
-      //   }
-      // }
-
-      //});
     } else if (value.isEmpty) {
       var http = HttpRequest();
       http.shifts().then((value) {
@@ -82,7 +61,6 @@ class _ShiftScreenState extends State<ShiftScreen> {
             SnackBarMessage.errorSnackbar(context, value.message);
           } else {
             var docType = value.data['data']['shifts'];
-
             if (docType != null) {
               setState(() {
                 listShift = ShiftModel.listShiftModels(docType);
@@ -97,6 +75,12 @@ class _ShiftScreenState extends State<ShiftScreen> {
   @override
   void initState() {
     super.initState();
+    _loadShifts();
+    fetchClinicianTypes();
+    listOfShiftHours();
+  }
+
+  void _loadShifts() {
     var http = HttpRequest();
     setState(() {
       loading = true;
@@ -109,7 +93,6 @@ class _ShiftScreenState extends State<ShiftScreen> {
         SnackBarMessage.errorSnackbar(context, value.message);
       } else {
         var docType = value.data['data']['shifts'];
-        print("UUUUUUUUUUUUUUUUUUUUUUUUUUUU $docType");
         if (docType != null) {
           setState(() {
             listShift = ShiftModel.listShiftModels(docType);
@@ -117,8 +100,6 @@ class _ShiftScreenState extends State<ShiftScreen> {
         }
       }
     });
-    fetchClinicianTypes();
-    listOfShiftHours();
   }
 
   void fetchClinicianTypes() async {
@@ -133,8 +114,6 @@ class _ShiftScreenState extends State<ShiftScreen> {
     if (response.statusCode == 200) {
       String responseString = await response.stream.bytesToString();
       List<dynamic> jsonData = json.decode(responseString);
-
-      // Update the list with parsed clinician types
       setState(() {
         listClinicianTypes = ClincianTypes.listClinicianTypes(jsonData);
       });
@@ -143,7 +122,6 @@ class _ShiftScreenState extends State<ShiftScreen> {
     }
   }
 
-  // shift-hours
   listOfShiftHours() async {
     var token = await HttpRequest().getToken();
     var headers = {'Accept': 'application/json', 'Authorization': 'Bearer $token'};
@@ -156,8 +134,6 @@ class _ShiftScreenState extends State<ShiftScreen> {
     if (response.statusCode == 200) {
       String responseString = await response.stream.bytesToString();
       List<dynamic> jsonData = json.decode(responseString);
-
-      // Update the list with parsed clinician types
       setState(() {
         listShiftHours = shiftHours.ClincianTypes.listClinicianTypes(jsonData);
       });
@@ -166,9 +142,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
     }
   }
 
-  // shift filters
   shiftFilters({String? date, String? type, String? shift_hour, String? location}) async {
-    print("Date: $date, Type: $type, Shift Hour: $shift_hour, Location: $location");
     var token = await HttpRequest().getToken();
     var headers = {'Accept': 'application/json', 'Authorization': 'Bearer $token'};
     var url = Uri.https(Constants.baseUrl, 'api/v1/shifts/filter');
@@ -185,19 +159,14 @@ class _ShiftScreenState extends State<ShiftScreen> {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      // Read response only once
       String responseString = await response.stream.bytesToString();
       var jsonResponse = json.decode(responseString);
-
-      // Check if jsonResponse contains a list under 'data' key or directly
       var docType = jsonResponse['data'];
       if (docType is List) {
         setState(() {
           listShift = ShiftModel.listShiftModels(docType).toList();
         });
         Navigator.pop(context);
-      } else {
-        print("Unexpected data format. Expected a list, but received: ${docType.runtimeType}");
       }
     } else {
       print(response.reasonPhrase);
@@ -206,237 +175,576 @@ class _ShiftScreenState extends State<ShiftScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const data = ['a', 'b', 'c', 'd'];
-    return SingleChildScrollView(
+    return Scaffold(
+      body: SingleChildScrollView(
         child: Container(
-      padding: const EdgeInsets.fromLTRB(20, 10, 10, 32),
-      child: Column(
-        children: [
-          // const SearchField(),
-          const SizedBox(height: 24),
-          loading
-              ? ListView.separated(
-                  itemCount: 3,
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (BuildContext context, int index) {
-                    return const AppCard(child: ShiftSkeleton());
-                  },
-                  separatorBuilder: (BuildContext context, int index) => Container(padding: const EdgeInsets.symmetric(vertical: 16), child: const Divider()),
-                )
-              : listShift.isEmpty
-                  ? Center(
-                      child: Column(
-                        children: [
-                          FilterRow(context),
-                          //  const SizedBox(height: 16),
-                          const SizedBox(height: 24),
-                          Image.asset(
-                            'assets/images/no-shift.png',
-                            width: 280,
-                          ),
-                          const SizedBox(height: 20),
-                          const AppTypography(text: 'No Shift Found!', size: 18)
-                        ],
-                      ),
-                    )
-                  : Column(
-                      children: [
-                        FilterRow(context),
-                        const SizedBox(height: 16),
-                        ListView.separated(
-                          itemCount: listShift.length,
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            return AppCard(
-                              path: ShiftDetailScreen.route,
-                              args: {
-                                'shiftModel': listShift.elementAt(index),
-                              },
-                              child: JobShift(shift: listShift.elementAt(index)),
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) => Container(padding: const EdgeInsets.symmetric(vertical: 16), child: const Divider()),
-                        ),
-                      ],
-                    )
-        ],
+          padding: const EdgeInsets.fromLTRB(20, 50, 20, 32),
+          child: Column(
+            children: [
+              // Modern Header
+              _buildHeader(),
+              const SizedBox(height: 24),
+
+              // Filter Button
+              _buildFilterButton(),
+              const SizedBox(height: 20),
+
+              // Content
+              loading
+                  ? _buildShimmerLoading()
+                  : listShift.isEmpty
+                  ? _buildEmptyState()
+                  : _buildShiftList(),
+            ],
+          ),
+        ),
       ),
-    ));
+    );
   }
 
-  Row FilterRow(BuildContext context) {
+  Widget _buildHeader() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        IconButton(
-          padding: const EdgeInsets.all(0),
-          icon: const Icon(Icons.filter_alt_outlined),
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              builder: (BuildContext context) {
-                return SingleChildScrollView(
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Date Filter
-                        const SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            InkWell(
-                                onTap: () {
-                                  var http = HttpRequest();
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                  http.shifts().then((value) {
-                                    setState(() {
-                                      loading = false;
-                                    });
-                                    if (!value.success) {
-                                      SnackBarMessage.errorSnackbar(context, value.message);
-                                    } else {
-                                      var docType = value.data['data']['shifts'];
-                                      print("UUUUUUUUUUUUUUUUUUUUUUUUUUUU $docType");
-                                      if (docType != null) {
-                                        setState(() {
-                                          listShift = ShiftModel.listShiftModels(docType);
-                                        });
-                                        Navigator.pop(context);
-                                      }
-                                    }
-                                  });
-                                },
-                                child: const Text("Remove Filter", style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.blue))),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        const Text("Search By Location :", style: TextStyle(fontSize: 16)),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.69,
-                              child: TextField(
-                                controller: searchController,
-                                decoration: InputDecoration(
-                                  hintText: 'Search',
-                                  prefixIcon: const Icon(Icons.search),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            GestureDetector(
-                              onTap: () {
-                                _onChangeHandler(searchController.text);
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(15),
-                                decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: const Text("Search", style: TextStyle(color: Colors.white)),
-                              ),
-                            )
-                          ],
-                        ),
-                        // onChanged: _onChangeHandler),
-                        const SizedBox(height: 16),
-                        const Text("Filter By Date:", style: TextStyle(fontSize: 16)),
-                        ListTile(
-                          leading: const Icon(Icons.filter_alt_outlined, color: Colors.blue),
-                          title: const Text("Select Date"),
-                          selected: selectedDateIndex == 0,
-                          selectedTileColor: Colors.blue[50],
-                          onTap: () {
-                            showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2025),
-                            ).then((value) {
-                              if (value != null) {
-                                setState(() {
-                                  // Clear other selections when date is selected
-                                  selectedDateIndex = 0;
-                                  selectedTypeIndex = null;
-                                  selectedHourIndex = null;
-                                });
-                                shiftFilters(date: value.toString().split(" ")[0]);
-                              }
-                            });
-                          },
-                        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Available Shifts',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[800],
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Find your next opportunity',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+              ),
+            ),
+          ],
+        ),
+        Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            color: Colors.blue[50],
+            borderRadius: BorderRadius.circular(25),
+          ),
+          child: Icon(
+            Icons.work_outline,
+            color: Colors.blue[700],
+            size: 28,
+          ),
+        ),
+      ],
+    );
+  }
 
-                        // Type Filter
-                        const Text("Filter By Type:", style: TextStyle(fontSize: 16)),
-                        ...listClinicianTypes.asMap().entries.map((entry) {
-                          int index = entry.key;
-                          ClincianTypes clinician = entry.value;
+  Widget _buildFilterButton() {
+    return Container(
+      width: double.infinity,
+      height: 50,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[300]!),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: TextButton.icon(
+        onPressed: () => _showFilterModal(context),
+        style: TextButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        icon: Icon(
+          Icons.filter_list_rounded,
+          color: Colors.blue[700],
+        ),
+        label: Text(
+          'Filter Shifts',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey[800],
+          ),
+        ),
+      ),
+    );
+  }
 
-                          return ListTile(
-                            leading: const Icon(Icons.filter_alt_outlined, color: Colors.blue),
-                            title: Text(clinician.label ?? ""),
-                            selected: selectedTypeIndex == index,
-                            selectedTileColor: Colors.blue[50],
-                            onTap: () {
-                              setState(() {
-                                // Clear other selections when type is selected
-                                selectedTypeIndex = index;
-                                selectedDateIndex = null;
-                                selectedHourIndex = null;
-                              });
-                              shiftFilters(type: clinician.value ?? "");
-                            },
-                          );
-                        }).toList(),
+  Widget _buildShimmerLoading() {
+    return ListView.separated(
+      itemCount: 3,
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          child: AppCard(
+            child: ShiftSkeleton(),
+          ),
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 16),
+    );
+  }
 
-                        // Shift Hour Filter
-                        const Text("Filter By Time:", style: TextStyle(fontSize: 16)),
-                        ...listShiftHours.asMap().entries.map((entry) {
-                          int index = entry.key;
-                          shiftHours.ClincianTypes time = entry.value;
+  Widget _buildEmptyState() {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(40),
+          child: Column(
+            children: [
+              Icon(
+                Icons.work_outline,
+                size: 80,
+                color: Colors.grey[400],
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'No Shifts Available',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey[600],
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Check back later for new opportunities',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[500],
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
-                          return ListTile(
-                            leading: const Icon(Icons.filter_alt_outlined, color: Colors.blue),
-                            title: Text(time.label ?? ""),
-                            selected: selectedHourIndex == index,
-                            selectedTileColor: Colors.blue[50],
-                            onTap: () {
-                              setState(() {
-                                // Clear other selections when time is selected
-                                selectedHourIndex = index;
-                                selectedDateIndex = null;
-                                selectedTypeIndex = null;
-                              });
-                              shiftFilters(shift_hour: time.value ?? "");
-                            },
-                          );
-                        }).toList(),
-                      ],
-                    ),
-                  ),
-                );
-              },
+  Widget _buildShiftList() {
+    return Column(
+      children: [
+        Text(
+          '${listShift.length} shifts found',
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey[600],
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 16),
+        ListView.separated(
+          itemCount: listShift.length,
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              margin: const EdgeInsets.only(bottom: 16),
+              child: ModernCard.elevated(
+                onTap: () {
+                  Navigator.pushNamed(
+                      context,
+                      ShiftDetailScreen.route,
+                      arguments: {'shiftModel': listShift.elementAt(index)}
+                  );
+                },
+                child: JobShift(shift: listShift.elementAt(index)),
+              ),
             );
           },
+          separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 16),
+        ),
+      ],
+    );
+  }
+
+  void _showFilterModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 20,
+                offset: const Offset(0, -5),
+              ),
+            ],
+          ),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Header
+                  _buildFilterHeader(),
+                  const SizedBox(height: 24),
+
+                  // Location Search
+                  _buildLocationSearch(),
+                  const SizedBox(height: 24),
+
+                  // Date Filter
+                  _buildDateFilter(),
+                  const SizedBox(height: 20),
+
+                  // Type Filter
+                  _buildTypeFilter(),
+                  const SizedBox(height: 20),
+
+                  // Time Filter
+                  _buildTimeFilter(),
+                  const SizedBox(height: 30),
+
+                  // Action Buttons
+                  _buildActionButtons(),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildFilterHeader() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'Filter Shifts',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey[800],
+          ),
+        ),
+        IconButton(
+          icon: Icon(Icons.close, color: Colors.grey[600]),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLocationSearch() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Search by Location',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey[700],
+          ),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: TextField(
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Enter location...',
+                    prefixIcon: Icon(Icons.location_on_outlined, color: Colors.grey[500]),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.blue[600],
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.blue.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.search, color: Colors.white),
+                onPressed: () => _onChangeHandler(searchController.text),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDateFilter() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Filter by Date',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey[700],
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: selectedDateIndex == 0 ? Colors.blue[50] : Colors.grey[50],
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: selectedDateIndex == 0 ? Colors.blue[200]! : Colors.grey[300]!,
+            ),
+          ),
+          child: ListTile(
+            leading: Icon(
+              Icons.calendar_today,
+              color: selectedDateIndex == 0 ? Colors.blue[600] : Colors.grey[600],
+            ),
+            title: Text(
+              'Select Date',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: selectedDateIndex == 0 ? Colors.blue[800] : Colors.grey[700],
+              ),
+            ),
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: selectedDateIndex == 0 ? Colors.blue[600] : Colors.grey[500],
+            ),
+            onTap: () {
+              showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2075),
+              ).then((value) {
+                if (value != null) {
+                  setState(() {
+                    selectedDateIndex = 0;
+                    selectedTypeIndex = null;
+                    selectedHourIndex = null;
+                  });
+                  shiftFilters(date: value.toString().split(" ")[0]);
+                }
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTypeFilter() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Filter by Type',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey[700],
+          ),
+        ),
+        const SizedBox(height: 12),
+        ...listClinicianTypes.asMap().entries.map((entry) {
+          int index = entry.key;
+          ClincianTypes clinician = entry.value;
+          bool isSelected = selectedTypeIndex == index;
+
+          return Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            decoration: BoxDecoration(
+              color: isSelected ? Colors.blue[50] : Colors.grey[50],
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: isSelected ? Colors.blue[200]! : Colors.grey[300]!,
+              ),
+            ),
+            child: ListTile(
+              leading: Icon(
+                Icons.medical_services_outlined,
+                color: isSelected ? Colors.blue[600] : Colors.grey[600],
+              ),
+              title: Text(
+                clinician.label ?? "",
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: isSelected ? Colors.blue[800] : Colors.grey[700],
+                ),
+              ),
+              onTap: () {
+                setState(() {
+                  selectedTypeIndex = index;
+                  selectedDateIndex = null;
+                  selectedHourIndex = null;
+                });
+                shiftFilters(type: clinician.value ?? "");
+              },
+            ),
+          );
+        }).toList(),
+      ],
+    );
+  }
+
+  Widget _buildTimeFilter() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Filter by Time',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey[700],
+          ),
+        ),
+        const SizedBox(height: 12),
+        ...listShiftHours.asMap().entries.map((entry) {
+          int index = entry.key;
+          shiftHours.ClincianTypes time = entry.value;
+          bool isSelected = selectedHourIndex == index;
+
+          return Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            decoration: BoxDecoration(
+              color: isSelected ? Colors.blue[50] : Colors.grey[50],
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: isSelected ? Colors.blue[200]! : Colors.grey[300]!,
+              ),
+            ),
+            child: ListTile(
+              leading: Icon(
+                Icons.access_time,
+                color: isSelected ? Colors.blue[600] : Colors.grey[600],
+              ),
+              title: Text(
+                time.label ?? "",
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: isSelected ? Colors.blue[800] : Colors.grey[700],
+                ),
+              ),
+              onTap: () {
+                setState(() {
+                  selectedHourIndex = index;
+                  selectedDateIndex = null;
+                  selectedTypeIndex = null;
+                });
+                shiftFilters(shift_hour: time.value ?? "");
+              },
+            ),
+          );
+        }).toList(),
+      ],
+    );
+  }
+
+  Widget _buildActionButtons() {
+    return Row(
+      children: [
+        Expanded(
+          child: OutlinedButton(
+            onPressed: () {
+              _loadShifts();
+              setState(() {
+                selectedDateIndex = null;
+                selectedTypeIndex = null;
+                selectedHourIndex = null;
+                searchController.clear();
+              });
+              Navigator.pop(context);
+            },
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              side: BorderSide(color: Colors.blue[600]!),
+            ),
+            child: Text(
+              'Clear Filters',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.blue[600],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue[600],
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 2,
+            ),
+            child: Text(
+              'Apply Filters',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
+          ),
         ),
       ],
     );

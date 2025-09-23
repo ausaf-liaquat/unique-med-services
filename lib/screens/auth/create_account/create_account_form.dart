@@ -42,7 +42,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     }
   }
 
-  // Add error handling for the HTTP request
   Future<void> _submitForm() async {
     if (!(_formKey.currentState?.validate() ?? false)) {
       return;
@@ -89,14 +88,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     }
   }
 
-  // Validate step 1 before proceeding
   bool _validateStep1() {
     if (resume == null) {
       SnackBarMessage.errorSnackbar(context, 'Please upload resume to continue');
       return false;
     }
 
-    // Optional: Phone number validation
     final phone = _formKey.currentState?.value['phone']?.toString() ?? '';
     if (phone.isNotEmpty) {
       RegExp exp = RegExp(r'^1[0-9]+$');
@@ -153,60 +150,183 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Modern Step Indicator
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 32),
+                        child: Row(
+                          children: [
+                            _buildStepIndicator(0, "Step 1", _currentStep >= 0),
+                            Container(
+                              width: 40,
+                              height: 2,
+                              color: _currentStep >= 1
+                                  ? Theme.of(context).colorScheme.primary
+                                  : AppColorScheme().black30,
+                              margin: const EdgeInsets.symmetric(horizontal: 4),
+                            ),
+                            _buildStepIndicator(1, "Step 2", _currentStep >= 1),
+                          ],
+                        ),
+                      ),
+
                       steps[_currentStep],
                       const SizedBox(height: 40),
+
+                      // Modern Button Container
                       Container(
                         padding: EdgeInsets.symmetric(
                             horizontal: smallDevice ? 40 : 0),
-                        child: ElevatedButton(
-                          onPressed: loading
-                              ? null // Disable button when loading
-                              : () async {
-                            if (!(_formKey.currentState?.validate() ?? false)) {
-                              setState(() {}); // Trigger validation UI update
-                              return;
-                            }
+                        child: Column(
+                          children: [
+                            // Next/Finish Button
+                            SizedBox(
+                              width: double.infinity,
+                              height: 50,
+                              child: ElevatedButton(
+                                onPressed: loading
+                                    ? null
+                                    : () async {
+                                  if (!(_formKey.currentState?.validate() ?? false)) {
+                                    setState(() {});
+                                    return;
+                                  }
 
-                            if (_currentStep == 0) {
-                              if (_validateStep1()) {
-                                setState(() {
-                                  _currentStep = 1;
-                                });
-                              }
-                            } else {
-                              // Final submission
-                              await _submitForm();
-                            }
-                          },
-                          child: loading
-                              ? SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: AppColorScheme().black0,
+                                  if (_currentStep == 0) {
+                                    if (_validateStep1()) {
+                                      setState(() {
+                                        _currentStep = 1;
+                                      });
+                                    }
+                                  } else {
+                                    await _submitForm();
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Theme.of(context).colorScheme.primary,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 2,
+                                ),
+                                child: loading
+                                    ? SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: AppColorScheme().black0,
+                                  ),
+                                )
+                                    : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      _currentStep == 1 ? Icons.check_circle_outline : Icons.arrow_forward,
+                                      size: 20,
+                                      color: AppColorScheme().black0,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      _currentStep == 1 ? 'Finish Application' : 'Continue to Next Step',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColorScheme().black0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          )
-                              : Text(_currentStep == 1 ? 'Finish' : 'Next'),
-                        ),
-                      ),
-                      SizedBox(height: _currentStep == 0 ? 0 : 24),
-                      _currentStep == 0
-                          ? const SizedBox()
-                          : Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: smallDevice ? 40 : 0),
-                        child: TextButton(
-                          child: const Text('Back'),
-                          onPressed: loading ? null : () {
-                            setState(() {
-                              _currentStep = _currentStep - 1;
-                            });
-                          },
+
+                            SizedBox(height: _currentStep == 0 ? 0 : 16),
+
+                            // Back Button
+                            if (_currentStep > 0)
+                              SizedBox(
+                                width: double.infinity,
+                                height: 50,
+                                child: TextButton.icon(
+                                  onPressed: loading ? null : () {
+                                    setState(() {
+                                      _currentStep = _currentStep - 1;
+                                    });
+                                  },
+                                  style: TextButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  icon: Icon(
+                                    Icons.arrow_back,
+                                    size: 20,
+                                    color: AppColorScheme().black60,
+                                  ),
+                                  label: Text(
+                                    'Back to Previous Step',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: AppColorScheme().black60,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       )
                     ],
                   ))),
         ));
+  }
+
+  // Modern Step Indicator Widget
+  Widget _buildStepIndicator(int stepNumber, String label, bool isCompleted) {
+    return Expanded(
+      child: Column(
+        children: [
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: isCompleted
+                  ? Theme.of(context).colorScheme.primary
+                  : Colors.transparent,
+              border: Border.all(
+                color: isCompleted
+                    ? Theme.of(context).colorScheme.primary
+                    : AppColorScheme().black30,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Center(
+              child: isCompleted
+                  ? Icon(Icons.check, color: Colors.white, size: 16)
+                  : Text(
+                '${stepNumber + 1}',
+                style: TextStyle(
+                  color: isCompleted
+                      ? Colors.white
+                      : AppColorScheme().black30,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: isCompleted
+                  ? Theme.of(context).colorScheme.primary
+                  : AppColorScheme().black60,
+              fontWeight: isCompleted ? FontWeight.w600 : FontWeight.normal,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
