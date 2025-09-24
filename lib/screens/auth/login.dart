@@ -113,7 +113,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           // Modern Email Field
                           Container(
                             margin: const EdgeInsets.only(bottom: 20),
-                            child: TextFormField(
+                            child: FormBuilderTextField(
+                              name: 'email',
                               keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
                                 labelText: 'Username or Email',
@@ -142,7 +143,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                    color: Theme.of(context).colorScheme.primary,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                     width: 2,
                                   ),
                                 ),
@@ -153,25 +155,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                   vertical: 16,
                                 ),
                               ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Email is required';
-                                }
-                                if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                                  return 'Invalid email address';
-                                }
-                                return null;
-                              },
-                              onSaved: (value) {
-                                _formKey.currentState?.fields['email']?.didChange(value);
-                              },
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(
+                                    errorText: 'Email is required'),
+                                FormBuilderValidators.email(
+                                    errorText: 'Invalid email address'),
+                              ]),
                             ),
                           ),
 
                           // Modern Password Field
                           Container(
                             margin: const EdgeInsets.only(bottom: 24),
-                            child: TextFormField(
+                            child: FormBuilderTextField(
+                              name: 'password',
                               obscureText: _obscurePassword,
                               keyboardType: TextInputType.visiblePassword,
                               decoration: InputDecoration(
@@ -214,7 +211,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                    color: Theme.of(context).colorScheme.primary,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                     width: 2,
                                   ),
                                 ),
@@ -225,15 +223,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                   vertical: 16,
                                 ),
                               ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Password is required';
-                                }
-                                return null;
-                              },
-                              onSaved: (value) {
-                                _formKey.currentState?.fields['password']?.didChange(value);
-                              },
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(
+                                    errorText: 'Password is required'),
+                              ]),
                             ),
                           ),
 
@@ -245,123 +238,158 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: loading
                                   ? () {}
                                   : () {
-                                if (_formKey.currentState?.validate() ?? false) {
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                  var api = HttpRequest();
-                                  api.login(_formKey.currentState?.value).then((value) async {
-                                    setState(() {
-                                      loading = false;
-                                    });
+                                      if (_formKey.currentState?.validate() ??
+                                          false) {
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        var api = HttpRequest();
+                                        print(
+                                            'dsa ${_formKey.currentState?.value}');
+                                        api
+                                            .login(_formKey.currentState?.value)
+                                            .then((value) async {
+                                          setState(() {
+                                            loading = false;
+                                          });
 
-                                    // DEBUG: Print the entire response
-                                    print('=== LOGIN RESPONSE DEBUG ===');
-                                    print('Success: ${value.success}');
-                                    print('Message: ${value.message}');
-                                    print('Full data: ${value.data}');
+                                          // DEBUG: Print the entire response
+                                          print('=== LOGIN RESPONSE DEBUG ===');
+                                          print('Success: ${value.success}');
+                                          print('Message: ${value.message}');
+                                          print('Full data: ${value.data}');
 
-                                    if (value.data != null) {
-                                      print('Nested data: ${value.data['data']}');
-                                      print('AccountStatus: ${value.data['data']?['accountStatus']}');
-                                      print('Token: ${value.data['data']?['token']}');
-                                    }
-                                    print('==========================');
-
-                                    if (!value.success) {
-                                      SnackBarMessage.errorSnackbar(context, value.message);
-                                    } else {
-                                      final accountStatus = value.data?['data']?['accountStatus'] ?? 'verified';
-                                      final email = _formKey.currentState?.value['email'] ?? '';
-                                      final token = value.data?['data']?['token'] ?? '';
-
-                                      print('Corrected accountStatus: $accountStatus');
-                                      print('Corrected token: $token');
-
-                                      if (accountStatus == 'unverified') {
-                                        // Save the token for verification
-                                        if (token.isNotEmpty) {
-                                          api.saveToken(token);
-                                        }
-
-                                        try {
-                                          var http = HttpRequest();
-                                          final response = await http.resendVerificationCode({'email': email});
-                                          if (response.success) {
-                                            print('Verification code resent to $email');
-                                            SnackBarMessage.successSnackbar(context, 'Verification code sent!');
-                                          } else {
-                                            print('Failed to resend code: ${response.message}');
-                                            SnackBarMessage.errorSnackbar(context, 'Failed to send code: ${response.message}');
+                                          if (value.data != null) {
+                                            print(
+                                                'Nested data: ${value.data['data']}');
+                                            print(
+                                                'AccountStatus: ${value.data['data']?['accountStatus']}');
+                                            print(
+                                                'Token: ${value.data['data']?['token']}');
                                           }
-                                        } catch (e) {
-                                          print('❌ Error resending code: $e');
-                                          SnackBarMessage.errorSnackbar(context, 'Error sending verification code');
-                                        }
+                                          print('==========================');
 
-                                        // Redirect to verification screen AFTER the code is sent
-                                        Navigator.pushReplacementNamed(
-                                          context,
-                                          VerificationScreen.route,
-                                          arguments: {
-                                            'email': email,
-                                            'register': true,
-                                          },
-                                        );
+                                          if (!value.success) {
+                                            SnackBarMessage.errorSnackbar(
+                                                context, value.message);
+                                          } else {
+                                            final accountStatus =
+                                                value.data?['data']
+                                                        ?['accountStatus'] ??
+                                                    'verified';
+                                            final email = _formKey.currentState
+                                                    ?.value['email'] ??
+                                                '';
+                                            final token = value.data?['data']
+                                                    ?['token'] ??
+                                                '';
+
+                                            print(
+                                                'Corrected accountStatus: $accountStatus');
+                                            print('Corrected token: $token');
+
+                                            if (accountStatus == 'unverified') {
+                                              // Save the token for verification
+                                              if (token.isNotEmpty) {
+                                                api.saveToken(token);
+                                              }
+
+                                              try {
+                                                var http = HttpRequest();
+                                                final response = await http
+                                                    .resendVerificationCode(
+                                                        {'email': email});
+                                                if (response.success) {
+                                                  print(
+                                                      'Verification code resent to $email');
+                                                  SnackBarMessage.successSnackbar(
+                                                      context,
+                                                      'Verification code sent!');
+                                                } else {
+                                                  print(
+                                                      'Failed to resend code: ${response.message}');
+                                                  SnackBarMessage.errorSnackbar(
+                                                      context,
+                                                      'Failed to send code: ${response.message}');
+                                                }
+                                              } catch (e) {
+                                                print(
+                                                    '❌ Error resending code: $e');
+                                                SnackBarMessage.errorSnackbar(
+                                                    context,
+                                                    'Error sending verification code');
+                                              }
+
+                                              // Redirect to verification screen AFTER the code is sent
+                                              Navigator.pushReplacementNamed(
+                                                context,
+                                                VerificationScreen.route,
+                                                arguments: {
+                                                  'email': email,
+                                                  'register': true,
+                                                },
+                                              );
+                                            } else {
+                                              // Account is verified, save token and go to landing
+                                              if (token.isNotEmpty) {
+                                                api.saveToken(token);
+                                              }
+                                              Navigator.pushReplacementNamed(
+                                                  context, LandingScreen.route);
+                                            }
+                                          }
+                                        }).catchError((error) {
+                                          setState(() {
+                                            loading = false;
+                                          });
+                                          SnackBarMessage.errorSnackbar(context,
+                                              'Login failed. Please try again.');
+                                        });
                                       } else {
-                                        // Account is verified, save token and go to landing
-                                        if (token.isNotEmpty) {
-                                          api.saveToken(token);
-                                        }
-                                        Navigator.pushReplacementNamed(context, LandingScreen.route);
+                                        setState(() {});
                                       }
-                                    }
-                                  }).catchError((error) {
-                                    setState(() {
-                                      loading = false;
-                                    });
-                                    SnackBarMessage.errorSnackbar(context, 'Login failed. Please try again.');
-                                  });
-                                } else {
-                                  setState(() {});
-                                }
-                              },
+                                    },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(context).colorScheme.primary,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 elevation: 2,
-                                shadowColor: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                                shadowColor: Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withOpacity(0.3),
                               ),
                               child: loading
                                   ? SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  color: AppColorScheme().black0,
-                                  strokeWidth: 2,
-                                ),
-                              )
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        color: AppColorScheme().black0,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
                                   : Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'SIGN IN',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColorScheme().black0,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'SIGN IN',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColorScheme().black0,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Icon(
+                                          Icons.arrow_forward_rounded,
+                                          size: 20,
+                                          color: AppColorScheme().black0,
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Icon(
-                                    Icons.arrow_forward_rounded,
-                                    size: 20,
-                                    color: AppColorScheme().black0,
-                                  ),
-                                ],
-                              ),
                             ),
                           ),
 
@@ -387,17 +415,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                     margin: const EdgeInsets.only(right: 8),
                                     child: OutlinedButton.icon(
                                       onPressed: () {
-                                        Navigator.pushNamed(context, ForgetPasswordScreen.route);
+                                        Navigator.pushNamed(context,
+                                            ForgetPasswordScreen.route);
                                       },
                                       style: OutlinedButton.styleFrom(
-                                        foregroundColor: AppColorScheme().black90,
+                                        foregroundColor:
+                                            AppColorScheme().black90,
                                         backgroundColor: Colors.transparent,
                                         side: BorderSide(
                                           color: AppColorScheme().black30,
                                           width: 1,
                                         ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                         padding: const EdgeInsets.symmetric(
                                           horizontal: 16,
@@ -427,13 +458,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                     margin: const EdgeInsets.only(left: 8),
                                     child: FilledButton.icon(
                                       onPressed: () {
-                                        Navigator.pushNamed(context, CreateAccountScreen.route);
+                                        Navigator.pushNamed(
+                                            context, CreateAccountScreen.route);
                                       },
                                       style: FilledButton.styleFrom(
-                                        backgroundColor: Theme.of(context).colorScheme.error,
-                                        foregroundColor: AppColorScheme().black0,
+                                        backgroundColor:
+                                            Theme.of(context).colorScheme.error,
+                                        foregroundColor:
+                                            AppColorScheme().black0,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                         padding: const EdgeInsets.symmetric(
                                           horizontal: 16,

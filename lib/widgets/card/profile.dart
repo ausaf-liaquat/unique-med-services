@@ -18,136 +18,334 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard(
-        radius: BorderRadius.circular(35),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+      radius: BorderRadius.circular(24),
+      elevation: 4,
+      shadowColor: Colors.black.withOpacity(0.1),
+      child: Column(
+        children: [
+          // Header section with profile image and name
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Profile Avatar with modern design
                 Container(
-                    padding: const EdgeInsets.all(4),
-                    height: 150,
-                    width: 96,
-                    decoration: BoxDecoration(
-                        image: profile?.imageUrl != null
-                            ? DecorationImage(
-                                image: CachedNetworkImageProvider(profile?.imageUrl ?? ''),
-                                fit: BoxFit.cover,
-                              )
-                            : null,
-                        borderRadius: BorderRadius.circular(100),
-                        color: AppColorScheme().black0,
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.02),
-                            blurRadius: 6,
-                          ),
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ]),
-                    child: profile?.imageUrl != null
-                        ? null
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: Container(
-                                color: AppColorScheme().black6,
-                                child: Image.asset(
-                                  'assets/images/defult-profile.jpg',
-                                  fit: BoxFit.cover,
-                                )
-                                // profile?.imageUrl != null
-                                //     ? CachedNetworkImage(
-                                //         placeholder: (context, url) =>
-                                //             const SkeletonAvatar(
-                                //           style: SkeletonAvatarStyle(
-                                //               width: 88,
-                                //               height: 142,
-                                //               borderRadius: BorderRadius.zero),
-                                //         ),
-                                //         fit: BoxFit.cover,
-                                //         imageUrl: profile?.imageUrl ?? '',
-                                //       )
-                                //     :
-                                // Image.asset(
-                                //         'assets/images/default-profile.jpg',
-                                //         fit: BoxFit.cover,
-                                //       ),
-                                ),
-                          )),
-                const SizedBox(width: 19),
-                Expanded(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 8),
-                        AppTypography(
-                          overflow: TextOverflow.ellipsis,
-                          text: '${profile?.firstName ?? ''} ${profile?.lastName ?? ''}',
-                          size: 20,
-                          weight: FontWeight.w500,
-                        ),
-                      ],
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: HexColor('#6505A3').withOpacity(0.2),
+                      width: 3,
                     ),
-                    const SizedBox(height: 10),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ProfileShiftData(quentity: ((profile?.completedShifts ?? 0) + (profile?.unCompletedShifts ?? 0)).toString(), title: 'Assigned Shifts'),
-                          const SizedBox(width: 13),
-                          ProfileShiftData(quentity: (profile?.completedShifts ?? 0).toString(), title: 'Complete Shifts'),
-                          const SizedBox(width: 13),
-                          ProfileShiftData(quentity: (profile?.unCompletedShifts ?? 0).toString(), title: 'UnComplete Shifts'),
-                        ],
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
                       ),
-                    )
-                  ],
-                ))
-              ],
-            ),
-            Container(
-              padding: const EdgeInsets.fromLTRB(12, 24, 12, 0),
-              child: Column(
-                children: [
-                  RowItem(
-                    icon: Icons.call_outlined,
-                    text: "+${profile!.phoneNumber}",
-                    bottom: 16,
-                  ),
-                  profile!.address != null ? RowItem(icon: Icons.location_on_outlined, bottom: 16, text: profile!.address ?? '') : Container(),
-                  RowItem(icon: Icons.call_outlined, bottom: 16, text: '+${profile!.phoneNumber}'),
-                  Row(
-                    children: [
-                      Expanded(child: RowItem(icon: Icons.apartment_outlined, bottom: 16, text: profile!.state ?? '')),
-                      SizedBox(width: 6),
-                      Expanded(
-                          child: RowItem(
-                        icon: Icons.villa_outlined,
-                        text: profile!.city ?? '',
-                        bottom: 16,
-                      ))
                     ],
                   ),
-                  RowItem(
-                    icon: Icons.map_outlined,
-                    text: profile!.zipCode ?? '',
-                    bottom: 16,
+                  child: ClipOval(
+                    child: profile?.imageUrl != null
+                        ? CachedNetworkImage(
+                      imageUrl: profile!.imageUrl!,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        color: Colors.grey[200],
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.grey[400],
+                          size: 40,
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.grey[200],
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.grey[400],
+                          size: 40,
+                        ),
+                      ),
+                    )
+                        : Container(
+                      color: HexColor('#6505A3').withOpacity(0.1),
+                      child: Icon(
+                        Icons.person_outline_rounded,
+                        color: HexColor('#6505A3'),
+                        size: 40,
+                      ),
+                    ),
                   ),
+                ),
+
+                const SizedBox(width: 20),
+
+                // Name and basic info
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${profile?.firstName ?? ''} ${profile?.lastName ?? ''}'.trim(),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: HexColor('#6505A3'),
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 8),
+
+                      // Status badge based on shift completion rate
+                      _buildStatusBadge(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Shift statistics with modern design
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  HexColor('#6505A3').withOpacity(0.05),
+                  HexColor('#6505A3').withOpacity(0.02),
                 ],
               ),
-            )
-          ],
-        ));
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: HexColor('#6505A3').withOpacity(0.1),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildStatItem(
+                  value: ((profile?.completedShifts ?? 0) + (profile?.unCompletedShifts ?? 0)).toString(),
+                  label: 'Assigned',
+                  icon: Icons.assignment_outlined,
+                ),
+                _buildStatItem(
+                  value: (profile?.completedShifts ?? 0).toString(),
+                  label: 'Completed',
+                  icon: Icons.check_circle_outline,
+                ),
+                _buildStatItem(
+                  value: (profile?.unCompletedShifts ?? 0).toString(),
+                  label: 'Pending',
+                  icon: Icons.pending_actions_outlined,
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // Contact information section
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                _buildInfoRow(
+                  icon: Icons.phone_outlined,
+                  title: 'Phone Number',
+                  value: "+${profile?.phoneNumber ?? 'N/A'}",
+                ),
+                const SizedBox(height: 16),
+
+                if (profile?.address != null && profile!.address!.isNotEmpty)
+                  Column(
+                    children: [
+                      _buildInfoRow(
+                        icon: Icons.location_on_outlined,
+                        title: 'Address',
+                        value: profile!.address!,
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildInfoRow(
+                        icon: Icons.apartment_outlined,
+                        title: 'State',
+                        value: profile?.state ?? 'N/A',
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _buildInfoRow(
+                        icon: Icons.location_city_outlined,
+                        title: 'City',
+                        value: profile?.city ?? 'N/A',
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                _buildInfoRow(
+                  icon: Icons.pin_drop_outlined,
+                  title: 'ZIP Code',
+                  value: profile?.zipCode ?? 'N/A',
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatusBadge() {
+    final totalShifts = (profile?.completedShifts ?? 0) + (profile?.unCompletedShifts ?? 0);
+    final completedShifts = profile?.completedShifts ?? 0;
+
+    String statusText;
+    Color statusColor;
+
+    if (totalShifts == 0) {
+      statusText = 'No shifts assigned';
+      statusColor = Colors.grey;
+    } else if (completedShifts == totalShifts) {
+      statusText = 'All shifts completed';
+      statusColor = Colors.green;
+    } else if (completedShifts > 0) {
+      statusText = 'Partially completed';
+      statusColor = Colors.orange;
+    } else {
+      statusText = 'No shifts completed';
+      statusColor = Colors.red;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: statusColor.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Text(
+        statusText,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: statusColor,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatItem({required String value, required String label, required IconData icon}) {
+    return Column(
+      children: [
+        Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Icon(
+            icon,
+            color: HexColor('#6505A3'),
+            size: 24,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: HexColor('#6505A3'),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            color: Colors.grey[600],
+            fontWeight: FontWeight.w500,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow({required IconData icon, required String title, required String value}) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Colors.grey[200]!,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: HexColor('#6505A3').withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              color: HexColor('#6505A3'),
+              size: 18,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey[800],
+                    fontWeight: FontWeight.w600,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -159,17 +357,35 @@ class ProfileShiftData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 110,
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: HexColor('#F1FAFD'),
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: HexColor('#6505A3').withOpacity(0.1),
+        ),
       ),
       child: Column(
         children: [
-          AppTypography(text: quentity, size: 18, weight: FontWeight.w500),
-          const SizedBox(height: 4),
-          AppTypography(align: TextAlign.center, text: title, size: 14, weight: FontWeight.w500)
+          Text(
+            quentity,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: HexColor('#6505A3'),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[600],
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+          ),
         ],
       ),
     );
