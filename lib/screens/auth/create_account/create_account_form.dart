@@ -24,26 +24,28 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   bool loading = false;
   int _currentStep = 0;
 
+  // Called from child steps when a field needs to change programmatically
   void changeSelectValue(String name, dynamic value) {
-    _formKey.currentState!.fields[name]!.didChange(value);
+    _formKey.currentState?.fields[name]?.didChange(value);
   }
 
+  // Called from Step1 when resume is picked
   void updateResume(dynamic value) {
     setState(() {
       resume = value;
     });
+    // Update the FormBuilder field value so it is included in .value
+    _formKey.currentState?.fields['resume']?.didChange((resume as File).path);
   }
 
   String? fieldsErrors(String name) {
-    if (_formKey.currentState!.fields[name] == null) {
-      return null;
-    } else {
-      return _formKey.currentState!.fields[name]!.errorText;
-    }
+    return _formKey.currentState?.fields[name]?.errorText;
   }
 
   Future<void> _submitForm() async {
-    if (!(_formKey.currentState?.validate() ?? false)) {
+    // final validation before submit
+    if (!(_formKey.currentState?.saveAndValidate() ?? false)) {
+      setState(() {}); // refresh errors
       return;
     }
 
@@ -53,9 +55,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
     try {
       var http = HttpRequest();
-      var body = {..._formKey.currentState?.value ?? {}};
+      var body = {..._formKey.currentState!.value};
+      // convert all values to string (your HTTP client expects this)
       var formatBody = body.map<String, String>(
-              (key, value) => MapEntry(key, value.toString()));
+            (key, value) => MapEntry(key, value.toString()),
+      );
 
       if (resume != null) {
         formatBody['resume'] = (resume as File).path;
@@ -69,9 +73,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
       if (response.success == true) {
         Navigator.pushNamed(
-            context,
-            VerificationScreen.route,
-            arguments: {'register': true}
+          context,
+          VerificationScreen.route,
+          arguments: {'register': true},
         );
       } else {
         SnackBarMessage.errorSnackbar(context, response.message);
@@ -81,10 +85,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         loading = false;
       });
       SnackBarMessage.errorSnackbar(
-          context,
-          'An error occurred during registration. Please try again.'
+        context,
+        'An error occurred during registration. Please try again.',
       );
-      print('Registration error: $e');
+      debugPrint('Registration error: $e');
     }
   }
 
@@ -94,7 +98,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       return false;
     }
 
-    final phone = _formKey.currentState?.value['phone']?.toString() ?? '';
+    final phone = _formKey.currentState?.fields['phone']?.value?.toString() ?? '';
     if (phone.isNotEmpty) {
       RegExp exp = RegExp(r'^1[0-9]+$');
       if (!exp.hasMatch(phone)) {
@@ -112,171 +116,185 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     bool smallDevice = MediaQuery.of(context).size.width >= 365;
     final List<Widget> steps = <Widget>[
       Step1(
-          resume: resume,
-          onSelect: changeSelectValue,
-          fieldsError: fieldsErrors,
-          updateResume: updateResume),
-      Step2(onSelect: changeSelectValue, fieldsError: fieldsErrors),
+        resume: resume,
+        onSelect: changeSelectValue,
+        fieldsError: fieldsErrors,
+        updateResume: updateResume,
+      ),
+      Step2(
+        onSelect: changeSelectValue,
+        fieldsError: fieldsErrors,
+      ),
     ];
 
     return BackLayout(
-        totalTabs: 2,
-        currentTabs: _currentStep,
-        text: 'Apply Clinician',
-        page: SingleChildScrollView(
-          child: Container(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
-              child: FormBuilder(
-                  key: _formKey,
-                  onChanged: () {
-                    _formKey.currentState!.save();
-                  },
-                  autovalidateMode: AutovalidateMode.disabled,
-                  initialValue: const {
-                    'first_name': '',
-                    'last_name': '',
-                    'phone': '',
-                    'zip_code': '',
-                    'email': '',
-                    'password': '',
-                    'city': '',
-                    'address': '',
-                    'state': '',
-                    'qualification_type': '',
-                    'resume': '',
-                    'agree': false
-                  },
-                  skipDisabled: true,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      totalTabs: 2,
+      currentTabs: _currentStep,
+      text: 'Apply Clinician',
+      page: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+          child: FormBuilder(
+            key: _formKey,
+            onChanged: () {
+              _formKey.currentState?.save();
+            },
+            autovalidateMode: AutovalidateMode.disabled,
+            initialValue: const {
+              'first_name': '',
+              'last_name': '',
+              'phone': '',
+              'zip_code': '',
+              'email': '',
+              'password': '',
+              'city': '',
+              'address': '',
+              'state': '',
+              'qualification_type': '',
+              'resume': '',
+              'agree': false
+            },
+            skipDisabled: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Modern Step Indicator
+                Container(
+                  margin: const EdgeInsets.only(bottom: 32),
+                  child: Row(
                     children: [
-                      // Modern Step Indicator
+                      _buildStepIndicator(0, "Step 1", _currentStep >= 0),
                       Container(
-                        margin: const EdgeInsets.only(bottom: 32),
-                        child: Row(
-                          children: [
-                            _buildStepIndicator(0, "Step 1", _currentStep >= 0),
-                            Container(
-                              width: 40,
-                              height: 2,
-                              color: _currentStep >= 1
-                                  ? Theme.of(context).colorScheme.primary
-                                  : AppColorScheme().black30,
-                              margin: const EdgeInsets.symmetric(horizontal: 4),
+                        width: 40,
+                        height: 2,
+                        color: _currentStep >= 1
+                            ? Theme.of(context).colorScheme.primary
+                            : AppColorScheme().black30,
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                      ),
+                      _buildStepIndicator(1, "Step 2", _currentStep >= 1),
+                    ],
+                  ),
+                ),
+
+                // Show one step at a time but keep the same FormBuilder so values persist
+                steps[_currentStep],
+                const SizedBox(height: 40),
+
+                // Modern Button Container
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: smallDevice ? 40 : 0),
+                  child: Column(
+                    children: [
+                      // Next/Finish Button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: loading
+                              ? null
+                              : () async {
+                            // Validate visible fields first (this uses FormBuilder validators)
+                            if (!(_formKey.currentState?.validate() ?? false)) {
+                              setState(() {});
+                              return;
+                            }
+
+                            if (_currentStep == 0) {
+                              if (_validateStep1()) {
+                                setState(() {
+                                  _currentStep = 1;
+                                });
+                              }
+                            } else {
+                              await _submitForm();
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(context).colorScheme.primary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            _buildStepIndicator(1, "Step 2", _currentStep >= 1),
-                          ],
+                            elevation: 2,
+                          ),
+                          child: loading
+                              ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: AppColorScheme().black0,
+                            ),
+                          )
+                              : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                _currentStep == 1
+                                    ? Icons.check_circle_outline
+                                    : Icons.arrow_forward,
+                                size: 20,
+                                color: AppColorScheme().black0,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                _currentStep == 1
+                                    ? 'Finish Application'
+                                    : 'Continue to Next Step',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColorScheme().black0,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
 
-                      steps[_currentStep],
-                      const SizedBox(height: 40),
+                      SizedBox(height: _currentStep == 0 ? 0 : 16),
 
-                      // Modern Button Container
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: smallDevice ? 40 : 0),
-                        child: Column(
-                          children: [
-                            // Next/Finish Button
-                            SizedBox(
-                              width: double.infinity,
-                              height: 50,
-                              child: ElevatedButton(
-                                onPressed: loading
-                                    ? null
-                                    : () async {
-                                  if (!(_formKey.currentState?.validate() ?? false)) {
-                                    setState(() {});
-                                    return;
-                                  }
-
-                                  if (_currentStep == 0) {
-                                    if (_validateStep1()) {
-                                      setState(() {
-                                        _currentStep = 1;
-                                      });
-                                    }
-                                  } else {
-                                    await _submitForm();
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Theme.of(context).colorScheme.primary,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  elevation: 2,
-                                ),
-                                child: loading
-                                    ? SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: AppColorScheme().black0,
-                                  ),
-                                )
-                                    : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      _currentStep == 1 ? Icons.check_circle_outline : Icons.arrow_forward,
-                                      size: 20,
-                                      color: AppColorScheme().black0,
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      _currentStep == 1 ? 'Finish Application' : 'Continue to Next Step',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColorScheme().black0,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                      // Back Button
+                      if (_currentStep > 0)
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: TextButton.icon(
+                            onPressed: loading
+                                ? null
+                                : () {
+                              setState(() {
+                                _currentStep = _currentStep - 1;
+                              });
+                            },
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-
-                            SizedBox(height: _currentStep == 0 ? 0 : 16),
-
-                            // Back Button
-                            if (_currentStep > 0)
-                              SizedBox(
-                                width: double.infinity,
-                                height: 50,
-                                child: TextButton.icon(
-                                  onPressed: loading ? null : () {
-                                    setState(() {
-                                      _currentStep = _currentStep - 1;
-                                    });
-                                  },
-                                  style: TextButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                  ),
-                                  icon: Icon(
-                                    Icons.arrow_back,
-                                    size: 20,
-                                    color: AppColorScheme().black60,
-                                  ),
-                                  label: Text(
-                                    'Back to Previous Step',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: AppColorScheme().black60,
-                                    ),
-                                  ),
-                                ),
+                            icon: Icon(
+                              Icons.arrow_back,
+                              size: 20,
+                              color: AppColorScheme().black60,
+                            ),
+                            label: Text(
+                              'Back to Previous Step',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppColorScheme().black60,
                               ),
-                          ],
+                            ),
+                          ),
                         ),
-                      )
                     ],
-                  ))),
-        ));
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   // Modern Step Indicator Widget
@@ -305,9 +323,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   : Text(
                 '${stepNumber + 1}',
                 style: TextStyle(
-                  color: isCompleted
-                      ? Colors.white
-                      : AppColorScheme().black30,
+                  color:
+                  isCompleted ? Colors.white : AppColorScheme().black30,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),

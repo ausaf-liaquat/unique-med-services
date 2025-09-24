@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../../shared/theme/color.dart';
@@ -11,20 +12,34 @@ import '../../../widgets/inputs/check_box.dart';
 import '../../../widgets/inputs/group_check_box.dart';
 import '../../../widgets/inputs/group_radio_box.dart';
 import '../../../widgets/inputs/select_field.dart';
-import '../../../widgets/inputs/text_field.dart';
 import '../../../widgets/dataDisplay/typography.dart';
 
 class Step1 extends StatelessWidget {
-  const Step1({super.key, required this.onSelect, required this.fieldsError, required this.updateResume, this.resume});
+  const Step1({
+    super.key,
+    required this.onSelect,
+    required this.fieldsError,
+    required this.updateResume,
+    this.resume,
+  });
+
   final void Function(String, dynamic) onSelect;
   final void Function(dynamic) updateResume;
   final String? Function(String) fieldsError;
   final File? resume;
 
-  void resumePick() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-    if (result != null) {
-      updateResume(File(result.files[0].path ?? ''));
+  Future<void> resumePick() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc', 'docx'],
+      );
+
+      if (result != null && result.files.single.path != null) {
+        updateResume(File(result.files.single.path!));
+      }
+    } catch (e) {
+      debugPrint('Resume pick error: $e');
     }
   }
 
@@ -57,7 +72,8 @@ class Step1 extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 AppTypography(
-                  text: "First, we just need some basic information to get started.",
+                  text:
+                  "First, we just need some basic information to get started.",
                   size: 14,
                   color: AppColorScheme().black60,
                 ),
@@ -67,7 +83,7 @@ class Step1 extends StatelessWidget {
 
           const SizedBox(height: 8),
 
-          // Modern Form Fields with Icons
+          // First Name
           _buildModernTextField(
             context: context,
             error: fieldsError('first_name'),
@@ -78,8 +94,10 @@ class Step1 extends StatelessWidget {
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(errorText: 'First name is required'),
             ]),
+            onSelect: onSelect,
           ),
 
+          // Last Name
           _buildModernTextField(
             context: context,
             error: fieldsError('last_name'),
@@ -90,8 +108,10 @@ class Step1 extends StatelessWidget {
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(errorText: 'Last name is required'),
             ]),
+            onSelect: onSelect,
           ),
 
+          // Phone
           _buildModernTextField(
             context: context,
             error: fieldsError('phone'),
@@ -100,10 +120,12 @@ class Step1 extends StatelessWidget {
             type: TextInputType.phone,
             name: 'phone',
             validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: 'Phone number is required')
+              FormBuilderValidators.required(errorText: 'Phone number is required'),
             ]),
+            onSelect: onSelect,
           ),
 
+          // Address
           _buildModernTextField(
             context: context,
             error: fieldsError('address'),
@@ -114,8 +136,10 @@ class Step1 extends StatelessWidget {
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(errorText: 'Address is required'),
             ]),
+            onSelect: onSelect,
           ),
 
+          // State
           _buildModernTextField(
             context: context,
             error: fieldsError('state'),
@@ -126,8 +150,10 @@ class Step1 extends StatelessWidget {
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(errorText: 'State is required'),
             ]),
+            onSelect: onSelect,
           ),
 
+          // City
           _buildModernTextField(
             context: context,
             error: fieldsError('city'),
@@ -138,8 +164,10 @@ class Step1 extends StatelessWidget {
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(errorText: 'City is required'),
             ]),
+            onSelect: onSelect,
           ),
 
+          // Zip Code
           _buildModernTextField(
             context: context,
             error: fieldsError('zip_code'),
@@ -150,8 +178,10 @@ class Step1 extends StatelessWidget {
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(errorText: 'Zip code is required'),
             ]),
+            onSelect: onSelect,
           ),
 
+          // Email
           _buildModernTextField(
             context: context,
             error: fieldsError('email'),
@@ -161,10 +191,12 @@ class Step1 extends StatelessWidget {
             name: 'email',
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(errorText: 'Email is required'),
-              FormBuilderValidators.email(errorText: 'Invalid email address')
+              FormBuilderValidators.email(errorText: 'Invalid email address'),
             ]),
+            onSelect: onSelect,
           ),
 
+          // Password
           _buildModernTextField(
             context: context,
             error: fieldsError('password'),
@@ -180,11 +212,12 @@ class Step1 extends StatelessWidget {
                 errorText: 'Password must contain letters and numbers',
               ),
             ]),
+            onSelect: onSelect,
           ),
 
           const SizedBox(height: 16),
 
-          // Modern Resume Upload Section
+          // Resume Upload
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -208,7 +241,8 @@ class Step1 extends StatelessWidget {
               InkWell(
                 onTap: resumePick,
                 child: Container(
-                  height: 120, // Reduced height
+                  height: 150,
+                  width: 370,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -230,20 +264,20 @@ class Step1 extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.cloud_upload_outlined,
-                        size: 32, // Smaller icon
+                        size: 32,
                         color: AppColorScheme().black40,
                       ),
                       const SizedBox(height: 8),
                       AppTypography(
                         text: 'Upload Your Resume',
-                        size: 14, // Smaller text
+                        size: 14,
                         weight: FontWeight.w500,
                         color: AppColorScheme().black60,
                       ),
                       const SizedBox(height: 2),
                       AppTypography(
                         text: 'PDF, DOC, DOCX up to 10MB',
-                        size: 10, // Smaller text
+                        size: 10,
                         color: AppColorScheme().black40,
                       ),
                     ],
@@ -253,7 +287,8 @@ class Step1 extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20), // Extra padding at bottom
+
+          const SizedBox(height: 10),
         ],
       ),
     );
@@ -267,9 +302,10 @@ class Step1 extends StatelessWidget {
     required TextInputType type,
     required String name,
     required FormFieldValidator<String>? validator,
+    required void Function(String, dynamic) onSelect,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12), // Reduced margin
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
@@ -280,7 +316,8 @@ class Step1 extends StatelessWidget {
           ),
         ],
       ),
-      child: TextFormField(
+      child: FormBuilderTextField(
+        name: name,
         keyboardType: type,
         obscureText: type == TextInputType.visiblePassword,
         decoration: InputDecoration(
@@ -311,7 +348,7 @@ class Step1 extends StatelessWidget {
           ),
           filled: true,
           fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Reduced padding
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
         validator: validator,
         onChanged: (value) {
@@ -375,7 +412,7 @@ class _Step2State extends State<Step2> with AutomaticKeepAliveClientMixin {
 
           // Qualification Type
           Container(
-            margin: const EdgeInsets.only(bottom: 16), // Reduced margin
+            margin: const EdgeInsets.only(bottom: 16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
@@ -402,8 +439,8 @@ class _Step2State extends State<Step2> with AutomaticKeepAliveClientMixin {
 
           // Shifts Section
           Container(
-            padding: const EdgeInsets.all(12), // Reduced padding
-            margin: const EdgeInsets.only(bottom: 16), // Added margin
+            padding: const EdgeInsets.all(12),
+            margin: const EdgeInsets.only(bottom: 16),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -424,13 +461,13 @@ class _Step2State extends State<Step2> with AutomaticKeepAliveClientMixin {
                     Icon(
                       Icons.schedule_outlined,
                       color: Theme.of(context).colorScheme.primary,
-                      size: 18, // Smaller icon
+                      size: 18,
                     ),
                     const SizedBox(width: 6),
                     Expanded(
                       child: AppTypography(
                         text: 'What types of shifts are you interested in?',
-                        size: 14, // Smaller text
+                        size: 14,
                         weight: FontWeight.w600,
                         color: AppColorScheme().black80,
                       ),
@@ -449,12 +486,12 @@ class _Step2State extends State<Step2> with AutomaticKeepAliveClientMixin {
             ),
           ),
 
-          const SizedBox(height: 16), // Reduced spacing
+          const SizedBox(height: 16),
 
           // Experience Section
           Container(
-            padding: const EdgeInsets.all(12), // Reduced padding
-            margin: const EdgeInsets.only(bottom: 16), // Added margin
+            padding: const EdgeInsets.all(12),
+            margin: const EdgeInsets.only(bottom: 16),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -475,13 +512,13 @@ class _Step2State extends State<Step2> with AutomaticKeepAliveClientMixin {
                     Icon(
                       Icons.work_history_outlined,
                       color: Theme.of(context).colorScheme.primary,
-                      size: 18, // Smaller icon
+                      size: 18,
                     ),
                     const SizedBox(width: 6),
                     Expanded(
                       child: AppTypography(
                         text: 'Select your licensed work experience:',
-                        size: 14, // Smaller text
+                        size: 14,
                         weight: FontWeight.w600,
                         color: AppColorScheme().black80,
                       ),
@@ -500,11 +537,11 @@ class _Step2State extends State<Step2> with AutomaticKeepAliveClientMixin {
             ),
           ),
 
-          const SizedBox(height: 16), // Reduced spacing
+          const SizedBox(height: 16),
 
           // Terms and Conditions
           Container(
-            padding: const EdgeInsets.all(12), // Reduced padding
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: AppColorScheme().black6,
               borderRadius: BorderRadius.circular(12),
@@ -519,7 +556,7 @@ class _Step2State extends State<Step2> with AutomaticKeepAliveClientMixin {
                 textAlign: TextAlign.start,
                 text: TextSpan(
                   text: 'I have read and agree to Unique Med Services ',
-                  style: TextStyle(color: AppColorScheme().black60, fontSize: 12), // Smaller text
+                  style: TextStyle(color: AppColorScheme().black60, fontSize: 12),
                   children: <TextSpan>[
                     TextSpan(
                       recognizer: TapGestureRecognizer()
@@ -529,8 +566,7 @@ class _Step2State extends State<Step2> with AutomaticKeepAliveClientMixin {
                       text: 'Terms of Service',
                       style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: Theme.of(context).colorScheme.primary
-                      ),
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                     const TextSpan(text: ', '),
                     TextSpan(
@@ -541,8 +577,7 @@ class _Step2State extends State<Step2> with AutomaticKeepAliveClientMixin {
                       text: 'Privacy Policy',
                       style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: Theme.of(context).colorScheme.primary
-                      ),
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                     const TextSpan(text: ' and '),
                     TextSpan(
@@ -553,8 +588,7 @@ class _Step2State extends State<Step2> with AutomaticKeepAliveClientMixin {
                       text: 'SMS Terms of Service',
                       style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: Theme.of(context).colorScheme.primary
-                      ),
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                   ],
                 ),
@@ -562,7 +596,7 @@ class _Step2State extends State<Step2> with AutomaticKeepAliveClientMixin {
               name: 'agree',
             ),
           ),
-          const SizedBox(height: 20), // Extra padding at bottom
+          const SizedBox(height: 20),
         ],
       ),
     );

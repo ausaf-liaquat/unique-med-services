@@ -28,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool loading = false;
+  bool _obscurePassword = true;
 
   @override
   void initState() {
@@ -109,35 +110,130 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           const SizedBox(height: 32),
 
-                          // Email Field
+                          // Modern Email Field
                           Container(
-                            margin: const EdgeInsets.only(bottom: 16),
-                            child: AppTextField(
-                              error: _formKey.currentState?.fields['email']!.errorText,
-                              type: TextInputType.emailAddress,
-                              name: 'email',
-                              label: 'Username or Email',
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(
-                                    errorText: 'Email is required'),
-                                FormBuilderValidators.email(
-                                    errorText: 'Invalid email address')
-                              ]),
+                            margin: const EdgeInsets.only(bottom: 20),
+                            child: TextFormField(
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(
+                                labelText: 'Username or Email',
+                                labelStyle: TextStyle(
+                                  color: AppColorScheme().black60,
+                                  fontSize: 16,
+                                ),
+                                prefixIcon: Icon(
+                                  Icons.person_outline,
+                                  color: AppColorScheme().black60,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: AppColorScheme().black30,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: AppColorScheme().black30,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    width: 2,
+                                  ),
+                                ),
+                                filled: true,
+                                fillColor: AppColorScheme().black6,
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 16,
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Email is required';
+                                }
+                                if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                                  return 'Invalid email address';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                _formKey.currentState?.fields['email']?.didChange(value);
+                              },
                             ),
                           ),
 
-                          // Password Field
+                          // Modern Password Field
                           Container(
                             margin: const EdgeInsets.only(bottom: 24),
-                            child: AppTextField(
-                              error: _formKey.currentState?.fields['password']!.errorText,
-                              type: TextInputType.visiblePassword,
-                              name: 'password',
-                              label: 'Password',
-                              validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(
-                                    errorText: 'Password is required'),
-                              ]),
+                            child: TextFormField(
+                              obscureText: _obscurePassword,
+                              keyboardType: TextInputType.visiblePassword,
+                              decoration: InputDecoration(
+                                labelText: 'Password',
+                                labelStyle: TextStyle(
+                                  color: AppColorScheme().black60,
+                                  fontSize: 16,
+                                ),
+                                prefixIcon: Icon(
+                                  Icons.lock_outline,
+                                  color: AppColorScheme().black60,
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _obscurePassword
+                                        ? Icons.visibility_outlined
+                                        : Icons.visibility_off_outlined,
+                                    color: AppColorScheme().black60,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscurePassword = !_obscurePassword;
+                                    });
+                                  },
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: AppColorScheme().black30,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: AppColorScheme().black30,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    width: 2,
+                                  ),
+                                ),
+                                filled: true,
+                                fillColor: AppColorScheme().black6,
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 16,
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Password is required';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                _formKey.currentState?.fields['password']?.didChange(value);
+                              },
                             ),
                           ),
 
@@ -236,6 +332,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 elevation: 2,
+                                shadowColor: Theme.of(context).colorScheme.primary.withOpacity(0.3),
                               ),
                               child: loading
                                   ? SizedBox(
@@ -246,20 +343,31 @@ class _LoginScreenState extends State<LoginScreen> {
                                   strokeWidth: 2,
                                 ),
                               )
-                                  : Text(
-                                'LOGIN',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColorScheme().black0,
-                                ),
+                                  : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'SIGN IN',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColorScheme().black0,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Icon(
+                                    Icons.arrow_forward_rounded,
+                                    size: 20,
+                                    color: AppColorScheme().black0,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
 
                           const SizedBox(height: 24),
 
-                          // Links Section
+                          // Modern Button Links Section
                           Container(
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             decoration: BoxDecoration(
@@ -273,29 +381,78 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.pushNamed(context, ForgetPasswordScreen.route);
-                                  },
-                                  child: Text(
-                                    'Forgot Password?',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: AppColorScheme().black90,
-                                      fontWeight: FontWeight.w500,
+                                // Forgot Password Button
+                                Expanded(
+                                  child: Container(
+                                    margin: const EdgeInsets.only(right: 8),
+                                    child: OutlinedButton.icon(
+                                      onPressed: () {
+                                        Navigator.pushNamed(context, ForgetPasswordScreen.route);
+                                      },
+                                      style: OutlinedButton.styleFrom(
+                                        foregroundColor: AppColorScheme().black90,
+                                        backgroundColor: Colors.transparent,
+                                        side: BorderSide(
+                                          color: AppColorScheme().black30,
+                                          width: 1,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 12,
+                                        ),
+                                      ),
+                                      icon: Icon(
+                                        Icons.lock_reset_outlined,
+                                        size: 18,
+                                        color: AppColorScheme().black90,
+                                      ),
+                                      label: Text(
+                                        'Forgot Password',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColorScheme().black90,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.pushNamed(context, CreateAccountScreen.route);
-                                  },
-                                  child: Text(
-                                    'Create Account',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Theme.of(context).colorScheme.error,
-                                      fontWeight: FontWeight.w600,
+
+                                // Create Account Button
+                                Expanded(
+                                  child: Container(
+                                    margin: const EdgeInsets.only(left: 8),
+                                    child: FilledButton.icon(
+                                      onPressed: () {
+                                        Navigator.pushNamed(context, CreateAccountScreen.route);
+                                      },
+                                      style: FilledButton.styleFrom(
+                                        backgroundColor: Theme.of(context).colorScheme.error,
+                                        foregroundColor: AppColorScheme().black0,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 12,
+                                        ),
+                                      ),
+                                      icon: Icon(
+                                        Icons.person_add_alt_1_outlined,
+                                        size: 18,
+                                        color: AppColorScheme().black0,
+                                      ),
+                                      label: Text(
+                                        'Create Account',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColorScheme().black0,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
