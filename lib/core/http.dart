@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:localstorage/localstorage.dart';
 import 'package:ums_staff/core/api_response.dart';
@@ -250,18 +251,24 @@ class HttpRequest extends BaseHttpRequest {
     return post('api/v1/auth/logout', {"": ""}, {"": ""}, false);
   }
 
-  Future<dynamic> updateProfile(dynamic body) async {
+  Future<dynamic> updateProfile(Map<String, String> body, {File? imageFile}) async {
     var url = Uri.https(Constants.baseUrl, 'api/v1/user/update');
     var request = http.MultipartRequest('POST', url);
+
     var token = await getToken();
     Map<String, String> header = {"Authorization": 'Bearer ${token ?? ''}'};
     request.headers.addAll(header);
-    request.fields.addAll(body);
-    if (body['image'] != null) {
-      request.files.add(await http.MultipartFile.fromPath('image', body['image']!));
-    }
-    var res = await request.send();
 
+    // ✅ Add all text fields EXCEPT image
+    body.remove('image');
+    request.fields.addAll(body);
+
+    // ✅ Only add image if updated
+    if (imageFile != null) {
+      request.files.add(await http.MultipartFile.fromPath('image', imageFile.path));
+    }
+
+    var res = await request.send();
     return await parseResponseForm(res);
   }
 
