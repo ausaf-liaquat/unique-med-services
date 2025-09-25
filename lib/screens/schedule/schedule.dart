@@ -112,7 +112,21 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                   shrinkWrap: true,
                                   itemBuilder: (BuildContext context, int index) {
                                     print("XXXXXXXXXXXXXXXXXXXXXXXXX ${listShift.elementAt(index).shiftClinicians.toString()}");
-                                    return AppLink(
+                                    return
+                                      ModernCard.elevated(
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                              context,
+                                              ScheduleDetailScreen.route,
+                                              arguments: {'shiftModel': listShift.elementAt(index)}
+                                          );
+                                        },
+                                        child: JobShift(
+                                          shift: listShift.elementAt(index),
+                                          compact: true, // Use compact layout
+                                        ),
+                                      );
+                                      AppLink(
                                         path: ScheduleDetailScreen.route,
                                         params: {"shiftModel": listShift.elementAt(index)},
                                         child: JobShift(

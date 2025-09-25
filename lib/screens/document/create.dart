@@ -36,6 +36,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
   File? _image;
   bool loading = false;
   Iterable<DocType> docTypeList = [];
+
   void changeSelectValue(String name, String value) {
     _formKey.currentState!.fields[name]!.didChange(value);
   }
@@ -43,6 +44,10 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
   @override
   void initState() {
     super.initState();
+    _loadDocumentTypes();
+  }
+
+  void _loadDocumentTypes() {
     var http = HttpRequest();
     setState(() {
       loading = true;
@@ -59,7 +64,6 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
           setState(() {
             docTypeList = DocType.getList(docType);
           });
-          SnackBarMessage.successSnackbar(context, "Document Type Loaded");
         }
       }
     });
@@ -67,152 +71,335 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BackLayout(
-        text: 'Upload Document',
-        page: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(20, 28, 20, 60),
-            child: Column(children: [
-              RichText(
-                text: TextSpan(
-                  style: TextStyle(fontSize: 14, height: 1.4, color: AppColorScheme().black90, letterSpacing: 0.1),
-                  children: [
-                    WidgetSpan(
-                        child: Padding(
-                      padding: const EdgeInsetsDirectional.only(end: 4),
-                      child: Icon(
-                        Icons.info_outline,
-                        color: HexColor('#B3261E'),
-                        size: 19,
-                      ),
-                    )),
-                    const TextSpan(text: 'Note: ', style: TextStyle(fontWeight: FontWeight.w600)),
-                    const TextSpan(text: 'Uploaded documents will be verified by  staff member before they are visible to both nurses and facilities'),
-                  ],
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: HexColor('#6505A3'),
+              size: 18,
+            ),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          'Upload Document',
+          style: TextStyle(
+            color: HexColor('#6505A3'),
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Information Card
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: HexColor('#FFFBF2'),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: HexColor('#F9D649').withOpacity(0.3),
                 ),
               ),
-              Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 40),
-                  child: FormBuilder(
-                    key: _formKey,
-                    onChanged: () {
-                      _formKey.currentState!.save();
-                    },
-                    autovalidateMode: AutovalidateMode.disabled,
-                    initialValue: const {
-                      'document_type_id': '',
-                      'title': "",
-                      "notes": 'Enter notes...',
-                    },
-                    skipDisabled: true,
-                    child: Column(
-                      children: [
-                        AppSelectField(
-                          error: _formKey.currentState?.fields['document_type_id']?.errorText,
-                          title: 'What is your document type?',
-                          bottom: 20,
-                          onSelect: changeSelectValue,
-                          option: docTypeList.map((e) => e.name).toList(),
-                          name: 'document_type_id',
-                          label: 'Document Type',
-                        ),
-                        AppTextField(
-                          type: TextInputType.text,
-                          name: 'title',
-                          label: "Title",
-                          bottom: 20,
-                          error: _formKey.currentState?.fields['title']?.errorText,
-                          validator: FormBuilderValidators.compose([FormBuilderValidators.required(errorText: 'Title is required')]),
-                        ),
-                        const AppTextField(
-                          type: TextInputType.multiline,
-                          name: 'notes',
-                          label: "Notes",
-                          bottom: 20,
-                        ),
-                        _image == null
-                            ? Padding(
-                                padding: const EdgeInsets.only(top: 24),
-                                child: Image.asset(
-                                  'assets/images/select-image.png',
-                                  width: 300,
-                                ),
-                              )
-                            : Image.file(
-                                _image!,
-                                fit: BoxFit.fitWidth,
-                              )
-                      ],
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.info_outline_rounded,
+                    color: HexColor('#B38B1C'),
+                    size: 20,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Uploaded documents will be verified by staff member before they are visible to both nurses and facilities',
+                      style: TextStyle(
+                        color: HexColor('#B38B1C'),
+                        fontSize: 13,
+                        height: 1.4,
+                      ),
                     ),
-                  )),
-              const SizedBox(height: 24),
-              Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 26),
-                  child: Column(children: [
-                    ElevatedButton.icon(
-                        onPressed: () {
-                          ImagePick.pickerImage(context, (File image) {
-                            setState(() {
-                              _image = image;
-                            });
-                          });
-                        },
-                        icon: const Icon(Icons.wallpaper_outlined),
-                        label: Text(_image == null ? 'SELECT DOCUMENT' : 'RESELECT DOCUMENT')),
-                    const SizedBox(height: 24),
-                    _image == null
-                        ? const SizedBox()
-                        : ElevatedButton.icon(
-                            onPressed: loading
-                                ? null
-                                : () {
-                                    if (_formKey.currentState?.validate() ?? false) {
-                                      var body = {..._formKey.currentState?.value ?? {}};
-                                      var formatBody = body.map<String, String>((key, value) {
-                                        if (key == 'document_type_id') {
-                                          var dt = docTypeList.firstWhere((element) => element.name == value);
-                                          return MapEntry(key, dt.id.toString());
-                                        }
-                                        return MapEntry(key, value.toString());
-                                      });
-                                      if (_image != null) {
-                                        formatBody['file'] = (_image as File).path;
-                                      }
-                                      var http = HttpRequest();
-                                      setState(() {
-                                        loading = true;
-                                      });
-                                      http.uploadDoc(formatBody).then((value) {
-                                        setState(() {
-                                          loading = false;
-                                        });
-                                        if (value.success == true) {
-                                          SnackBarMessage.successSnackbar(context, "File Upload SuccessFully");
+                  ),
+                ],
+              ),
+            ),
 
-                                          Navigator.pop(context);
-                                          http.docs().then((value) {
-                                            if (!value.success) {
-                                              SnackBarMessage.errorSnackbar(context, value.message);
-                                            } else {
-                                              var docType = value.data['data']['documents'];
-                                              if (docType != null) {
-                                                setState(() {
-                                                  docTypeList = DocType.getList(docType);
-                                                });
-                                              }
-                                            }
-                                          });
-                                        } else {
-                                          SnackBarMessage.errorSnackbar(context, value.message);
-                                        }
-                                      });
-                                    }
-                                  },
-                            icon: const Icon(Icons.cloud_upload_outlined),
-                            label: const Text('UPLOAD DOCUMENT')),
-                  ])),
-            ]),
+            const SizedBox(height: 32),
+
+            // Form Section
+            Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: FormBuilder(
+                  key: _formKey,
+                  onChanged: () {
+                    _formKey.currentState!.save();
+                  },
+                  autovalidateMode: AutovalidateMode.disabled,
+                  initialValue: const {
+                    'document_type_id': '',
+                    'title': "",
+                    "notes": '',
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Document Details',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: HexColor('#6505A3'),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+
+                      AppSelectField(
+                        error: _formKey.currentState?.fields['document_type_id']?.errorText,
+                        title: 'Document Type',
+                        bottom: 20,
+                        onSelect: changeSelectValue,
+                        option: docTypeList.map((e) => e.name).toList(),
+                        name: 'document_type_id',
+                        label: 'Select Document Type',
+                      ),
+
+                      AppTextField(
+                        type: TextInputType.text,
+                        name: 'title',
+                        label: "Document Title",
+                        bottom: 20,
+                        error: _formKey.currentState?.fields['title']?.errorText,
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(errorText: 'Title is required')
+                        ]),
+                      ),
+
+                      AppTextField(
+                        type: TextInputType.multiline,
+                        name: 'notes',
+                        label: "Additional Notes",
+                        bottom: 20,
+                        // maxLines: 4,
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Document Preview Section
+                      _buildDocumentPreview(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 32),
+
+            // Action Buttons
+            _buildActionButtons(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDocumentPreview() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Document Preview',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey[700],
           ),
-        ));
+        ),
+        const SizedBox(height: 16),
+
+        Container(
+          width: double.infinity,
+          height: 200,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey[300]!,
+              width: 1.5,
+            ),
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.grey[50],
+          ),
+          child: _image == null
+              ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.description_outlined,
+                color: Colors.grey[400],
+                size: 48,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'No document selected',
+                style: TextStyle(
+                  color: Colors.grey[500],
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Select a document to preview',
+                style: TextStyle(
+                  color: Colors.grey[400],
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          )
+              : ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.file(
+              _image!,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionButtons() {
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: ElevatedButton.icon(
+            onPressed: () {
+              ImagePick.pickerImage(context, (File image) {
+                setState(() {
+                  _image = image;
+                });
+              });
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: HexColor('#6505A3'),
+              elevation: 1,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(
+                  color: HexColor('#6505A3'),
+                  width: 1.5,
+                ),
+              ),
+            ),
+            icon: Icon(
+              _image == null ? Icons.add_photo_alternate_outlined : Icons.change_circle_outlined,
+              size: 20,
+            ),
+            label: Text(
+              _image == null ? 'SELECT DOCUMENT' : 'CHANGE DOCUMENT',
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+
+        if (_image != null) ...[
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: ElevatedButton.icon(
+              onPressed: loading ? null : _uploadDocument,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: HexColor('#6505A3'),
+                foregroundColor: Colors.white,
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                disabledBackgroundColor: Colors.grey[400],
+              ),
+              icon: loading
+                  ? SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              )
+                  : const Icon(Icons.cloud_upload_outlined, size: 20),
+              label: loading
+                  ? const Text('UPLOADING...')
+                  : const Text(
+                'UPLOAD DOCUMENT',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  void _uploadDocument() {
+    if (_formKey.currentState?.validate() ?? false) {
+      var body = {..._formKey.currentState?.value ?? {}};
+      var formatBody = body.map<String, String>((key, value) {
+        if (key == 'document_type_id') {
+          var dt = docTypeList.firstWhere((element) => element.name == value);
+          return MapEntry(key, dt.id.toString());
+        }
+        return MapEntry(key, value.toString());
+      });
+
+      if (_image != null) {
+        formatBody['file'] = (_image as File).path;
+      }
+
+      var http = HttpRequest();
+      setState(() {
+        loading = true;
+      });
+
+      http.uploadDoc(formatBody).then((value) {
+        setState(() {
+          loading = false;
+        });
+
+        if (value.success == true) {
+          SnackBarMessage.successSnackbar(context, "Document uploaded successfully!");
+          Navigator.pop(context);
+        } else {
+          SnackBarMessage.errorSnackbar(context, value.message);
+        }
+      });
+    }
   }
 }

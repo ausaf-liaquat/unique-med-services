@@ -148,28 +148,71 @@ class _ShiftScreenState extends State<ShiftScreen> {
     var url = Uri.https(Constants.baseUrl, 'api/v1/shifts/filter');
     var request = http.MultipartRequest('POST', url);
 
-    request.fields.addAll({
-      if (date != null) 'date': date,
-      if (type != null) 'type': type,
-      if (shift_hour != null) 'shift_hour': shift_hour,
-    });
+    // Debug: Print the date to see what's being sent
+    print('Date being sent: $date');
+
+    // FIX: Properly add fields one by one with null checks
+    if (date != null && date.isNotEmpty) {
+      request.fields['date'] = date;
+    }
+    if (type != null && type.isNotEmpty) {
+      request.fields['type'] = type;
+    }
+    if (shift_hour != null && shift_hour.isNotEmpty) {
+      request.fields['shift_hour'] = shift_hour;
+    }
+    if (location != null && location.isNotEmpty) {
+      request.fields['location'] = location;
+    }
 
     request.headers.addAll(headers);
 
-    http.StreamedResponse response = await request.send();
+    // Debug: Print the full request
+    print('Request fields: ${request.fields}');
+    print('Request headers: ${request.headers}');
 
-    if (response.statusCode == 200) {
-      String responseString = await response.stream.bytesToString();
-      var jsonResponse = json.decode(responseString);
-      var docType = jsonResponse['data'];
-      if (docType is List) {
-        setState(() {
-          listShift = ShiftModel.listShiftModels(docType).toList();
-        });
-        Navigator.pop(context);
+    try {
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        String responseString = await response.stream.bytesToString();
+        var jsonResponse = json.decode(responseString);
+
+        print('API Response: $jsonResponse');
+
+        if (jsonResponse['data'] is List) {
+          var shiftsList = jsonResponse['data'];
+
+          setState(() {
+            listShift = ShiftModel.listShiftModels(shiftsList).toList();
+          });
+
+          print('Filtered shifts count: ${listShift.length}');
+
+          // Check if the returned data actually matches the filter
+          if (date != null && listShift.isNotEmpty) {
+            print('Shifts returned for date $date:');
+            for (var shift in listShift) {
+              print(' - Shift date: ${shift.date}');
+            }
+          }
+
+          Navigator.pop(context);
+        } else {
+          setState(() {
+            listShift = [];
+          });
+          print('No shifts found or unexpected data format');
+          Navigator.pop(context);
+        }
+      } else {
+        print('Error ${response.statusCode}: ${response.reasonPhrase}');
+        String errorResponse = await response.stream.bytesToString();
+        print('Error details: $errorResponse');
       }
-    } else {
-      print(response.reasonPhrase);
+    } catch (e) {
+      print('Exception during API call: $e');
+      Navigator.pop(context);
     }
   }
 
@@ -356,7 +399,7 @@ class _ShiftScreenState extends State<ShiftScreen> {
           itemBuilder: (BuildContext context, int index) {
             return Container(
               margin: const EdgeInsets.only(bottom: 16),
-              child: ModernCard.elevated(
+              child: ModernCard.compact(
                 onTap: () {
                   Navigator.pushNamed(
                       context,
@@ -364,7 +407,10 @@ class _ShiftScreenState extends State<ShiftScreen> {
                       arguments: {'shiftModel': listShift.elementAt(index)}
                   );
                 },
-                child: JobShift(shift: listShift.elementAt(index)),
+                child: JobShift(
+                  shift: listShift.elementAt(index),
+                  compact: true, // Use compact layout
+                ),
               ),
             );
           },
