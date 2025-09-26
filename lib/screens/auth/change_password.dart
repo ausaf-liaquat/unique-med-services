@@ -71,13 +71,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               bottom: 40,
                               type: TextInputType.visiblePassword,
                               name: 'conform_password',
-                              label: 'Conform Password',
+                              label: 'Confirm Password',
                               validator: FormBuilderValidators.compose([
                                 FormBuilderValidators.equal(
                                     _formKey.currentState?.value['password'] ??
                                         '',
                                     errorText:
-                                        'Conform password must be same as password'),
+                                        'Confirm password must be same as password'),
                               ]),
                             ),
                             ElevatedButton(

@@ -81,7 +81,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
                       const SizedBox(height: 32),
 
-                      // Modern Email Field with Icon
+                      // Use FormBuilderTextField instead of TextFormField
                       Container(
                         margin: const EdgeInsets.only(bottom: 32),
                         decoration: BoxDecoration(
@@ -94,7 +94,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                             ),
                           ],
                         ),
-                        child: TextFormField(
+                        child: FormBuilderTextField(
+                          name: 'email', // This is crucial - name must match
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             labelText: 'Email Address',
@@ -142,18 +143,10 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               color: AppColorScheme().black40,
                             ),
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Email is required';
-                            }
-                            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                              return 'Invalid email address';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {
-                            _formKey.currentState?.fields['email']?.didChange(value);
-                          },
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(),
+                            FormBuilderValidators.email(),
+                          ]),
                         ),
                       ),
 
@@ -296,21 +289,29 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   }
 
   void _handleSubmit() async {
+    // Save the form first to ensure all values are captured
+    _formKey.currentState?.save();
+
     if (_formKey.currentState?.validate() ?? false) {
       setState(() {
         _loading = true;
       });
 
       try {
-        final formatBody = _formKey.currentState?.value
-            .map<String, String>((key, value) => MapEntry(key, value.toString()));
+        final formData = _formKey.currentState?.value;
+        final email = formData?['email']?.toString() ?? '';
+
+        print("Form data: $formData");
+        print("Email: $email");
 
         final api = HttpRequest();
-        final value = await api.forgetPassword(formatBody);
+        final value = await api.forgetPassword({'email': email});
 
         setState(() {
           _loading = false;
         });
+
+        print("API response: $value");
 
         if (value.success) {
           if (mounted) {
@@ -318,7 +319,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               context,
               VerificationScreen.route,
               arguments: {
-                "email": _formKey.currentState?.value['email'],
+                "email": email,
               },
             );
           }
