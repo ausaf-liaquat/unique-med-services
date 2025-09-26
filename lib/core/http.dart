@@ -320,9 +320,20 @@ class HttpRequest extends BaseHttpRequest {
     return await parseResponseForm(res);
   }
 
-  Future<dynamic> clockout(int id) async {
-    return post('api/v1/shift/$id/clockout', {"": ""}, null, false);
+  // Future<dynamic> clockout(int id) async {
+  //   return post('api/v1/shift/$id/clockout', {"": ""}, null, false);
+  // }
+  Future<dynamic> clockout(dynamic body, int id) async {
+    var url = Uri.https(Constants.baseUrl, 'api/v1/shift/$id/clockout');
+    var request = http.MultipartRequest('POST', url);
+    var token = await getToken();
+    Map<String, String> header = {"Authorization": 'Bearer ${token ?? ''}'};
+    request.headers.addAll(header);
+    request.fields.addAll(body);
+    var res = await request.send();
+    return await parseResponseForm(res);
   }
+
 }
 
 class ResponseBody {

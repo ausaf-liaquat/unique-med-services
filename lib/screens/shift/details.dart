@@ -21,6 +21,318 @@ class _ShiftDetailScreenState extends State<ShiftDetailScreen> {
   bool _accepting = false;
   bool _declining = false;
 
+  void _showAcceptConfirmation(ShiftModel register) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return _buildConfirmationDialog(
+          isAccept: true,
+          register: register,
+          title: 'Accept Shift',
+          subtitle: 'You are about to accept this shift offer',
+          icon: Icons.thumb_up_rounded,
+          iconColor: Colors.green.shade600,
+          primaryButtonText: 'Accept Shift',
+          warningMessage: 'Once accepted, this shift will be added to your schedule.',
+        );
+      },
+    );
+  }
+
+  void _showDeclineConfirmation(ShiftModel register) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.black54,
+      builder: (BuildContext context) {
+        return _buildConfirmationDialog(
+          isAccept: false,
+          register: register,
+          title: 'Decline Shift',
+          subtitle: 'You are about to decline this shift offer',
+          icon: Icons.thumb_down_rounded,
+          iconColor: Colors.red.shade600,
+          primaryButtonText: 'Decline Shift',
+          warningMessage: 'This action cannot be undone. The shift will be offered to other clinicians.',
+        );
+      },
+    );
+  }
+
+  Widget _buildConfirmationDialog({
+    required bool isAccept,
+    required ShiftModel register,
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required Color iconColor,
+    required String primaryButtonText,
+    required String warningMessage,
+  }) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: EdgeInsets.all(20),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 32,
+              offset: Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Header Section
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: isAccept
+                      ? [
+                    Colors.green.withOpacity(0.1),
+                    Colors.green.withOpacity(0.05),
+                  ]
+                      : [
+                    Colors.red.withOpacity(0.1),
+                    Colors.red.withOpacity(0.05),
+                  ],
+                ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(24),
+                  topRight: Radius.circular(24),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: iconColor.withOpacity(0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      icon,
+                      color: iconColor,
+                      size: 32,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: AppColorScheme().black90,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: AppColorScheme().black60,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+
+            // Content Section
+            Padding(
+              padding: EdgeInsets.all(24),
+              child: Column(
+                children: [
+                  _buildConfirmationDetailItem(
+                    icon: Icons.work_rounded,
+                    title: 'Shift Title',
+                    value: register.title ?? 'Not specified',
+                    color: Colors.blue.shade600,
+                  ),
+                  SizedBox(height: 12),
+                  _buildConfirmationDetailItem(
+                    icon: Icons.calendar_today_rounded,
+                    title: 'Date',
+                    value: register.date ?? 'Not specified',
+                    color: Colors.purple.shade600,
+                  ),
+                  SizedBox(height: 12),
+                  _buildConfirmationDetailItem(
+                    icon: Icons.access_time_rounded,
+                    title: 'Timing',
+                    value: register.shiftHour ?? 'Not specified',
+                    color: Colors.orange.shade600,
+                  ),
+                  SizedBox(height: 12),
+                  _buildConfirmationDetailItem(
+                    icon: Icons.attach_money_rounded,
+                    title: 'Rate',
+                    value: '\$${register.ratePerHour}/hour' ?? 'Not specified',
+                    color: Colors.green.shade600,
+                  ),
+                  SizedBox(height: 24),
+
+                  // Warning Message
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: isAccept ? Colors.blue.shade50 : Colors.orange.shade50,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: isAccept ? Colors.blue.shade200 : Colors.orange.shade200,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.info_outline_rounded,
+                          color: isAccept ? Colors.blue.shade700 : Colors.orange.shade700,
+                          size: 20,
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            warningMessage,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: isAccept ? Colors.blue.shade800 : Colors.orange.shade800,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Button Section
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border(top: BorderSide(color: AppColorScheme().black20)),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColorScheme().black60,
+                        side: BorderSide(color: AppColorScheme().black40),
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        _handleShiftAction(register.id.toString(), isAccept, context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isAccept ? Colors.green.shade600 : Colors.red.shade600,
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 2,
+                      ),
+                      child: _loading
+                          ? SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                          : Text(
+                        primaryButtonText,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildConfirmationDetailItem({
+    required IconData icon,
+    required String title,
+    required String value,
+    required Color color,
+  }) {
+    return Row(
+      children: [
+        Container(
+          padding: EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: color, size: 16),
+        ),
+        SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColorScheme().black60,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(height: 2),
+              Text(
+                value,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: AppColorScheme().black90,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Future<void> _handleShiftAction(String id, bool accept, BuildContext context) async {
     if (!mounted) return;
 
@@ -195,7 +507,6 @@ class _ShiftDetailScreenState extends State<ShiftDetailScreen> {
       backgroundColor: colorScheme.background,
       body: BackLayout(
         text: 'Shift Details',
-        // showActionButton: false,
         page: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.all(20),
@@ -323,7 +634,7 @@ class _ShiftDetailScreenState extends State<ShiftDetailScreen> {
                 children: [
                   Expanded(
                     child: FilledButton.tonal(
-                      onPressed: _loading ? null : () => _handleShiftAction(register.id.toString(), false, context),
+                      onPressed: _loading ? null : () => _showDeclineConfirmation(register),
                       style: FilledButton.styleFrom(
                         backgroundColor: colorScheme.errorContainer,
                         foregroundColor: colorScheme.onErrorContainer,
@@ -349,7 +660,7 @@ class _ShiftDetailScreenState extends State<ShiftDetailScreen> {
                   const SizedBox(width: 16),
                   Expanded(
                     child: FilledButton(
-                      onPressed: _loading ? null : () => _handleShiftAction(register.id.toString(), true, context),
+                      onPressed: _loading ? null : () => _showAcceptConfirmation(register),
                       style: FilledButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

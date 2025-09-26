@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -33,9 +34,10 @@ class DocType {
 
 class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-  File? _image;
+  File? _documentFile;
   bool loading = false;
   Iterable<DocType> docTypeList = [];
+  DateTime? _selectedExpiryDate;
 
   void changeSelectValue(String name, String value) {
     _formKey.currentState!.fields[name]!.didChange(value);
@@ -196,12 +198,15 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
                         ]),
                       ),
 
+                      // Expiry Date Field - EXACT SAME UI as other fields
+                      _buildExpiryDateField(),
+
                       AppTextField(
                         type: TextInputType.multiline,
                         name: 'notes',
                         label: "Additional Notes",
                         bottom: 20,
-                        // maxLines: 4,
+                        // maxLines: 3,
                       ),
 
                       const SizedBox(height: 24),
@@ -224,6 +229,83 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
     );
   }
 
+  // Expiry Date Field with EXACT same UI as AppTextField
+  Widget _buildExpiryDateField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Text(
+            'Expiry Date',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey[700],
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: _showDatePicker,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.grey[300]!,
+                width: 1.5,
+              ),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.calendar_today_outlined,
+                  color: _selectedExpiryDate != null ? HexColor('#6505A3') : Colors.grey[400],
+                  size: 20,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    _selectedExpiryDate != null
+                        ? DateFormat('MMM dd, yyyy').format(_selectedExpiryDate!)
+                        : 'Select expiry date (optional)',
+                    style: TextStyle(
+                      color: _selectedExpiryDate != null ? Colors.black87 : Colors.grey[500],
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_drop_down,
+                  color: Colors.grey[400],
+                  size: 24,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+      ],
+    );
+  }
+
+  void _showDatePicker() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedExpiryDate ?? DateTime.now().add(const Duration(days: 365)),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null) {
+      setState(() {
+        _selectedExpiryDate = picked;
+      });
+    }
+  }
+
   Widget _buildDocumentPreview() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -238,54 +320,115 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
         ),
         const SizedBox(height: 16),
 
-        Container(
-          width: double.infinity,
-          height: 200,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey[300]!,
-              width: 1.5,
+        GestureDetector(
+          onTap: _selectDocument,
+          child: Container(
+            width: double.infinity,
+            height: 150,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey[300]!,
+                width: 1.5,
+              ),
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.grey[50],
             ),
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.grey[50],
-          ),
-          child: _image == null
-              ? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.description_outlined,
-                color: Colors.grey[400],
-                size: 48,
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'No document selected',
-                style: TextStyle(
-                  color: Colors.grey[500],
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Select a document to preview',
-                style: TextStyle(
+            child: _documentFile == null
+                ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.attach_file,
                   color: Colors.grey[400],
-                  fontSize: 12,
+                  size: 48,
                 ),
-              ),
-            ],
-          )
-              : ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.file(
-              _image!,
-              fit: BoxFit.cover,
+                const SizedBox(height: 12),
+                Text(
+                  'No document selected',
+                  style: TextStyle(
+                    color: Colors.grey[500],
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Tap to select any file (PDF, Word, Excel, Image, etc.)',
+                  style: TextStyle(
+                    color: Colors.grey[400],
+                    fontSize: 12,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            )
+                : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  _getFileIcon(_documentFile!.path),
+                  color: HexColor('#6505A3'),
+                  size: 48,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  _getFileName(_documentFile!.path),
+                  style: TextStyle(
+                    color: Colors.grey[700],
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  _getFileSize(_documentFile!),
+                  style: TextStyle(
+                    color: Colors.grey[500],
+                    fontSize: 12,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
       ],
     );
+  }
+
+  IconData _getFileIcon(String filePath) {
+    final extension = filePath.toLowerCase().split('.').last;
+    switch (extension) {
+      case 'pdf':
+        return Icons.picture_as_pdf;
+      case 'doc':
+      case 'docx':
+        return Icons.description;
+      case 'xls':
+      case 'xlsx':
+        return Icons.table_chart;
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'gif':
+        return Icons.image;
+      default:
+        return Icons.insert_drive_file;
+    }
+  }
+
+  String _getFileName(String path) {
+    return path.split('/').last;
+  }
+
+  String _getFileSize(File file) {
+    final size = file.lengthSync();
+    if (size < 1024) {
+      return '$size B';
+    } else if (size < 1048576) {
+      return '${(size / 1024).toStringAsFixed(1)} KB';
+    } else {
+      return '${(size / 1048576).toStringAsFixed(1)} MB';
+    }
   }
 
   Widget _buildActionButtons() {
@@ -295,13 +438,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
           width: double.infinity,
           height: 50,
           child: ElevatedButton.icon(
-            onPressed: () {
-              ImagePick.pickerImage(context, (File image) {
-                setState(() {
-                  _image = image;
-                });
-              });
-            },
+            onPressed: _selectDocument,
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
               foregroundColor: HexColor('#6505A3'),
@@ -315,11 +452,11 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
               ),
             ),
             icon: Icon(
-              _image == null ? Icons.add_photo_alternate_outlined : Icons.change_circle_outlined,
+              _documentFile == null ? Icons.attach_file : Icons.change_circle_outlined,
               size: 20,
             ),
             label: Text(
-              _image == null ? 'SELECT DOCUMENT' : 'CHANGE DOCUMENT',
+              _documentFile == null ? 'SELECT DOCUMENT' : 'CHANGE DOCUMENT',
               style: const TextStyle(
                 fontWeight: FontWeight.w600,
               ),
@@ -327,7 +464,7 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
           ),
         ),
 
-        if (_image != null) ...[
+        if (_documentFile != null) ...[
           const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
@@ -368,6 +505,15 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
     );
   }
 
+  void _selectDocument() {
+    // Use file_picker package for any file type
+    ImagePick.pickerFile(context, (File file) {
+      setState(() {
+        _documentFile = file;
+      });
+    });
+  }
+
   void _uploadDocument() {
     if (_formKey.currentState?.validate() ?? false) {
       var body = {..._formKey.currentState?.value ?? {}};
@@ -379,8 +525,13 @@ class _CreateDocumentScreenState extends State<CreateDocumentScreen> {
         return MapEntry(key, value.toString());
       });
 
-      if (_image != null) {
-        formatBody['file'] = (_image as File).path;
+      // Add expiry date to the request body
+      if (_selectedExpiryDate != null) {
+        formatBody['expiry_date'] = DateFormat('yyyy-MM-dd').format(_selectedExpiryDate!);
+      }
+
+      if (_documentFile != null) {
+        formatBody['file'] = _documentFile!.path;
       }
 
       var http = HttpRequest();
