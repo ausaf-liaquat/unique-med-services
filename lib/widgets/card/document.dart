@@ -1,100 +1,61 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_skeleton_plus/flutter_skeleton_plus.dart';
 import 'package:ums_staff/screens/document/models.dart';
 import 'package:ums_staff/shared/theme/color.dart';
 import 'package:ums_staff/widgets/card/card.dart';
-import 'package:ums_staff/widgets/dataDisplay/row_item.dart';
-import 'package:ums_staff/widgets/dataDisplay/typography.dart';
 
 class DocumentCard extends StatelessWidget {
-  late Docs doc;
-  DocumentCard({super.key, required this.doc});
+  final Docs doc;
+  const DocumentCard({super.key, required this.doc});
 
   @override
   Widget build(BuildContext context) {
+    final isVerified = doc.verified;
+    print("asdasdas: $isVerified");
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
       child: AppCard(
         padding: const EdgeInsets.all(0),
-        radius: BorderRadius.circular(16),
-        elevation: 2,
-        shadowColor: Colors.black.withOpacity(0.08),
-        child: Row(
-          children: [
-            // Document thumbnail with modern design
-            Container(
-              width: 80,
-              height: 100,
-              decoration: BoxDecoration(
-                color: HexColor('#58BDEA').withOpacity(0.1),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  bottomLeft: Radius.circular(16),
-                ),
-              ),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  bottomLeft: Radius.circular(16),
-                ),
-                child: CachedNetworkImage(
-                  placeholder: (context, url) => Container(
-                    color: Colors.grey[100],
-                    child: const SkeletonAvatar(
-                      style: SkeletonAvatarStyle(
-                        width: 80,
-                        height: 100,
-                        borderRadius: BorderRadius.zero,
-                      ),
-                    ),
-                  ),
-                  fit: BoxFit.cover,
-                  imageUrl: doc.documentUrl,
-                  errorWidget: (context, url, error) => Container(
-                    color: Colors.grey[100],
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.description_outlined,
-                          color: Colors.grey[400],
-                          size: 32,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Document',
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
+        radius: BorderRadius.circular(20),
+        elevation: 1,
+        shadowColor: Colors.black.withOpacity(0.04),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 📂 File icon with modern design
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: HexColor('#9C7BEE').withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: HexColor('#9C7BEE').withOpacity(0.3),
+                    width: 1,
                   ),
                 ),
+                child: Icon(
+                  Icons.insert_drive_file_rounded,
+                  color: HexColor('#9C7BEE'),
+                  size: 24,
+                ),
               ),
-            ),
 
-            const SizedBox(width: 16),
+              const SizedBox(width: 16),
 
-            // Document details
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
+              // 📑 Document details - Expanded to prevent overflow
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Document title
+                    // Title with better spacing
                     Text(
                       doc.title,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.w600,
-                        color: Colors.grey[800],
+                        color: Colors.grey[900],
                         height: 1.3,
                       ),
                       maxLines: 2,
@@ -103,104 +64,116 @@ class DocumentCard extends StatelessWidget {
 
                     const SizedBox(height: 8),
 
-                    // Document type
-                    if (doc.documentType?.name != null && doc.documentType!.name!.isNotEmpty)
+                    // Document type chip with improved layout
+                    if (doc.documentType?.name != null &&
+                        doc.documentType!.name!.isNotEmpty)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
-                          color: HexColor('#58BDEA').withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
+                          color: HexColor('#9C7BEE').withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
-                              Icons.category_outlined,
-                              color: HexColor('#58BDEA'),
-                              size: 12,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              doc.documentType!.name!,
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w500,
-                                color: HexColor('#58BDEA'),
+                            Icon(Icons.category_outlined,
+                                size: 13, color: HexColor('#9C7BEE')),
+                            const SizedBox(width: 6),
+                            Flexible(
+                              child: Text(
+                                doc.documentType!.name!,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: HexColor('#7B5DC8'),
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
                         ),
                       ),
 
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
 
-                    // Upload date
+                    // Date information in a compact row
                     Row(
                       children: [
-                        Icon(
-                          Icons.calendar_today_outlined,
-                          color: Colors.grey[500],
-                          size: 14,
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(Icons.calendar_today_outlined,
+                              size: 12, color: Colors.grey[600]),
                         ),
-                        const SizedBox(width: 6),
-                        Text(
-                          'Uploaded: ${DateFormat('MMM dd, yyyy').format(DateTime.parse(doc.createdAt))}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[600],
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            DateFormat('MMM dd, yyyy').format(DateTime.parse(doc.createdAt)),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Flexible(
+                          child: Text(
+                            _formatRelativeTime(DateTime.parse(doc.createdAt)),
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey[500],
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
                       ],
                     ),
-
-                    const SizedBox(height: 4),
-
-                    // Relative time
-                    Text(
-                      _formatRelativeTime(DateTime.parse(doc.createdAt)),
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: Colors.grey[500],
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
                   ],
                 ),
               ),
-            ),
 
-            const SizedBox(width: 12),
+              const SizedBox(width: 12),
 
-            // Verification badge
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              // ✅ Verified Badge with improved layout
+              if (isVerified)
                 Container(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                   decoration: BoxDecoration(
-                    color: HexColor('#3CA442').withOpacity(0.1),
-                    shape: BoxShape.circle,
+                    color: HexColor('#10B981').withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: HexColor('#10B981').withOpacity(0.2),
+                      width: 1,
+                    ),
                   ),
-                  child: Icon(
-                    Icons.verified_rounded,
-                    color: HexColor('#3CA442'),
-                    size: 20,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.verified_rounded,
+                        color: HexColor('#10B981'),
+                        size: 18,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'Verified',
+                        style: TextStyle(
+                          fontSize: 9,
+                          color: HexColor('#10B981'),
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  'Verified',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: HexColor('#3CA442'),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(width: 16),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -216,7 +189,6 @@ class DocumentCard extends StatelessWidget {
     if (difference.inDays == 1) return 'Yesterday';
     if (difference.inDays < 7) return '${difference.inDays}d ago';
     if (difference.inDays < 30) return '${difference.inDays ~/ 7}w ago';
-
     return '${difference.inDays ~/ 30}mo ago';
   }
 }

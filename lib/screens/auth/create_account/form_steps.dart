@@ -73,7 +73,7 @@ class Step1 extends StatelessWidget {
                 const SizedBox(height: 8),
                 AppTypography(
                   text:
-                  "First, we just need some basic information to get started.",
+                      "First, we just need some basic information to get started.",
                   size: 14,
                   color: AppColorScheme().black60,
                 ),
@@ -92,7 +92,8 @@ class Step1 extends StatelessWidget {
             type: TextInputType.name,
             name: 'first_name',
             validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: 'First name is required'),
+              FormBuilderValidators.required(
+                  errorText: 'First name is required'),
             ]),
             onSelect: onSelect,
           ),
@@ -106,7 +107,8 @@ class Step1 extends StatelessWidget {
             type: TextInputType.name,
             name: 'last_name',
             validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: 'Last name is required'),
+              FormBuilderValidators.required(
+                  errorText: 'Last name is required'),
             ]),
             onSelect: onSelect,
           ),
@@ -120,7 +122,8 @@ class Step1 extends StatelessWidget {
             type: TextInputType.phone,
             name: 'phone',
             validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: 'Phone number is required'),
+              FormBuilderValidators.required(
+                  errorText: 'Phone number is required'),
             ]),
             onSelect: onSelect,
           ),
@@ -206,7 +209,8 @@ class Step1 extends StatelessWidget {
             name: 'password',
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(errorText: 'Password is required'),
-              FormBuilderValidators.minLength(6, errorText: 'Password must be at least 6 characters'),
+              FormBuilderValidators.minLength(6,
+                  errorText: 'Password must be at least 6 characters'),
               FormBuilderValidators.match(
                 RegExp(r'^(?=.*[a-zA-Z])(?=.*\d).{6,}$'),
                 errorText: 'Password must contain letters and numbers',
@@ -218,75 +222,84 @@ class Step1 extends StatelessWidget {
           const SizedBox(height: 16),
 
           // Resume Upload
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+          // Resume Upload - Fix the overflow by removing fixed width
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 16), // fixes overflow
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(
-                    Icons.attach_file_outlined,
-                    color: AppColorScheme().black60,
-                    size: 18,
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.attach_file_outlined,
+                        color: AppColorScheme().black60,
+                        size: 18,
+                      ),
+                      const SizedBox(width: 6),
+                      AppTypography(
+                        text: 'Resume Upload',
+                        size: 16,
+                        weight: FontWeight.w500,
+                        color: AppColorScheme().black80,
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 6),
-                  AppTypography(
-                    text: 'Resume Upload',
-                    size: 16,
-                    weight: FontWeight.w500,
-                    color: AppColorScheme().black80,
+                  const SizedBox(height: 8),
+                  InkWell(
+                    onTap: resumePick,
+                    child: Container(
+                      height: 150,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          width: 2,
+                          color: resume == null
+                              ? AppColorScheme().black30
+                              : Theme.of(context).colorScheme.primary,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: resume == null
+                          ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.cloud_upload_outlined,
+                            size: 32,
+                            color: AppColorScheme().black40,
+                          ),
+                          const SizedBox(height: 8),
+                          AppTypography(
+                            text: 'Upload Your Resume',
+                            size: 14,
+                            weight: FontWeight.w500,
+                            color: AppColorScheme().black60,
+                          ),
+                          const SizedBox(height: 2),
+                          AppTypography(
+                            text: 'PDF, DOC, DOCX up to 10MB',
+                            size: 10,
+                            color: AppColorScheme().black40,
+                          ),
+                        ],
+                      )
+                          : UploadFileCard(file: resume),
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              InkWell(
-                onTap: resumePick,
-                child: Container(
-                  height: 150,
-                  width: 370,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      width: 2,
-                      color: resume == null ? AppColorScheme().black30 : Theme.of(context).colorScheme.primary,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: resume == null
-                      ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.cloud_upload_outlined,
-                        size: 32,
-                        color: AppColorScheme().black40,
-                      ),
-                      const SizedBox(height: 8),
-                      AppTypography(
-                        text: 'Upload Your Resume',
-                        size: 14,
-                        weight: FontWeight.w500,
-                        color: AppColorScheme().black60,
-                      ),
-                      const SizedBox(height: 2),
-                      AppTypography(
-                        text: 'PDF, DOC, DOCX up to 10MB',
-                        size: 10,
-                        color: AppColorScheme().black40,
-                      ),
-                    ],
-                  )
-                      : UploadFileCard(file: resume),
-                ),
-              ),
-            ],
+            ),
           ),
+
 
           const SizedBox(height: 10),
         ],
@@ -348,11 +361,14 @@ class Step1 extends StatelessWidget {
           ),
           filled: true,
           fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
         validator: validator,
         onChanged: (value) {
-          onSelect(name, value);
+          if (value != null) {
+            onSelect(name, value);
+          }
         },
       ),
     );
@@ -428,11 +444,24 @@ class _Step2State extends State<Step2> with AutomaticKeepAliveClientMixin {
               title: 'Select the qualification type?',
               bottom: 0,
               onSelect: widget.onSelect,
-              option: const ['RN', 'MT', 'PST', 'PCT', 'PT', 'OT', 'RT', 'EKG', 'LPN / LVN', 'CNA / SRNA / GNA / LNA / STNA / NAC', 'CMA / QMAP / MAPS / LMA / CMT / RMA / UAP / AMAP'],
+              option: const [
+                'RN',
+                'MT',
+                'PST',
+                'PCT',
+                'PT',
+                'OT',
+                'RT',
+                'EKG',
+                'LPN / LVN',
+                'CNA / SRNA / GNA / LNA / STNA / NAC',
+                'CMA / QMAP / MAPS / LMA / CMT / RMA / UAP / AMAP'
+              ],
               name: 'qualification_type',
               label: 'Qualification Type',
               validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: 'Qualification type is required'),
+                FormBuilderValidators.required(
+                    errorText: 'Qualification type is required'),
               ]),
             ),
           ),
@@ -478,9 +507,16 @@ class _Step2State extends State<Step2> with AutomaticKeepAliveClientMixin {
                 AppGroupCheckBox(
                   name: 'shift',
                   validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.minLength(1, errorText: 'At least select one option'),
+                    FormBuilderValidators.minLength(1,
+                        errorText: 'At least select one option'),
                   ]),
-                  options: const ['Day Shifts', 'Evening Shifts', 'Overnight Shifts', 'Weekend Shifts', 'Weekday Shifts'],
+                  options: const [
+                    'Day Shifts',
+                    'Evening Shifts',
+                    'Overnight Shifts',
+                    'Weekend Shifts',
+                    'Weekday Shifts'
+                  ],
                 ),
               ],
             ),
@@ -529,7 +565,8 @@ class _Step2State extends State<Step2> with AutomaticKeepAliveClientMixin {
                 AppGroupRadioBox(
                   name: 'experience',
                   validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.minLength(1, errorText: 'At least select one option'),
+                    FormBuilderValidators.minLength(1,
+                        errorText: 'At least select one option'),
                   ]),
                   options: const ['0 - 3 months', '4 - 6 months', '6+ months'],
                 ),
@@ -556,7 +593,8 @@ class _Step2State extends State<Step2> with AutomaticKeepAliveClientMixin {
                 textAlign: TextAlign.start,
                 text: TextSpan(
                   text: 'I have read and agree to Unique Med Services ',
-                  style: TextStyle(color: AppColorScheme().black60, fontSize: 12),
+                  style:
+                      TextStyle(color: AppColorScheme().black60, fontSize: 12),
                   children: <TextSpan>[
                     TextSpan(
                       recognizer: TapGestureRecognizer()

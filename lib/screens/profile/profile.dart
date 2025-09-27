@@ -214,28 +214,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(height: 24),
 
                       // Statistics section
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              HexColor('#6505A3').withOpacity(0.1),
-                              HexColor('#6505A3').withOpacity(0.05),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            _buildStatItem('Member since', '2023'),
-                            _buildStatItem('Last login', 'Today'),
-                            _buildStatItem('Status', 'Active'),
-                          ],
-                        ),
-                      ),
+                      // Container(
+                      //   padding: const EdgeInsets.all(20),
+                      //   decoration: BoxDecoration(
+                      //     gradient: LinearGradient(
+                      //       begin: Alignment.topLeft,
+                      //       end: Alignment.bottomRight,
+                      //       colors: [
+                      //         HexColor('#6505A3').withOpacity(0.1),
+                      //         HexColor('#6505A3').withOpacity(0.05),
+                      //       ],
+                      //     ),
+                      //     borderRadius: BorderRadius.circular(16),
+                      //   ),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      //     children: [
+                      //       _buildStatItem('Member since', '2023'),
+                      //       _buildStatItem('Last login', 'Today'),
+                      //       _buildStatItem('Status', 'Active'),
+                      //     ],
+                      //   ),
+                      // ),
 
                       const SizedBox(height: 24),
 
